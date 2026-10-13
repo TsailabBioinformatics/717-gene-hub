@@ -21,26 +21,30 @@ export const QUESTIONS = [
   {
     id: 'young-and-duplicated',
     q: 'Which tandem-array genes are xylem-specific?',
-    sub: 'in a curated tandem array, peak expression in xylem, τ ≥ 0.8 (no age or Ks cut)',
-    params: { tandem: 'yes', top: 'xylem', tau_min: '0.8' },
+    sub: 'in a curated tandem array, peak tissue xylem, τ ≥ 0.85 and mean TPM ≥ 5 on the 222-sample reference panel',
+    params: { tandem: 'yes', top: 'xylem', tau_min: '0.85', tok: 'yes', qc: 'no' },
+    byHap: true,
   },
   {
     id: 'lsg-with-protein',
-    q: 'Which lineage-specific candidates have a peptide match in public Populus mass spectra?',
-    sub: 'phylostratum ≥ 18, a peptide in at least one of 5 public datasets; mostly single, shared or cross-species (P. tomentosa, P. × canescens) peptides',
-    params: { ps_min: '18', ms: 'yes' },
+    q: 'Which lineage-specific genes have a peptide match in public Populus mass spectra?',
+    sub: 'the final LSG set, a peptide in at least one of 5 public datasets; mostly single, shared or cross-species (P. tomentosa, P. × canescens) peptides',
+    params: { lsg: 'final_set', ms: 'yes' },
+    byHap: true,
   },
   {
     id: 'hemizygous',
-    q: 'Which genes exist on only one haplotype?',
-    sub: 'Strict PAV: no syntelog and no protein-level match on the other haplotype',
+    q: 'Which genes have no protein-level counterpart on the other haplotype?',
+    sub: 'Strict PAV: no syntelog and no protein-level match on the other haplotype; partial DNA at the syntenic position is tolerated',
     params: { rel: 'hemizygous_strict_PAV' },
+    byHap: true,
   },
   {
     id: 'three-layers',
     q: 'Which tandem-array genes are also called for both whole-genome events?',
-    sub: 'a curated tandem array plus sWGD and aWGT anchors, under the primary call',
+    sub: 'a curated tandem array plus sWGD and aWGT anchors',
     params: { tandem: 'yes', wgd9: 'both' },
+    byHap: true,
   },
   {
     id: 'never-expressed',
@@ -62,19 +66,18 @@ export const QUESTIONS = [
     params: { cls: 'private_no_ortholog' },
   },
   {
-    id: 'disputed-wgd',
-    q: 'Where do the two whole-genome-duplication calls disagree?',
-    // NOT { wgd: 'salicoid', wgd9: 'gamma' }. That was the first draft and it reported
-    // 7,574, because a gene carrying BOTH events under BOTH calls matches it while agreeing
-    // about everything. The disagreement is its own fact and needs its own column.
-    sub: 'the exploratory topology re-check compared with the primary call, gene by gene',
-    params: { wgd_disputed: 'yes' },
+    id: 'lsg-final',
+    q: 'Which genes are in the final lineage-specific gene set?',
+    sub: 'PS18 or PS19 candidates that pass the four exclusion criteria of the dissertation',
+    params: { lsg: 'final_set' },
+    byHap: true,
   },
 ];
 
 /** Count matches for a question over the facet rows, using Browse's OWN filter functions so
  *  the number here and the number on the linked page cannot drift apart. */
-export function countQuestion(q, rows, FILTERS) {
+export function countQuestion(q, rows, FILTERS, hap = null) {
+  if (hap) rows = rows.filter((r) => r.hap === hap);
   if (q.test) return rows.reduce((n, r) => n + (q.test(r) ? 1 : 0), 0);
   const active = FILTERS.filter((f) => q.params[f.id] !== undefined && q.params[f.id] !== '');
   if (!active.length) return null;

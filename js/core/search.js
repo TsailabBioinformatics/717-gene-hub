@@ -24,6 +24,7 @@ function rowsTable(page, byId, ann) {
     return el('tr', {},
       el('td', {}, el('a', { href: `#/gene/${id}`, class: 'mono' }, id)),
       el('td', { style: 'font-size:12px;max-width:260px;overflow:hidden;text-overflow:ellipsis' },
+        a.sym && a.sym.length ? el('strong', {}, a.sym.join(', ') + ' ') : null,
         (a.d || a.atd || '') || el('span', { class: 'muted' }, '–')),
       el('td', {}, r ? r.hap.toUpperCase() : '–'),
       el('td', {}, r ? (r.cls ? r.cls.replace(/_/g, ' ') : '–') : '–'),
@@ -37,7 +38,8 @@ function rowsTable(page, byId, ann) {
     el('thead', {}, el('tr', {},
       el('th', {}, 'Gene'), el('th', {}, 'Description'), el('th', {}, 'Hap'),
       el('th', {}, 'Synteny class'), el('th', {}, 'Dup.'), el('th', {}, 'Chr'),
-      el('th', { class: 'num' }, 'PS'), el('th', {}, 'Peak tissue'), el('th', { class: 'num' }, 'τ'))),
+      el('th', { class: 'num' }, 'PS'), el('th', { title: 'tissue group with the highest mean TPM, 222-sample reference panel' }, 'Peak tissue'),
+      el('th', { class: 'num', title: 'tissue specificity as in the dissertation' }, 'τ'))),
     el('tbody', {}, ...body)));
 }
 
@@ -77,12 +79,12 @@ export async function searchResultsView(query) {
     // Only the page shown is fetched -- see the file header. Parallel, but bounded to PAGE.
     await Promise.all(slice.map(async (id) => {
       const g = await getGene(id);
-      if (g) ann.set(id, { d: g.ann && g.ann.d, atd: g.ann && g.ann.atd, dup: g.dup && g.dup.t });
+      if (g) ann.set(id, { d: g.ann && g.ann.d, atd: g.ann && g.ann.atd, dup: g.dup && g.dup.t, sym: g.ann && g.ann.sym });
     }));
     clear(tableHolder).append(matches.length
       ? rowsTable(slice, rowOf, ann)
       : el('p', { class: 'muted', style: 'padding:14px 0' },
-          `No gene matches "${query}". Try a shorter or more general term.`));
+          `No gene matches "${query}". Search takes a gene ID (a transcript suffix such as .1 is ignored), a P. trichocarpa ID, a gene name, an Arabidopsis locus, a Pfam accession or a word from the description.`));
 
     clear(pager);
     if (pages > 1) {

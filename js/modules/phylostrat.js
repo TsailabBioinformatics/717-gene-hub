@@ -2,10 +2,26 @@
 // and the caveats the method itself reports.
 import { el, fmt, pct } from '../core/dom.js';
 import { browseHref } from '../core/browse.js';
+import { LSG_REASON, lsgStatus } from '../core/paper.js';
 
 const LSG_MIN = 18;
 
-const ABSENSE_VERDICT = {'a_retract_young_call': 'abSENSE retracts the young call', 'b_supports_lineage_specific': 'abSENSE supports lineage-specific', 'b_weak_low_sensitivity': 'abSENSE supports it, weakly (low sensitivity)', 'ancestral_sequence_present_unannotated': 'an ancestral sequence appears present but unannotated', 'ambiguous': 'abSENSE result is ambiguous', 'not_testable': 'not testable with abSENSE'};
+// Two different checks, each with its own field. `verdict` is the search of outgroup syntenic
+// windows; `hdf` is abSENSE. Until 0.18.0 the window-search verdict was printed after the label
+// "abSENSE:", so a gene could read "abSENSE rejects" and "abSENSE supports" on adjacent lines.
+const WINDOW_VERDICT = {
+  a_retract_young_call: 'a homolog overlapping an annotated gene was found in an outgroup syntenic window, which contradicts the young call',
+  b_supports_lineage_specific: 'no homolog found in the outgroup syntenic windows, which supports a lineage-specific gene',
+  b_weak_low_sensitivity: 'no homolog found, but the search had low sensitivity for this gene',
+  ancestral_sequence_present_unannotated: 'a similar sequence is present in an outgroup window where no gene is annotated',
+  ambiguous: 'ambiguous',
+  not_testable: 'not testable (no usable syntenic window)',
+};
+const ABSENSE_HDF = {
+  detection_failure_plausible: 'the absence of older homologs is a plausible detection failure',
+  surprising_absence: 'an older homolog should have been detectable, so its absence supports the young call',
+  no_prediction: 'no prediction. abSENSE needs detected homologs to model detectability, so it cannot be applied to PS19 genes or to genes reassigned from PS19',
+};
 
 // Two QC checks, and only two (Chen, 2026-09-21 evening; ms2-lsg CORRECTIONS C5): abSENSE and
 // the synteny window search. A flag never removes a gene. `post` is the chapter's post-QC set,
@@ -18,24 +34,28 @@ function qcSummary(qc) {
   const flags = [];
   if (qc.abs) {
     flags.push(el('div', {}, el('span', { class: 'badge' }, 'abSENSE'),
-      ' rejects the young call: the absence of older homologs is plausibly a detection failure.'));
+      ' homology-detection failure: the absence of older homologs is plausibly a detection failure (exclusion criterion 2).'));
   }
   if (qc.ret) {
     flags.push(el('div', {}, el('span', { class: 'badge' }, 'synteny window'),
-      ' a tblastn search of the syntenic window finds a strong hit inside an annotated gene of '
-      + 'an outgroup, which contradicts the young call.'));
+      ' a tBLASTn search of the syntenic window finds a hit inside an annotated gene of '
+      + 'an outgroup (exclusion criterion 3).'));
   }
   if (!flags.length) {
-    flags.push(el('div', { class: 'muted' }, 'Neither QC check flags this gene.'));
+    flags.push(el('div', { class: 'muted' }, 'Neither abSENSE nor the synteny-window search flags this gene.'));
   }
-  const verdictLabel = ABSENSE_VERDICT[qc.verdict] || qc.verdict;
-  flags.push(el('div', {}, el('span', { class: 'muted' }, 'abSENSE: '), verdictLabel,
+  flags.push(el('div', { 'data-window-verdict': '' },
+    el('span', { class: 'muted' }, 'Search of outgroup syntenic windows: '),
+    WINDOW_VERDICT[qc.verdict] || qc.verdict || 'not run', '.'));
+  flags.push(el('div', { 'data-absense': '' }, el('span', { class: 'muted' }, 'abSENSE: '),
+    ABSENSE_HDF[qc.hdf] || qc.hdf || 'no prediction', '.',
     qc.hdf === 'detection_failure_plausible'
       ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
           'This is about the reliability of the age call, not the gene: an ancestral homolog '
           + 'could exist and be undetectable at this sensitivity. It does not mean the gene is old.')
       : null,
-    el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+    // only where abSENSE made a prediction: on a PS19 gene there is nothing to calibrate
+    !qc.hdf || qc.hdf === 'no_prediction' ? null : el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
       'How well calibrated is that? Measured for the first time in September 2026: abSENSE\u2019s '
       + 'nominal 99% prediction intervals contain 87 to 88% of true bitscores overall, but only '
       + '59 to 61% at Salix purpurea, and every abSENSE flag on this pool is a prediction at '
@@ -67,17 +87,16 @@ function qcSummary(qc) {
   }
   return el('div', {},
     el('div', {}, ...flags),
-    el('div', { style: 'margin-top:6px' },
-      el('span', { class: 'muted' }, 'In the post-QC set (neither QC flag): '),
-      el('strong', {}, qc.post ? 'yes' : 'no')),
+
     other.length
       ? el('div', { style: 'margin-top:6px' },
           el('div', { class: 'muted' }, 'Other evidence, not QC flags:'), ...other)
       : null,
     el('div', { class: 'muted', style: 'font-size:11px;margin-top:4px' },
-      'Flags, not filters: nothing here removes or renumbers a gene, and the pool size is '
-      + 'never set by these fields; every claim about this gene should cite the flag alongside it. '
-      + 'The two QC checks are abSENSE and the synteny window search.'));
+      'The final LSG set is defined in the dissertation by one reassignment (PS19 to PS18) and four '
+      + 'exclusion criteria applied in order: gene-model quality, homology-detection failure (abSENSE, '
+      + 'PS18 only), a homolog in an outgroup syntenic window, and a split gene model. The lines '
+      + 'above are the evidence for criteria 2 and 3.'));
 }
 
 function geneCard(g) {
@@ -87,7 +106,8 @@ function geneCard(g) {
   const add = (k, ...v) => { kv.append(el('dt', {}, k), el('dd', {}, ...v)); };
 
   add('Stratum', p.name
-    ? el('span', {}, p.name, p.rank != null ? el('span', { class: 'muted' }, ` · PS${p.rank} of 19`) : null,
+    ? el('span', {}, p.name, p.rank != null ? el('span', { class: 'muted' }, ` · PS${p.rank} of 19 (genEra)`) : null,
+        p.fin && p.fin.u !== p.rank ? el('strong', {}, ` · used in the dissertation: PS${p.fin.u}, reassigned`) : null,
         p.rank === 19
           ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px', 'data-ps19-caveat': '' },
               'PS19 means no homolog was detected outside this assembly in the species searched. '
@@ -103,9 +123,19 @@ function geneCard(g) {
         + 'assignment rests on few species.'));
   }
   if (p.rank != null) {
-    add('LSG pool', p.rank >= LSG_MIN
-      ? el('strong', {}, `yes, PS${p.rank}`)
-      : el('span', { class: 'muted' }, `no (pool is PS ≥ ${LSG_MIN})`));
+    const st = lsgStatus(g);
+    const f = p.fin;
+    add('Lineage-specific gene', !st
+      ? el('span', { class: 'muted' }, `no (candidates are PS ≥ ${LSG_MIN})`)
+      : el('span', { 'data-lsg-status': st.final ? 'final' : 'excluded' },
+          el('strong', {}, st.final ? `yes, in the final set (PS${f.u})` : 'candidate, excluded from the final set'),
+          st.final ? null : el('span', {}, `: ${LSG_REASON[f.r] || f.r}`),
+          f.g !== f.u ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+            `genEra placed this gene at PS${f.g}. Its protein matches the other haplotype’s genome at the `
+            + `syntenic position (tBLASTn, at least 90% of the protein at 90% identity or higher) where no gene is `
+            + `annotated, so the dissertation reassigns it to PS${f.u}.`) : null,
+          el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+            'Candidates are the 776 HAP1 and 835 HAP2 genes at PS18 or PS19; the final set is 583 HAP1 and 621 HAP2.')));
   }
   // The frozen 2026-04 genEra call, where its rank differs from the pool's call shown above.
   // Provenance only (C5, Chen 2026-09-21 evening): it drives no filter, count or default view,
@@ -233,10 +263,15 @@ async function overview(man) {
   const frz = ((man.lsg_pool || {}).frozen || {});
   const frzN = frz.at_rank_18_or_above || {};
   const left = frz.left_the_pool || {};
-  const post = ((man.lsg_qc || {}).per_haplotype || {}).in_the_chapter_post_qc_set || {};
+  const fin = (man.dissertation || {}).lsg || { HAP1: {}, HAP2: {} };
   const poolStat = (hap, rows) => el('div', { class: 'stat' },
     el('div', { class: 'n' }, fmt(pool[hap])),
-    el('div', { class: 'l' }, `${hap} LSG pool: ${fmt(at(rows, 18))} PS18 · ${fmt(at(rows, 19))} PS19`));
+    el('div', { class: 'l' }, `${hap} LSG candidates (genEra: ${fmt(at(rows, 18))} PS18 · ${fmt(at(rows, 19))} PS19)`));
+  const finStat = (hap) => el('a', { class: 'stat', 'data-lsg-final': hap, style: 'text-decoration:none;color:inherit',
+    href: browseHref({ hap: hap.toLowerCase(), lsg: 'final_set' }) },
+    el('div', { class: 'n' }, fmt(fin[hap].final)),
+    el('div', { class: 'l' }, `${hap} final LSG set: ${fmt(fin[hap].final_PS18)} PS18 · ${fmt(fin[hap].final_PS19)} PS19`));
+  const reasons = ['gene_model_quality', 'homology_detection_failure', 'homolog_in_outgroup_syntenic_window', 'split_gene_model'];
 
   return el('div', {},
     el('h1', {}, 'Phylostratigraphy'),
@@ -245,12 +280,15 @@ async function overview(man) {
       + 'over 19 strata from cellular organisms to this hybrid. The '
       + 'lineage-specific candidate pool is PS ≥ 18 in the genEra rerun that added Idesia polycarpa: '
       + `${fmt(pool.HAP1)} HAP1 and ${fmt(pool.HAP2)} HAP2 genes. PS17 Saliceae is flanking `
-      + 'context, not pool. Two QC checks flag genes without removing them, abSENSE and the '
-      + `synteny window search; ${fmt(post.HAP1)} HAP1 and ${fmt(post.HAP2)} HAP2 carry neither `
-      + 'flag, the post-QC set. The frozen 2026-04 genEra call, superseded as the '
+      + 'context, not pool. The final lineage-specific gene (LSG) set of the dissertation is '
+      + `${fmt(fin.HAP1.final)} HAP1 and ${fmt(fin.HAP2.final)} HAP2 genes: ${fmt(fin.HAP1.reassigned_PS19_to_PS18)} HAP1 and `
+      + `${fmt(fin.HAP2.reassigned_PS19_to_PS18)} HAP2 PS19 candidates are reassigned to PS18, and four exclusion criteria `
+      + 'are then applied in order (table below). The frozen 2026-04 genEra call, superseded as the '
       + `pool, had ${fmt(frzN.hap1)} HAP1 and ${fmt(frzN.hap2)} HAP2; the ${fmt(left.hap1)} HAP1 `
       + `and ${fmt(left.hap2)} HAP2 genes that left say so on their own page.`),
     el('div', { class: 'stat-row' },
+      finStat('HAP1'),
+      finStat('HAP2'),
       poolStat('HAP1', h1),
       poolStat('HAP2', h2),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(placed.HAP1 + placed.HAP2)),
@@ -259,6 +297,23 @@ async function overview(man) {
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(naH1 + naH2)),
         el('div', { class: 'l' }, `unplaced by genEra: ${fmt(naH1)} HAP1 · ${fmt(naH2)} HAP2`)),
     ),
+    el('div', { class: 'card', 'data-lsg-funnel': '' },
+      el('h2', {}, 'From candidates to the final LSG set', el('span', { class: 'tag' }, 'as in the dissertation')),
+      el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
+        el('thead', {}, el('tr', {}, el('th', {}, 'Step'), el('th', { class: 'num' }, 'HAP1'), el('th', { class: 'num' }, 'HAP2'))),
+        el('tbody', {},
+          el('tr', {}, el('td', {}, 'Candidates (PS18 or PS19)'),
+            ...['HAP1', 'HAP2'].map((h) => el('td', { class: 'num' }, fmt(fin[h].candidates)))),
+          el('tr', {}, el('td', {}, 'Reassigned from PS19 to PS18 (kept as candidates)'),
+            ...['HAP1', 'HAP2'].map((h) => el('td', { class: 'num' }, fmt(fin[h].reassigned_PS19_to_PS18)))),
+          ...reasons.map((r, i) => el('tr', {}, el('td', {}, `Excluded, criterion ${i + 1}: ${LSG_REASON[r]}`),
+            ...['HAP1', 'HAP2'].map((h) => el('td', { class: 'num' }, fmt((fin[h].excluded_by_first_criterion || {})[r] || 0))))),
+          el('tr', {}, el('td', {}, el('strong', {}, 'Final LSG set')),
+            ...['HAP1', 'HAP2'].map((h) => el('td', { class: 'num' }, el('strong', {}, fmt(fin[h].final)))))))),
+      el('p', { class: 'muted', style: 'font-size:12px;margin:8px 0 0' },
+        'Each excluded gene is counted under the first criterion it meets. On a gene page an excluded '
+        + 'candidate reads "candidate, excluded" with its reason. In Browse, the filter "Lineage-specific gene (LSG)" '
+        + 'selects the final set; "Phylostratum ≥ 18" selects all candidates.')),
     el('div', { class: 'hap-pair' },
       el('div', { class: 'card' },
         el('h2', {}, 'Genes per stratum', el('span', { class: 'tag' }, 'HAP1')),
@@ -298,7 +353,7 @@ export default {
   geneCard,
   overview,
   filters: [
-    { id: 'ps_lsg', label: 'LSG pool (PS ≥ 18)', options: ['yes', 'no'],
+    { id: 'ps_lsg', label: 'LSG candidate (PS ≥ 18)', options: ['yes', 'no'],
       test: (g, v) => (g.ps && g.ps.rank >= LSG_MIN ? 'yes' : 'no') === v },
     { id: 'ps_rank', label: 'Phylostratum ≥',
       test: (g, v) => g.ps && g.ps.rank != null && g.ps.rank >= parseInt(v, 10) },

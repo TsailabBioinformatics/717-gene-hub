@@ -4,6 +4,10 @@
 The gene page showed a curated duplication class (S = salicoid WGD, A = gamma) but never named
 the WGD partner, its dS, or the chromosome pair. This is that detail.
 
+EVENT LABELS (since 0.18.0): this script writes the label carried by the anchor table it reads.
+make_dissertation_layer_source.py then replaces `event` with the frozen pair call the
+dissertation uses, and asserts the pair totals. Run that script after this one, always.
+
 INCLUSIVE BY DESIGN: every anchor pair in the source is kept. No dS window, no site filter, no
 cap on partners -- the curated result is not re-filtered here. The gene-level S/A letters stay
 the authoritative call; ms1-dup derives them from `cls_5c` plus a 356-gene override, not from

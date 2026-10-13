@@ -350,22 +350,39 @@ export const loadSearchShard = (c) => fetchJSON(`data/index/search/${c}.json`);
  *  fully for a query is cheap -- the old implementation's `limit*8` scan-break existed only
  *  to bound dropdown latency, not because an accurate count was expensive to get.
  */
+/** What a reader pastes is rarely the bare gene ID: transcript suffixes (".1"), lower case,
+ *  a P. trichocarpa ID, a gene name. Returns the query as the indexes expect it. */
+export function normalizeQuery(query) {
+  let q = String(query || '').trim();
+  if (/^ptxa(tre|alb)h\./i.test(q)) {
+    q = q.replace(/\.\d+(\.p)?$/i, '');                  // transcript / peptide suffix
+    q = q.replace(/^ptxa(tre|alb)h\.(.*)$/i, (_m, h, rest) =>
+      `PtXa${h[0].toUpperCase()}${h.slice(1).toLowerCase()}H.${rest.toUpperCase()}`);
+  }
+  return q;
+}
+
+let _alias;
+/** Gene names, P. trichocarpa IDs and Arabidopsis loci -> positions in index/genes.json. */
+export function loadAlias() {
+  if (!_alias) _alias = fetchJSON('data/index/alias.json').catch(() => ({ name: {}, potri: {}, at: {} }));
+  return _alias;
+}
+
 export async function searchGenesRanked(query) {
-  const q = query.trim();
+  const q = normalizeQuery(query);
   const ql = q.toLowerCase();
   if (ql.length < 3) return { ids: [], total: 0 };
 
   const byIdIdx = [];               // gene-ID prefix match, e.g. "PtXaTreH.05G12"
-  const idPromise = /^PtXa/i.test(q) ? loadGeneIndex() : null;
+  const isId = /^PtXa/i.test(q);
 
   const c = /[a-z0-9]/.test(ql[0]) ? ql[0] : '_';
-  let shard, ids;
-  try {
-    [shard, ids] = await Promise.all([loadSearchShard(c), loadGeneIndex()]);
-  } catch {
-    shard = {}; ids = idPromise ? await idPromise : [];
-  }
-  if (idPromise) {
+  const [shard, ids, alias] = await Promise.all([
+    // the description index has no shard for digits; asking for one would be a 404 in the console
+    (/[a-z_]/.test(c) ? loadSearchShard(c).catch(() => ({})) : Promise.resolve({})),
+    loadGeneIndex(), loadAlias()]);
+  if (isId) {
     const up = q.toUpperCase();
     for (let i = 0; i < ids.length; i++) if (ids[i].toUpperCase().startsWith(up)) byIdIdx.push(i);
   }
@@ -373,10 +390,17 @@ export async function searchGenesRanked(query) {
   // Exact token first, then prefix matches, so "kinase" beats "kinase-like".
   const rank = new Map();
   const add = (idxs, r) => idxs.forEach((i) => { if (!rank.has(i)) rank.set(i, r); });
-  add(byIdIdx, -1);                 // an ID match always outranks a text match
-  if (shard[ql]) add(shard[ql], 0);
-  for (const tok in shard) {
-    if (tok !== ql && tok.startsWith(ql)) add(shard[tok], 1);
+  add(byIdIdx, -3);                 // an ID match always outranks a text match
+  // exact gene name, P. trichocarpa ID (with or without a version suffix) or Arabidopsis locus
+  const potriKey = ql.replace(/\.v\d+(\.\d+)?$/, '').replace(/^(potri\.\d{3}g\d{6})\.\d+$/, '$1');
+  const atKey = ql.replace(/^(at[1-5cm]g\d{5})\.\d+$/, '$1');
+  for (const hit of [alias.name[ql], alias.potri[potriKey], alias.at[atKey]]) if (hit) add(hit, -2);
+  {
+    for (const k in alias.name) if (k !== ql && k.startsWith(ql)) add(alias.name[k], -1);
+    if (shard[ql]) add(shard[ql], 0);
+    for (const tok in shard) {
+      if (tok !== ql && tok.startsWith(ql)) add(shard[tok], 1);
+    }
   }
   const ranked = [...rank.entries()].sort((a, b) => a[1] - b[1] || a[0] - b[0]).map(([i]) => ids[i]);
   return { ids: ranked, total: ranked.length };
@@ -404,13 +428,18 @@ export function facetRow(facets, i) {
     chr: v.chr[o.chr] ?? null,
     cls: v.cls[o.cls] ?? null,
     ps: o.ps < 0 ? null : o.ps,
-    tau: o.tau < 0 ? null : o.tau / 100,
+    // tau and peak tissue AS IN THE DISSERTATION (222-sample reference panel); per-mille
+    tau: o.tau < 0 ? null : o.tau / 1000,
+    tok: !!o.tok,         // mean TPM over that panel >= 5, the dissertation's expression filter
     top: v.top[o.top] ?? null,
     allele: !!o.allele,
     at: !!o.at,
-    wgd: o.wgd | 0,       // the Ks + topology re-check (exploratory)
-    wgd9: o.wgd9 | 0,     // the primary call
-    ccd: !!o.ccd,         // the two WGD calls disagree for this gene
+    wgd: o.wgd9 | 0,      // the adopted call (kept under this name for older links)
+    wgd9: o.wgd9 | 0,     // the adopted call
+    dup: (v.dup || [])[o.dup] ?? null,   // duplication class letters
+    lsg: o.lsg | 0,       // 1 final LSG set, 2 candidate excluded from it, 0 neither
+    qc: !!o.qc,           // gene model flagged by quality control
+    psg: o.psg == null || o.psg < 0 ? null : o.psg,   // genEra's own rank
     tandem: !!o.tandem,
     npres: o.npres,   // 0 means OrthoFinder assigned no orthogroup at all
     amb: !!o.amb,

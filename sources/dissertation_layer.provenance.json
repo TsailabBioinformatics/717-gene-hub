@@ -1,0 +1,66 @@
+{
+ "analysis_repository_commit": "59eec6bd",
+ "arabidopsis_hit_genes": 59162,
+ "by": "scripts/make_dissertation_layer_source.py",
+ "generated": "2026-10-13",
+ "genes_with_a_name": 3454,
+ "inputs": {
+  "Table_3.S1_S3_per_gene.tsv": "0b6f5aa8db57dbfdb59d1a554b64f07c2f96edd14476a564cad837da5ad41664",
+  "combined_tpm_k21_rounded_20260814.csv": "1531f3e883c207e75740c211551d0c68452fd7e9b9eeb68a2f5f9330c40bc8a9",
+  "master_per_gene_v12.csv": "d674c508f575e550d6dae2dcbf60d6af0233ee2c60ec14ecd24c858521949e73",
+  "v4_panel_20260814.csv": "4233f26c4165e489b06d4ed72595b2ba7ac06a5af852b838343bf58fb09e761c",
+  "wgd_pair_classes_FROZEN_1p05.csv": "a0d6eeb3f2e4c450384fd2dd5e62a264a8d59dba3982f5f6021040004cd5a10e"
+ },
+ "lsg": {
+  "candidates": {
+   "HAP1": 776,
+   "HAP2": 835
+  },
+  "excluded_by_first_criterion": {
+   "gene_model_quality": 39,
+   "homolog_in_outgroup_syntenic_window": 184,
+   "homology_detection_failure": 178,
+   "split_gene_model": 6
+  },
+  "final": {
+   "HAP1|PS18": 380,
+   "HAP1|PS19": 203,
+   "HAP2|PS18": 418,
+   "HAP2|PS19": 203
+  },
+  "reassigned_PS19_to_PS18": {
+   "HAP1": 104,
+   "HAP2": 100
+  }
+ },
+ "tau": {
+  "definition": "tau over mean TPM of 9 tissue groups, 222-sample reference panel; defined where at least one tissue mean reaches 5 TPM; a gene is counted tissue-specific at tau >= 0.85 with mean TPM >= 5",
+  "genes_with_tau": 41808,
+  "max_abs_difference_from_master": 1.1747534227335432e-07,
+  "panel_n": {
+   "bark": 38,
+   "bud": 17,
+   "catkin": 4,
+   "leaf": 34,
+   "leaf_old": 11,
+   "leaf_young": 11,
+   "root": 26,
+   "stem": 24,
+   "xylem": 57
+  },
+  "tissue_specific_quality_filtered": {
+   "HAP1": 1372,
+   "HAP2": 1305
+  }
+ },
+ "wgd_pairs": {
+  "event_from": "cls_final_loose of the frozen call",
+  "pairs": 23154,
+  "totals": {
+   "HAP1|A": 4445,
+   "HAP1|S": 7081,
+   "HAP2|A": 4523,
+   "HAP2|S": 7105
+  }
+ }
+}

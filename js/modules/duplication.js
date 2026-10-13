@@ -6,6 +6,7 @@
 import { el, fmt } from '../core/dom.js';
 import { loadArrays, getGene } from '../core/data.js';
 import { browseHref } from '../core/browse.js';
+import { ageBinName, AGE_BINS, paperTop } from '../core/paper.js';
 
 // Paralog-pair provenance, as a reader would say it. The upstream code for the first source is
 // "founder" (the gene family's oldest member arises at that stratum); the word explained nothing.
@@ -13,8 +14,8 @@ const PAIR_SRC = { founder: 'same gene family', synteny: 'syntenic paralog' };
 
 // The two whole-genome events every Populus gene can carry, oldest last. Codes match g.dup.
 const WGD_EVENT = {
-  S: { name: 'sWGD', when: 'whole-genome duplication shared by Populus and Salix, about 60 million years ago; median anchor dS in this genome 0.27' },
-  A: { name: 'aWGT', when: 'whole-genome triplication shared by all core eudicots, about 120 million years ago; median anchor dS in this genome 1.90, a range where synonymous sites are saturated, so read it as "very old" rather than as a clock' },
+  S: { name: 'sWGD', when: 'whole-genome duplication shared by Populus and Salix, about 60 million years ago; anchor-pair Ks peaks at 0.25 in this genome (median 0.27)' },
+  A: { name: 'aWGT', when: 'whole-genome triplication shared by all core eudicots, about 120 million years ago; anchor-pair Ks peaks near 1.7 in this genome (median 1.90), a range where synonymous sites are saturated, so read it as "very old" rather than as a clock' },
 };
 
 const STRATUM = { 12: 'Pentapetalae', 16: 'Salicaceae', 17: 'Saliceae', 18: 'Populus', 19: 'hybrid' };
@@ -57,7 +58,7 @@ function partnerHeaders() {
       + 'T tandem, D dispersed, C none)' }, 'Its class'),
     el('th', { class: 'num', title: 'highest TPM the partner reaches in any of the 652 samples '
       + '– raw, not batch-corrected' }, 'Max TPM'),
-    el('th', { title: 'tissue with the partner’s highest WT-control median' }, 'Peak tissue'),
+    el('th', { title: 'tissue group with the partner’s highest mean TPM in the 222-sample reference panel' }, 'Peak tissue'),
   ];
 }
 
@@ -83,7 +84,7 @@ function fillPartners(entries) {
       : '–';
     cells.max.title = x && x.max != null ? '' : 'no expression profile for this gene';
     if (x && x.max != null) cells.max.classList.remove('muted');
-    cells.top.textContent = (x && x.top) || '–';
+    cells.top.textContent = paperTop({ x }) || '–';
   }));
 }
 
@@ -98,19 +99,30 @@ function arrayHistoryLine(g, memberIds) {
   const holder = el('dd', {}, el('span', { class: 'muted' }, 'checking the other members…'));
   const ownEvents = new Set((g.wgd || []).map((p) => (p.e === 'A' ? 'A' : 'S')));
   (async () => {
-    const recs = await Promise.all(memberIds.map((id) => getGene(id).catch(() => null)));
+    // td.mem is display-capped. History must use the complete curated array index.
+    const arrays = await loadArrays().catch(() => null);
+    const completeIds = arrays && g.td && arrays[g.td.aid];
+    if (!completeIds) {
+      holder.replaceChildren(el('span', { class: 'muted' },
+        'Full array membership could not be read; array-level WGD history is unavailable.'));
+      return;
+    }
+    const otherIds = completeIds.filter((id) => id !== g.id);
+    const recs = await Promise.all(otherIds.map((id) => getGene(id).catch(() => null)));
     const via = { S: [], A: [] };
     let unresolved = 0;
     recs.forEach((r, i) => {
       if (!r) { unresolved += 1; return; }
-      for (const q of (r.wgd || [])) via[q.e === 'A' ? 'A' : 'S'].push(memberIds[i]);
+      for (const q of (r.wgd || [])) via[q.e === 'A' ? 'A' : 'S'].push(otherIds[i]);
     });
     const evName = { S: 'sWGD', A: 'aWGT' };
     const present = ['S', 'A'].filter((e) => ownEvents.has(e) || via[e].length);
     if (!present.length) {
       holder.replaceChildren(el('span', { class: 'muted' },
-        'No member of this array retains a whole-genome duplication partner. That is not '
-        + 'evidence the array predates those events, only that no anchor pair was called here.'));
+        unresolved
+          ? 'No WGD partner was found among the members that could be read; full array history remains unresolved.'
+          : 'No member of this array retains a whole-genome duplication partner. That is not '
+            + 'evidence the array predates those events, only that no anchor pair was called here.'));
       return;
     }
     const parts = present.map((e) => {
@@ -155,48 +167,13 @@ function wgdSection(g) {
   }
   wrap.append(kv);
 
-  // The route C combined Ks + topology call, beside the canonical letters rather than instead
-  // of them. It disagrees on 904 genes, and which one is right is not the atlas's call to
-  // make: MS1's 2026-09-16 reconciliation still lists v9 as canonical and marks this
-  // "nothing applied, for the WGD track owner". Same treatment as the withdrawn LSG pool --
-  // show the correction, never silently swap it.
-  const cc = d.cc;
-  if (cc) {
-    const evName = { s: 'sWGD', a: 'aWGT' };
-    const ccSays = ['s', 'a'].filter((k) => cc[k]).map((k) => evName[k]).join(' + ')
-      || (cc.r ? 'set aside for review' : 'neither');
-    const v9Says = [d.s ? 'sWGD' : null, d.a ? 'aWGT' : null].filter(Boolean).join(' + ')
-      || 'neither';
-    const row = el('div', { style: 'margin-top:10px' },
-      el('h3', { style: 'font-size:13px;margin:0 0 6px;display:flex;align-items:center;gap:8px' },
-        'Topology re-check',
-        el('span', { class: 'badge', style: 'font-size:11px;padding:0 6px' }, 'proposed, not adopted')));
-    const ckv = el('dl', { class: 'kv' });
-    ckv.append(
-      el('dt', {}, 'Canonical call'),
-      el('dd', {}, el('strong', {}, v9Says),
-        el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-          'The primary call, from the current duplication table with a per-gene dS conflict resolution. '
-          + 'The rest of this page, the array pages and the dissertation use this call.')),
-      el('dt', {}, 'Combined Ks + topology call'),
-      el('dd', {}, el('strong', {}, ccSays),
-        cc.r ? el('span', { class: 'muted' }, ' · this gene sits on a split-evidence pair') : null,
-        el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-          'Re-checked against the ancestral eudicot karyotype: the topology call '
-          + 'where grape and segment dS independently agree with it, the canonical call '
-          + 'otherwise, split-evidence pairs set aside.')));
-    row.append(ckv);
-    if (d.ccd) {
-      row.append(el('div', { class: 'warn' },
-        el('strong', {}, 'The two calls disagree for this gene. '),
-        `The primary call says ${v9Says}; the topology re-check says ${ccSays}. `
-        + 'They differ on 1,355 genes genome-wide: the re-check adds sWGD to 1,160 and removes it from 5, '
-        + 'adds aWGT to 2 and removes it from 1,088. Neither is overridden here. Browse offers both: its '
-        + '"WGD event" filter uses the primary call, and a separate filter under "Disputed and exploratory '
-        + 'calls" uses the re-check.'));
-    }
-    wrap.append(row);
-  }
+  // One call. Until 0.18.0 a second, exploratory "topology re-check" was shown beside it and
+  // 1,355 genes were advertised as disputed. The adopted call already combines both lines of
+  // evidence (anchor-pair Ks and the ancestral-karyotype topology), so there is nothing to dispute.
+  wrap.append(el('p', { class: 'muted', style: 'font-size:12px;margin:6px 0 0' },
+    'The call combines anchor-pair Ks with the position of the two segments on the ancestral '
+    + 'eudicot karyotype; a pair the karyotype places in sWGD is assigned to aWGT when its dS exceeds 1.05. '
+    + 'Each anchor pair below carries the same call (dissertation Figure 2.S2).'));
 
   if (pairs.length) {
     const deferred = [];
@@ -235,8 +212,9 @@ function wgdSection(g) {
       + 'both copies gives more. Expression r uses the same basis as the other duplicate tables; '
       + '"n/c" means not comparable, not uncorrelated.'));
   }
-  // The gene-level call and the pair table come from two steps of the same curated pipeline and
-  // disagree on about 70 genes. Show both rather than overwrite either.
+  // The gene-level call and the pair labels are the same frozen call since 0.18.0, and the
+  // release gate (check_dissertation.py) requires that they agree for every gene. This box is
+  // kept as a tripwire: if a later build breaks that, the page says so rather than hiding it.
   const mismatch = ['S', 'A'].filter((c) =>
     (c === 'S' ? !!d.s : !!d.a) !== pairs.some((p) => p.e === c));
   if (g.dup && mismatch.length) {
@@ -385,7 +363,7 @@ function geneCard(g) {
         : el('span', { class: 'mono' }, '–'),
         el('span', { class: 'muted' }, `  ${td.n} member${td.n === 1 ? '' : 's'}`),
         td.age ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-          `age bin ${String(td.age).replace(/_/g, ' ').replace('aWGD', 'aWGT')}${td.ks != null ? ` · array median Ks ${td.ks}` : ''}`) : null));
+          `age bin: ${ageBinName(td.age)}${td.ks != null ? ` · array median Ks ${td.ks}` : ''}`) : null));
     // The card named the array and counted it, so a reader could see "7 members" and never
     // learn which seven.
     //
@@ -541,76 +519,125 @@ function geneCard(g) {
   return card;
 }
 
+const HAPS = ['HAP1', 'HAP2'];
+const expandCode = (code) => (code === 'C' ? 'singleton (no paralog detected)'
+  : [...code].map((ch) => DUP_CODE[ch] || ch).join(' + '));
+
+/** Class codes per haplotype on quality-filtered genes: the basis of the dissertation's
+ *  Table 2.1 and Figure 2.1. Recomputed from the gene records at build. */
 function dupClassChart(man) {
-  const dist = (man.layers && man.layers.dup_class_dist) || {};
-  const rows = Object.entries(dist).sort((a, b) => b[1] - a[1]);
-  if (!rows.length) return el('p', { class: 'muted' }, 'Distribution not built.');
-  const max = Math.max(...rows.map((r) => r[1]));
-  const expand = (code) => code === 'C' ? 'none detected'
-    : [...code].map((ch) => DUP_CODE[ch] || ch).join(' + ');
-  return el('div', { class: 'barchart' }, ...rows.map(([code, n]) =>
-    el('div', { class: 'barrow', style: 'grid-template-columns:190px 1fr 62px' },
-      el('span', { class: 'lbl' }, el('b', {}, code), el('span', { class: 'muted' }, `  ${expand(code)}`)),
-      el('div', { class: 'bartrack' },
-        el('div', { class: 'barfill', style: `width:${(n / max) * 100}%;background:var(--accent)` })),
-      el('span', { class: 'val' }, fmt(n)))));
+  const by = (man.dissertation || {}).class_codes_quality_filtered || {};
+  const codes = [...new Set(HAPS.flatMap((h) => Object.keys(by[h] || {})))]
+    .sort((a, b) => ((by.HAP1 || {})[b] || 0) - ((by.HAP1 || {})[a] || 0));
+  if (!codes.length) return el('p', { class: 'muted' }, 'Distribution not built.');
+  return el('div', { class: 'scroll-x' }, el('table', { class: 'data', 'data-class-codes': '' },
+    el('thead', {}, el('tr', {}, el('th', {}, 'Code'), el('th', {}, 'Evidence'),
+      el('th', { class: 'num' }, 'HAP1'), el('th', { class: 'num' }, 'HAP2'))),
+    el('tbody', {}, ...codes.map((code) => el('tr', {},
+      el('td', { class: 'mono' }, el('b', {}, code)), el('td', { class: 'muted' }, expandCode(code)),
+      ...HAPS.map((h) => el('td', { class: 'num' }, fmt((by[h] || {})[code] || 0))))))));
+}
+
+/** The dissertation's Table 2.1, from the same records. */
+function table21(man) {
+  const t = (man.dissertation || {}).table_2_1 || {};
+  if (!t.HAP1) return el('p', { class: 'muted' }, 'Summary not built.');
+  const rows = [['sWGD', 'sWGD (salicoid whole-genome duplication)', { wgd9: 'salicoid' }],
+    ['aWGT', 'aWGT (ancient whole-genome triplication)', { wgd9: 'gamma' }],
+    ['tandem', 'Tandem duplicate (TD)', { tandem: 'yes' }],
+    ['dispersed_only', 'Dispersed duplicate only', { dup: 'D' }],
+    ['singleton', 'Singleton', { dup: 'C' }]];
+  const cell = (h, k, params) => {
+    const n = t[h][k], tot = t[h].quality_filtered_genes;
+    return el('td', { class: 'num' }, el('a', {
+      href: browseHref({ hap: h.toLowerCase(), qc: 'no', ...params }),
+      title: `Browse these ${fmt(n)} genes` }, fmt(n)),
+      el('span', { class: 'muted' }, ` (${(100 * n / tot).toFixed(1)}%)`));
+  };
+  return el('div', { class: 'scroll-x' }, el('table', { class: 'data', 'data-table-2-1': '' },
+    el('thead', {}, el('tr', {}, el('th', {}, 'Duplication class'),
+      el('th', { class: 'num' }, 'HAP1, n (%)'), el('th', { class: 'num' }, 'HAP2, n (%)'))),
+    el('tbody', {},
+      el('tr', {}, el('td', {}, 'Quality-filtered genes'),
+        ...HAPS.map((h) => el('td', { class: 'num' }, fmt(t[h].quality_filtered_genes)))),
+      ...rows.map(([k, label, params]) => el('tr', {}, el('td', {}, label),
+        ...HAPS.map((h) => cell(h, k, params)))))));
 }
 
 function wgdOverview(man) {
-  // Counts come from the same curated class distribution as the chart above, split by event.
-  // A gene with both letters counts under both, and again under "both".
-  const dist = (man.layers && man.layers.dup_class_dist) || {};
-  let s = 0, a = 0, both = 0;
-  for (const [code, n] of Object.entries(dist)) {
-    if (code.includes('S')) s += n;
-    if (code.includes('A')) a += n;
-    if (code.includes('S') && code.includes('A')) both += n;
-  }
-  // wgd9, the canonical call these counts come from, so the number clicked is the number
-  // Browse returns. Browse's `wgd` is the route C call and counts differently.
-  const link = (v, n, label) => el('a', { href: browseHref({ wgd9: v }), class: 'stat',
+  const d = man.dissertation || {};
+  const t = d.table_2_1 || {}, pr = d.wgd_anchor_pairs || {};
+  const stat = (n, label, params) => el('a', { href: browseHref(params), class: 'stat',
     style: 'text-decoration:none;color:inherit', title: `Browse these ${fmt(n)} genes` },
     el('div', { class: 'n' }, fmt(n)), el('div', { class: 'l' }, label));
   return el('div', { class: 'card' },
     el('h2', {}, 'Whole-genome duplication events', el('span', { class: 'tag' }, 'click to browse')),
     el('div', { class: 'stat-row' },
-      link('salicoid', s, 'sWGD genes'),
-      link('gamma', a, 'aWGT genes'),
-      link('both', both, 'retained from both')),
+      ...HAPS.flatMap((h) => [
+        stat(t[h].sWGD, `${h} sWGD genes`, { hap: h.toLowerCase(), qc: 'no', wgd9: 'salicoid' }),
+        stat(t[h].aWGT, `${h} aWGT genes`, { hap: h.toLowerCase(), qc: 'no', wgd9: 'gamma' }),
+        stat(t[h].sWGD_and_aWGT, `${h} retained from both`, { hap: h.toLowerCase(), qc: 'no', wgd9: 'both' })])),
+    el('p', { style: 'font-size:13px;margin:8px 0' },
+      `Anchor pairs: sWGD ${fmt(pr.HAP1.sWGD)} HAP1 and ${fmt(pr.HAP2.sWGD)} HAP2; `
+      + `aWGT ${fmt(pr.HAP1.aWGT)} HAP1 and ${fmt(pr.HAP2.aWGT)} HAP2. aWGT was a triplication, `
+      + 'observed here as pairwise relationships among its surviving copies.'),
     el('dl', { class: 'kv' },
       ...['S', 'A'].flatMap((c) => [el('dt', {}, WGD_EVENT[c].name), el('dd', {}, WGD_EVENT[c].when)])),
     el('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0' },
-      'Events are not exclusive. Each gene page lists every WGD anchor partner with its dS, '
-      + 'block and expression correlation.'));
+      'Events are not exclusive. Counts are quality-filtered genes, each haplotype separately. Each gene '
+      + 'page lists every WGD anchor partner with its dS, block and expression correlation.'));
+}
+
+function ageBinCard() {
+  return el('div', { class: 'card' },
+    el('h2', {}, 'Tandem-array age bins'),
+    el('p', { class: 'muted', style: 'font-size:12.5px;margin:0 0 8px' },
+      'A tandem array is dated by the median Ks of its member pairs. Limits are closed on the right; '
+      + 'pairs with Ks = 0 are not dated.'),
+    el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
+      el('thead', {}, el('tr', {}, el('th', {}, 'Age bin'), el('th', {}, 'Ks'))),
+      el('tbody', {}, ...AGE_BINS.filter(([k]) => k !== 'not datable').map(([, name, ks]) =>
+        el('tr', {}, el('td', {}, name), el('td', { class: 'mono' }, ks)))))));
 }
 
 async function overview(man) {
   const d = man.duplication;
   if (!d) return el('div', { class: 'empty' }, 'Duplication data not built.');
+  const t = (man.dissertation || {}).table_2_1 || { HAP1: {}, HAP2: {} };
+  const qf = (man.dissertation || {}).quality_flagged_gene_models || {};
   return el('div', {},
     el('h1', {}, 'Duplication'),
     el('p', { class: 'sub' },
-      'Within-haplotype paralog pairs with synonymous divergence, and tandem-array membership.'),
-    el('div', { class: 'warn' },
-      el('strong', {}, 'This paralog set is not genome-wide. '),
-      'The pairs were selected for the gene-age analysis and are concentrated at phylostrata '
-      + '16 to 18, with a rank-12 Pentapetalae comparator set. Any dS distribution here describes '
-      + 'that selection, not the genome.'),
-    el('div', { class: 'stat-row' },
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_pairs)), el('div', { class: 'l' }, 'paralog pairs')),
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_genes)), el('div', { class: 'l' }, 'genes with a pair')),
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(Object.entries((man.layers && man.layers.dup_class_dist) || {})
-        .reduce((s, [k, n]) => s + (k.includes('T') ? n : 0), 0))),
-        el('div', { class: 'l' }, 'curated tandem-array members (genome-wide)')),
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_ks_undefined)), el('div', { class: 'l' }, 'pairs with dS = 0')),
-    ),
+      'Duplication class of every gene, whole-genome duplication anchor pairs, tandem arrays, and a '
+      + 'set of paralog pairs with synonymous divergence.'),
     el('div', { class: 'card' },
-      el('h2', {}, 'Duplication class', el('span', { class: 'tag' }, 'genome-wide')),
+      el('h2', {}, 'Duplication class', el('span', { class: 'tag' }, 'quality-filtered genes, per haplotype')),
       el('p', { class: 'muted', style: 'font-size:12.5px;margin:0 0 12px' },
-        'From the duplication analysis, for all 63,960 genes. Codes concatenate: '
-        + 'S sWGD, A aWGT, T tandem, D dispersed, C none detected.'),
+        'Number of quality-filtered genes in each duplication class, as in the dissertation (Table 2.1, '
+        + `Figure 2.1). ${fmt(qf.HAP1)} HAP1 and ${fmt(qf.HAP2)} HAP2 gene models flagged by quality control `
+        + 'are left out. sWGD, aWGT and tandem overlap, because a gene can carry evidence from more than '
+        + 'one event, so the rows do not sum to the total. Haplotypes are reported separately.'),
+      table21(man),
+      el('h3', { style: 'font-size:13px;margin:16px 0 6px' }, 'By class code'),
+      el('p', { class: 'muted', style: 'font-size:12.5px;margin:0 0 8px' },
+        'The same genes by their full code. Codes concatenate: S sWGD, A aWGT, T tandem, D dispersed; '
+        + 'C is a singleton. Each gene has exactly one code.'),
       dupClassChart(man)),
     wgdOverview(man),
+    ageBinCard(),
+    el('div', { class: 'card' },
+      el('h2', {}, 'Paralog pairs with dS', el('span', { class: 'tag' }, 'a selected set')),
+      el('div', { class: 'warn' },
+        el('strong', {}, 'This paralog set is not genome-wide. '),
+        'The pairs were selected for the gene-age analysis and are concentrated at phylostrata '
+        + '16 to 18, with a rank-12 Pentapetalae comparator set. Any dS distribution here describes '
+        + 'that selection, not the genome.'),
+      el('div', { class: 'stat-row' },
+        el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_pairs)), el('div', { class: 'l' }, 'paralog pairs')),
+        el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_genes)), el('div', { class: 'l' }, 'genes with a pair')),
+        el('div', { class: 'stat' }, el('div', { class: 'n' }, `${fmt(t.HAP1.tandem)} / ${fmt(t.HAP2.tandem)}`),
+          el('div', { class: 'l' }, 'tandem-array genes, HAP1 / HAP2 (genome-wide)')),
+        el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(d.n_ks_undefined)), el('div', { class: 'l' }, 'pairs with dS = 0')))),
     el('div', { class: 'card' },
       el('h2', {}, 'What is not here'),
       el('ul', { style: 'margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-2);line-height:1.6' },

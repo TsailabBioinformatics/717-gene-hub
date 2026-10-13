@@ -1,0 +1,653 @@
+Library,BioProject,Run accession,Study,Tissue group,Genotype,Control or perturbation,Reference panel (n = 222),Treatment,Growth condition,Additional condition,Library strandedness
+01_leaf (young)_control_380CO2_rep1,PRJEB22956,ERR2167141,1,leaf_young,WT,control,yes,control,380CO2,,reverse-stranded
+01_leaf (young)_control_380CO2_rep2,PRJEB22956,ERR2167142,1,leaf_young,WT,control,yes,control,380CO2,,reverse-stranded
+01_leaf (young)_control_380CO2_rep3,PRJEB22956,ERR2167143,1,leaf_young,WT,control,yes,control,380CO2,,reverse-stranded
+01_leaf (young)_control_380CO2_recovered_rep1,PRJEB22956,ERR2167144,1,leaf_young,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_leaf (young)_control_380CO2_recovered_rep2,PRJEB22956,ERR2167146,1,leaf_young,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_leaf (young)_control_500CO2_rep1,PRJEB22956,ERR2167147,1,leaf_young,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (young)_control_500CO2_rep2,PRJEB22956,ERR2167148,1,leaf_young,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (young)_control_500CO2_rep3,PRJEB22956,ERR2167149,1,leaf_young,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (young)_control_500CO2_recovered_rep1,PRJEB22956,ERR2167150,1,leaf_young,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (young)_control_500CO2_recovered_rep2,PRJEB22956,ERR2167151,1,leaf_young,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (young)_control_500CO2_recovered_rep3,PRJEB22956,ERR2167152,1,leaf_young,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_rep1,PRJEB22956,ERR2167153,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_rep2,PRJEB22956,ERR2167154,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_rep3,PRJEB22956,ERR2167155,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167156,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167157,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (young)_chronic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167158,1,leaf_young,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_rep1,PRJEB22956,ERR2167159,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_rep2,PRJEB22956,ERR2167160,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_rep3,PRJEB22956,ERR2167161,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167162,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167163,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_leaf (young)_periodic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167164,1,leaf_young,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_control_380CO2_rep1,PRJEB22956,ERR2167165,1,leaf_old,WT,control,yes,control,380CO2,,reverse-stranded
+01_leaf (old)_control_380CO2_rep2,PRJEB22956,ERR2167166,1,leaf_old,WT,control,yes,control,380CO2,,reverse-stranded
+01_leaf (old)_control_380CO2_recovered_rep1,PRJEB22956,ERR2167167,1,leaf_old,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_leaf (old)_control_380CO2_recovered_rep2,PRJEB22956,ERR2167168,1,leaf_old,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_leaf (old)_control_380CO2_recovered_rep3,PRJEB22956,ERR2167169,1,leaf_old,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_leaf (old)_control_500CO2_rep1,PRJEB22956,ERR2167170,1,leaf_old,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (old)_control_500CO2_rep2,PRJEB22956,ERR2167171,1,leaf_old,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (old)_control_500CO2_rep3,PRJEB22956,ERR2167172,1,leaf_old,WT,control,yes,control,500CO2,,reverse-stranded
+01_leaf (old)_control_500CO2_recovered_rep1,PRJEB22956,ERR2167173,1,leaf_old,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (old)_control_500CO2_recovered_rep2,PRJEB22956,ERR2167174,1,leaf_old,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (old)_control_500CO2_recovered_rep3,PRJEB22956,ERR2167175,1,leaf_old,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_rep1,PRJEB22956,ERR2167176,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_rep2,PRJEB22956,ERR2167177,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_rep3,PRJEB22956,ERR2167178,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167179,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167180,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_chronic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167181,1,leaf_old,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_rep1,PRJEB22956,ERR2167182,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_rep2,PRJEB22956,ERR2167183,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_rep3,PRJEB22956,ERR2167184,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167185,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167186,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_leaf (old)_periodic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167187,1,leaf_old,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_phloem_control_380CO2_rep1,PRJEB22956,ERR2167188,1,bark,WT,control,yes,control,380CO2,,reverse-stranded
+01_phloem_control_380CO2_rep2,PRJEB22956,ERR2167189,1,bark,WT,control,yes,control,380CO2,,reverse-stranded
+01_phloem_control_380CO2_rep3,PRJEB22956,ERR2167190,1,bark,WT,control,yes,control,380CO2,,reverse-stranded
+01_phloem_control_380CO2_recovered_rep1,PRJEB22956,ERR2167191,1,bark,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_phloem_control_380CO2_recovered_rep2,PRJEB22956,ERR2167192,1,bark,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_phloem_control_380CO2_recovered_rep3,PRJEB22956,ERR2167193,1,bark,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_phloem_control_500CO2_rep1,PRJEB22956,ERR2167194,1,bark,WT,control,yes,control,500CO2,,reverse-stranded
+01_phloem_control_500CO2_rep2,PRJEB22956,ERR2167195,1,bark,WT,control,yes,control,500CO2,,reverse-stranded
+01_phloem_control_500CO2_rep3,PRJEB22956,ERR2167196,1,bark,WT,control,yes,control,500CO2,,reverse-stranded
+01_phloem_control_500CO2_recovered_rep1,PRJEB22956,ERR2167197,1,bark,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_phloem_control_500CO2_recovered_rep2,PRJEB22956,ERR2167198,1,bark,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_phloem_control_500CO2_recovered_rep3,PRJEB22956,ERR2167199,1,bark,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_phloem_chronic drought_500CO2_rep1,PRJEB22956,ERR2167200,1,bark,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_phloem_chronic drought_500CO2_rep2,PRJEB22956,ERR2167201,1,bark,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_phloem_chronic drought_500CO2_rep3,PRJEB22956,ERR2167202,1,bark,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_phloem_chronic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167203,1,bark,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_phloem_chronic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167204,1,bark,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_phloem_chronic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167205,1,bark,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_phloem_periodic drought_500CO2_rep1,PRJEB22956,ERR2167206,1,bark,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_phloem_periodic drought_500CO2_rep2,PRJEB22956,ERR2167207,1,bark,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_phloem_periodic drought_500CO2_rep3,PRJEB22956,ERR2167208,1,bark,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_phloem_periodic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167209,1,bark,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_phloem_periodic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167210,1,bark,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_phloem_periodic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167211,1,bark,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_root_control_380CO2_rep1,PRJEB22956,ERR2167212,1,root,WT,control,yes,control,380CO2,,reverse-stranded
+01_root_control_380CO2_rep2,PRJEB22956,ERR2167213,1,root,WT,control,yes,control,380CO2,,reverse-stranded
+01_root_control_380CO2_rep3,PRJEB22956,ERR2167214,1,root,WT,control,yes,control,380CO2,,reverse-stranded
+01_root_control_380CO2_recovered_rep1,PRJEB22956,ERR2167215,1,root,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_root_control_380CO2_recovered_rep2,PRJEB22956,ERR2167216,1,root,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_root_control_380CO2_recovered_rep3,PRJEB22956,ERR2167217,1,root,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_root_control_500CO2_rep1,PRJEB22956,ERR2167218,1,root,WT,control,yes,control,500CO2,,reverse-stranded
+01_root_control_500CO2_rep2,PRJEB22956,ERR2167219,1,root,WT,control,yes,control,500CO2,,reverse-stranded
+01_root_control_500CO2_rep3,PRJEB22956,ERR2167220,1,root,WT,control,yes,control,500CO2,,reverse-stranded
+01_root_control_500CO2_recovered_rep1,PRJEB22956,ERR2167221,1,root,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_root_control_500CO2_recovered_rep2,PRJEB22956,ERR2167222,1,root,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_root_control_500CO2_recovered_rep3,PRJEB22956,ERR2167223,1,root,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_root_chronic drought_500CO2_rep1,PRJEB22956,ERR2167224,1,root,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_root_chronic drought_500CO2_rep2,PRJEB22956,ERR2167225,1,root,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_root_chronic drought_500CO2_rep3,PRJEB22956,ERR2167226,1,root,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_root_chronic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167227,1,root,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_root_chronic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167228,1,root,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_root_chronic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167229,1,root,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_root_periodic drought_500CO2_rep1,PRJEB22956,ERR2167230,1,root,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_root_periodic drought_500CO2_rep2,PRJEB22956,ERR2167231,1,root,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_root_periodic drought_500CO2_rep3,PRJEB22956,ERR2167232,1,root,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_root_periodic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167233,1,root,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_root_periodic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167234,1,root,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_root_periodic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167235,1,root,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_xylem_control_380CO2_rep1,PRJEB22956,ERR2167236,1,xylem,WT,control,yes,control,380CO2,,reverse-stranded
+01_xylem_control_380CO2_rep2,PRJEB22956,ERR2167237,1,xylem,WT,control,yes,control,380CO2,,reverse-stranded
+01_xylem_control_380CO2_rep3,PRJEB22956,ERR2167238,1,xylem,WT,control,yes,control,380CO2,,reverse-stranded
+01_xylem_control_380CO2_recovered_rep1,PRJEB22956,ERR2167239,1,xylem,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_xylem_control_380CO2_recovered_rep2,PRJEB22956,ERR2167240,1,xylem,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_xylem_control_380CO2_recovered_rep3,PRJEB22956,ERR2167241,1,xylem,WT,control,yes,control,380CO2,recovered,reverse-stranded
+01_xylem_control_500CO2_rep1,PRJEB22956,ERR2167242,1,xylem,WT,control,yes,control,500CO2,,reverse-stranded
+01_xylem_control_500CO2_rep2,PRJEB22956,ERR2167243,1,xylem,WT,control,yes,control,500CO2,,reverse-stranded
+01_xylem_control_500CO2_rep3,PRJEB22956,ERR2167244,1,xylem,WT,control,yes,control,500CO2,,reverse-stranded
+01_xylem_control_500CO2_recovered_rep1,PRJEB22956,ERR2167245,1,xylem,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_xylem_control_500CO2_recovered_rep2,PRJEB22956,ERR2167246,1,xylem,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_xylem_control_500CO2_recovered_rep3,PRJEB22956,ERR2167247,1,xylem,WT,control,yes,control,500CO2,recovered,reverse-stranded
+01_xylem_chronic drought_500CO2_rep1,PRJEB22956,ERR2167248,1,xylem,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_xylem_chronic drought_500CO2_rep2,PRJEB22956,ERR2167249,1,xylem,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_xylem_chronic drought_500CO2_rep3,PRJEB22956,ERR2167250,1,xylem,WT,perturbation,no,chronic drought,500CO2,,reverse-stranded
+01_xylem_chronic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167251,1,xylem,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_xylem_chronic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167252,1,xylem,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_xylem_chronic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167253,1,xylem,WT,perturbation,no,chronic drought,500CO2,recovered,reverse-stranded
+01_xylem_periodic drought_500CO2_rep1,PRJEB22956,ERR2167254,1,xylem,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_xylem_periodic drought_500CO2_rep2,PRJEB22956,ERR2167255,1,xylem,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_xylem_periodic drought_500CO2_rep3,PRJEB22956,ERR2167256,1,xylem,WT,perturbation,no,periodic drought,500CO2,,reverse-stranded
+01_xylem_periodic drought_500CO2_recovered_rep1,PRJEB22956,ERR2167257,1,xylem,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_xylem_periodic drought_500CO2_recovered_rep2,PRJEB22956,ERR2167258,1,xylem,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+01_xylem_periodic drought_500CO2_recovered_rep3,PRJEB22956,ERR2167259,1,xylem,WT,perturbation,no,periodic drought,500CO2,recovered,reverse-stranded
+02_developing xylem_control_long day _rep1,PRJEB29146,ERR2836221,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_developing xylem_control_long day _rep2,PRJEB29146,ERR2836222,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_developing xylem_control_long day _rep3,PRJEB29146,ERR2836223,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_developing xylem_control_long day _rep4,PRJEB29146,ERR2836224,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_developing xylem_drought environment_long day _rep1,PRJEB29146,ERR2836225,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_developing xylem_drought environment_long day _rep2,PRJEB29146,ERR2836226,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_developing xylem_drought environment_long day _rep3,PRJEB29146,ERR2836227,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_developing xylem_drought environment_long day _rep4,PRJEB29146,ERR2836228,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_developing xylem_control_short day _rep1,PRJEB29146,ERR2836229,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_developing xylem_control_short day _rep2,PRJEB29146,ERR2836230,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_developing xylem_control_short day _rep3,PRJEB29146,ERR2836231,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_developing xylem_drought environment_short day _rep1,PRJEB29146,ERR2836232,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_developing xylem_drought environment_short day _rep2,PRJEB29146,ERR2836233,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_developing xylem_drought environment_short day _rep3,PRJEB29146,ERR2836234,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_developing xylem_drought environment_short day _rep4,PRJEB29146,ERR2836235,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_developing xylem_control_short day _rep4,PRJEB29146,ERR2836236,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_mature xylem_control_long day _rep1,PRJEB29146,ERR2836237,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_mature xylem_control_long day _rep2,PRJEB29146,ERR2836238,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_mature xylem_control_long day _rep3,PRJEB29146,ERR2836239,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_mature xylem_control_long day _rep4,PRJEB29146,ERR2836240,2,xylem,WT,control,yes,control,long day ,,reverse-stranded
+02_mature xylem_drought environment_long day _rep1,PRJEB29146,ERR2836241,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_mature xylem_drought environment_long day _rep2,PRJEB29146,ERR2836242,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_mature xylem_drought environment_long day _rep3,PRJEB29146,ERR2836243,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_mature xylem_drought environment_long day _rep4,PRJEB29146,ERR2836244,2,xylem,WT,perturbation,no,drought environment,long day ,,reverse-stranded
+02_mature xylem_control_short day _rep1,PRJEB29146,ERR2836245,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_mature xylem_control_short day _rep2,PRJEB29146,ERR2836246,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_mature xylem_control_short day _rep3,PRJEB29146,ERR2836247,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_mature xylem_control_short day _rep4,PRJEB29146,ERR2836248,2,xylem,WT,control,yes,control,short day ,,reverse-stranded
+02_mature xylem_drought environment_short day _rep1,PRJEB29146,ERR2836249,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_mature xylem_drought environment_short day _rep2,PRJEB29146,ERR2836250,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_mature xylem_drought environment_short day _rep3,PRJEB29146,ERR2836251,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+02_mature xylem_drought environment_short day _rep4,PRJEB29146,ERR2836252,2,xylem,WT,perturbation,no,drought environment,short day ,,reverse-stranded
+03_developing xylem_continuous abscisic acid_rep1,PRJEB30670,ERR3047700,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_developing xylem_continuous abscisic acid_rep2,PRJEB30670,ERR3047701,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_developing xylem_continuous abscisic acid_rep3,PRJEB30670,ERR3047702,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_developing xylem_continuous abscisic acid_rep4,PRJEB30670,ERR3047703,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_developing xylem_control_rep1,PRJEB30670,ERR3047704,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_developing xylem_control_rep2,PRJEB30670,ERR3047705,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_developing xylem_control_rep3,PRJEB30670,ERR3047706,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_developing xylem_control_rep4,PRJEB30670,ERR3047707,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_developing xylem_discontinuous abscisic acid_rep1,PRJEB30670,ERR3047708,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_developing xylem_discontinuous abscisic acid_rep2,PRJEB30670,ERR3047709,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_developing xylem_discontinuous abscisic acid_rep3,PRJEB30670,ERR3047710,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_developing xylem_discontinuous abscisic acid_rep4,PRJEB30670,ERR3047711,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_mature xylem_continuous abscisic acid_rep1,PRJEB30670,ERR3047712,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_mature xylem_continuous abscisic acid_rep2,PRJEB30670,ERR3047713,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_mature xylem_continuous abscisic acid_rep3,PRJEB30670,ERR3047714,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_mature xylem_continuous abscisic acid_rep4,PRJEB30670,ERR3047715,3,xylem,WT,perturbation,no,continuous abscisic acid,,,reverse-stranded
+03_mature xylem_control_rep1,PRJEB30670,ERR3047716,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_mature xylem_control_rep2,PRJEB30670,ERR3047717,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_mature xylem_control_rep3,PRJEB30670,ERR3047718,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_mature xylem_control_rep4,PRJEB30670,ERR3047719,3,xylem,WT,control,yes,control,,,reverse-stranded
+03_mature xylem_discontinuous abscisic acid_rep1,PRJEB30670,ERR3047720,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_mature xylem_discontinuous abscisic acid_rep2,PRJEB30670,ERR3047721,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_mature xylem_discontinuous abscisic acid_rep3,PRJEB30670,ERR3047722,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+03_mature xylem_discontinuous abscisic acid_rep4,PRJEB30670,ERR3047723,3,xylem,WT,perturbation,no,discontinuous abscisic acid,,,reverse-stranded
+04_leaf_control_rep1,PRJEB36267,ERR3822114,4,leaf,WT,control,yes,control,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep1,PRJEB36267,ERR3822115,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep2,PRJEB36267,ERR3822116,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep3,PRJEB36267,ERR3822117,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_root_control_rep1,PRJEB36267,ERR3822118,4,root,WT,control,yes,control,,,partially stranded
+04_root_control_rep2,PRJEB36267,ERR3822119,4,root,WT,control,yes,control,,,partially stranded
+04_root_control_rep3,PRJEB36267,ERR3822120,4,root,WT,control,yes,control,,,partially stranded
+04_root_control_rep4,PRJEB36267,ERR3822121,4,root,WT,control,yes,control,,,partially stranded
+04_root_control_rep5,PRJEB36267,ERR3822122,4,root,WT,control,yes,control,,,partially stranded
+04_root_control_rep6,PRJEB36267,ERR3822123,4,root,WT,control,yes,control,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep1,PRJEB36267,ERR3822124,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_control_rep2,PRJEB36267,ERR3822125,4,leaf,WT,control,yes,control,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep2,PRJEB36267,ERR3822126,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep3,PRJEB36267,ERR3822127,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep4,PRJEB36267,ERR3822128,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep5,PRJEB36267,ERR3822129,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_root_co-incubated with Laccaria bicolor_rep6,PRJEB36267,ERR3822130,4,root,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_control_rep3,PRJEB36267,ERR3822131,4,leaf,WT,control,yes,control,,,partially stranded
+04_leaf_control_rep4,PRJEB36267,ERR3822132,4,leaf,WT,control,yes,control,,,partially stranded
+04_leaf_control_rep5,PRJEB36267,ERR3822133,4,leaf,WT,control,yes,control,,,partially stranded
+04_leaf_control_rep6,PRJEB36267,ERR3822134,4,leaf,WT,control,yes,control,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep4,PRJEB36267,ERR3822135,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep5,PRJEB36267,ERR3822136,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+04_leaf_co-incubated with Laccaria bicolor_rep6,PRJEB36267,ERR3822137,4,leaf,WT,perturbation,no,co-incubated with Laccaria bicolor,,,partially stranded
+05_leaf_control_rep1,PRJEB37747,ERR4018564,5,leaf,WT,control,yes,control,,,ambiguous
+05_leaf_control_rep2,PRJEB37747,ERR4018566,5,leaf,WT,control,yes,control,,,ambiguous
+05_leaf_co-cultivated (Laccaria bicolor)_rep1,PRJEB37747,ERR4018567,5,leaf,WT,perturbation,no,co-cultivated (Laccaria bicolor),,,ambiguous
+05_leaf_control_rep3,PRJEB37747,ERR4018568,5,leaf,WT,control,yes,control,,,ambiguous
+05_leaf_co-cultivated (Laccaria bicolor)_rep2,PRJEB37747,ERR4018569,5,leaf,WT,perturbation,no,co-cultivated (Laccaria bicolor),,,ambiguous
+05_leaf_control_rep4,PRJEB37747,ERR4018570,5,leaf,WT,control,yes,control,,,ambiguous
+05_leaf_co-cultivated (Laccaria bicolor)_rep3,PRJEB37747,ERR4018571,5,leaf,WT,perturbation,no,co-cultivated (Laccaria bicolor),,,ambiguous
+06_root_untreted root_rep1,PRJNA244820,SRR1246865,6,root,WT,perturbation,no,control,,,unstranded
+06_root_untreted root_rep2,PRJNA244820,SRR1246866,6,root,WT,perturbation,no,control,,,unstranded
+06_root_MeJa treated root_rep1,PRJNA244820,SRR1246867,6,root,WT,perturbation,no,MeJa treated root,,,unstranded
+06_root_MeJa treated root_rep2,PRJNA244820,SRR1246868,6,root,WT,perturbation,no,MeJa treated root,,,unstranded
+07_xylem_control_rep1,PRJNA247385,SRR1292611,7,xylem,WT,control,yes,control,,,unstranded
+07_xylem_control_rep2,PRJNA247385,SRR1295980,7,xylem,WT,control,yes,control,,,unstranded
+07_xylem_mechanical bending_rep1,PRJNA247385,SRR1295981,7,xylem,WT,perturbation,no,mechanical bending,,,unstranded
+07_xylem_mechanical bending_rep2,PRJNA247385,SRR1295982,7,xylem,WT,perturbation,no,mechanical bending,,,unstranded
+07_xylem_mechanical bending_rep3,PRJNA247385,SRR1295983,7,xylem,WT,perturbation,no,mechanical bending,,,unstranded
+08_leaf_control_rep1,PRJNA275366,SRR2076095,8,leaf,WT,control,yes,control,,,unstranded
+08_bark_rep1,PRJNA275366,SRR2076096,8,bark,WT,control,yes,control,,,unstranded
+08_xylem_control_rep1,PRJNA275366,SRR2076097,8,xylem,WT,control,yes,control,,,unstranded
+08_leaf_control_rep2,PRJNA275366,SRR3027618,8,leaf,WT,control,yes,control,,,unstranded
+08_leaf_control_rep3,PRJNA275366,SRR3027619,8,leaf,WT,control,yes,control,,,unstranded
+08_leaf_50% defoliation_rep1,PRJNA275366,SRR3027620,8,leaf,WT,perturbation,no,50% defoliation,,,unstranded
+08_leaf_50% defoliation_rep2,PRJNA275366,SRR3027621,8,leaf,WT,perturbation,no,50% defoliation,,,unstranded
+08_leaf_50% defoliation_rep3,PRJNA275366,SRR3027622,8,leaf,WT,perturbation,no,50% defoliation,,,unstranded
+08_bark_rep2,PRJNA275366,SRR3027629,8,bark,WT,control,yes,control,,,unstranded
+08_bark_control_rep1,PRJNA275366,SRR3027630,8,bark,WT,control,yes,control,,,unstranded
+08_bark_50% defoliation_rep1,PRJNA275366,SRR3027631,8,bark,WT,perturbation,no,50% defoliation,,,unstranded
+08_bark_50% defoliation_rep2,PRJNA275366,SRR3027632,8,bark,WT,perturbation,no,50% defoliation,,,unstranded
+08_bark_50% defoliation_rep3,PRJNA275366,SRR3027633,8,bark,WT,perturbation,no,50% defoliation,,,unstranded
+08_xylem_control_rep2,PRJNA275366,SRR3027640,8,xylem,WT,control,yes,control,,,unstranded
+08_xylem_control_rep3,PRJNA275366,SRR3027641,8,xylem,WT,control,yes,control,,,unstranded
+08_xylem_50% defoliation_rep1,PRJNA275366,SRR3027642,8,xylem,WT,perturbation,no,50% defoliation,,,unstranded
+08_xylem_50% defoliation_rep2,PRJNA275366,SRR3027643,8,xylem,WT,perturbation,no,50% defoliation,,,unstranded
+08_xylem_50% defoliation_rep3,PRJNA275366,SRR3027644,8,xylem,WT,perturbation,no,50% defoliation,,,unstranded
+09_bark_rep1,PRJNA283179,SRR2010687,9,bark,WT,control,yes,control,,,unstranded
+09_bark_rep2,PRJNA283179,SRR2010688,9,bark,WT,control,yes,control,,,unstranded
+10_xylem_NoGA_Normal_Wood_side_A_rep1,PRJNA284622,SRR2042506,10,xylem,WT,control,no,control,,Normal_Wood_side_A,unstranded
+10_xylem_GA_Tension_Wood_rep1,PRJNA284622,SRR2042507,10,xylem,WT,perturbation,no,GA,,Tension_Wood,unstranded
+10_xylem_NoGA_Normal_Wood_side_B_rep1,PRJNA284622,SRR2042511,10,xylem,WT,control,yes,control,,Normal_Wood_side_B,unstranded
+10_xylem_GA_Normal_Wood_side_B_rep1,PRJNA284622,SRR2042518,10,xylem,WT,perturbation,no,GA,,Normal_Wood_side_B,unstranded
+10_xylem_GA_Normal_Wood_side_B_rep2,PRJNA284622,SRR2042519,10,xylem,WT,perturbation,no,GA,,Normal_Wood_side_B,unstranded
+10_xylem_GA_Tension_Wood_rep2,PRJNA284622,SRR2042520,10,xylem,WT,perturbation,no,GA,,Tension_Wood,unstranded
+10_xylem_GA_Normal_Wood_side_A_rep1,PRJNA284622,SRR2042521,10,xylem,WT,perturbation,no,GA,,Normal_Wood_side_A,unstranded
+10_xylem_GA_Normal_Wood_side_A_rep2,PRJNA284622,SRR2042522,10,xylem,WT,perturbation,no,GA,,Normal_Wood_side_A,unstranded
+10_xylem_NoGA_Tension_Wood_rep1,PRJNA284622,SRR2042523,10,xylem,WT,perturbation,no,control,,Tension_Wood,unstranded
+10_xylem_NoGA_Opposite_Wood_rep1,PRJNA284622,SRR2042524,10,xylem,WT,perturbation,no,control,,Opposite_Wood,unstranded
+10_xylem_GA_Opposite_Wood_rep1,PRJNA284622,SRR2042526,10,xylem,WT,perturbation,no,GA,,Opposite_Wood,unstranded
+10_xylem_GA_Opposite_Wood_rep2,PRJNA284622,SRR2042528,10,xylem,WT,perturbation,no,GA,,Opposite_Wood,unstranded
+10_xylem_NoGA_Opposite_Wood_rep2,PRJNA284622,SRR2042537,10,xylem,WT,perturbation,no,control,,Opposite_Wood,unstranded
+10_xylem_NoGA_Normal_Wood_side_A_rep2,PRJNA284622,SRR2042538,10,xylem,WT,control,yes,control,,Normal_Wood_side_A,unstranded
+10_xylem_NoGA_Tension_Wood_rep2,PRJNA284622,SRR2042541,10,xylem,WT,perturbation,no,control,,Tension_Wood,unstranded
+10_xylem_NoGA_Tension_Wood_rep3,PRJNA284622,SRR2042542,10,xylem,WT,perturbation,no,control,,Tension_Wood,unstranded
+10_xylem_NoGA_Normal_Wood_side_B_rep2,PRJNA284622,SRR2042545,10,xylem,WT,control,yes,control,,Normal_Wood_side_B,unstranded
+10_xylem_NoGA_Normal_Wood_side_A_rep3,PRJNA284622,SRR2042547,10,xylem,WT,control,yes,control,,Normal_Wood_side_A,unstranded
+10_xylem_NoGA_Opposite_Wood_rep3,PRJNA284622,SRR2042549,10,xylem,WT,perturbation,no,control,,Opposite_Wood,unstranded
+10_xylem_NoGA_Normal_Wood_side_B_rep3,PRJNA284622,SRR2042559,10,xylem,WT,control,yes,control,,Normal_Wood_side_B,unstranded
+12_xylem_Normal wood_0hr_rep1,PRJNA398515,SRR5944843,12,xylem,WT,control,yes,control,,0hr,reverse-stranded
+12_xylem_Tension wood_8hr_rep1,PRJNA398515,SRR5944844,12,xylem,WT,perturbation,no,Tension wood,,8hr,reverse-stranded
+12_xylem_Tension wood_24hr_rep1,PRJNA398515,SRR5944845,12,xylem,WT,perturbation,no,Tension wood,,24hr,reverse-stranded
+12_xylem_Opposite wood_24hr_rep1,PRJNA398515,SRR5944846,12,xylem,WT,perturbation,no,Opposite wood,,24hr,reverse-stranded
+12_xylem_Normal wood_0hr_rep2,PRJNA398515,SRR5944847,12,xylem,WT,control,yes,control,,0hr,reverse-stranded
+12_xylem_Normal wood_0hr_rep3,PRJNA398515,SRR5944848,12,xylem,WT,control,yes,control,,0hr,reverse-stranded
+12_xylem_Tension wood_336hr_rep1,PRJNA398515,SRR5944849,12,xylem,WT,perturbation,no,Tension wood,,336hr,reverse-stranded
+12_xylem_Opposite wood_336hr_rep1,PRJNA398515,SRR5944850,12,xylem,WT,perturbation,no,Opposite wood,,336hr,reverse-stranded
+12_xylem_Tension wood_2hr_rep1,PRJNA398515,SRR5944851,12,xylem,WT,perturbation,no,Tension wood,,2hr,reverse-stranded
+12_xylem_Opposite wood_2hr_rep1,PRJNA398515,SRR5944852,12,xylem,WT,perturbation,no,Opposite wood,,2hr,reverse-stranded
+12_xylem_Tension wood_96hr_rep1,PRJNA398515,SRR5944853,12,xylem,WT,perturbation,no,Tension wood,,96hr,reverse-stranded
+12_xylem_Opposite wood_96hr_rep1,PRJNA398515,SRR5944854,12,xylem,WT,perturbation,no,Opposite wood,,96hr,reverse-stranded
+12_xylem_Normal wood_0hr_rep4,PRJNA398515,SRR5944855,12,xylem,WT,control,no,control,,0hr,reverse-stranded
+12_xylem_Normal wood_0hr_rep5,PRJNA398515,SRR5944856,12,xylem,WT,control,yes,control,,0hr,reverse-stranded
+12_xylem_Opposite wood_48hr_rep1,PRJNA398515,SRR5944857,12,xylem,WT,perturbation,no,Opposite wood,,48hr,reverse-stranded
+12_xylem_Tension wood_48hr_rep1,PRJNA398515,SRR5944858,12,xylem,WT,perturbation,no,Tension wood,,48hr,reverse-stranded
+12_xylem_Opposite wood_24hr_rep2,PRJNA398515,SRR5944859,12,xylem,WT,perturbation,no,Opposite wood,,24hr,reverse-stranded
+12_xylem_Tension wood_24hr_rep2,PRJNA398515,SRR5944860,12,xylem,WT,perturbation,no,Tension wood,,24hr,reverse-stranded
+12_xylem_Opposite wood_48hr_rep2,PRJNA398515,SRR5944861,12,xylem,WT,perturbation,no,Opposite wood,,48hr,reverse-stranded
+12_xylem_Tension wood_48hr_rep2,PRJNA398515,SRR5944862,12,xylem,WT,perturbation,no,Tension wood,,48hr,reverse-stranded
+12_xylem_Opposite wood_2hr_rep2,PRJNA398515,SRR5944863,12,xylem,WT,perturbation,no,Opposite wood,,2hr,reverse-stranded
+12_xylem_Tension wood_2hr_rep2,PRJNA398515,SRR5944864,12,xylem,WT,perturbation,no,Tension wood,,2hr,reverse-stranded
+12_xylem_Tension wood_8hr_rep2,PRJNA398515,SRR5944865,12,xylem,WT,perturbation,no,Tension wood,,8hr,reverse-stranded
+12_xylem_Opposite wood_96hr_rep2,PRJNA398515,SRR5944866,12,xylem,WT,perturbation,no,Opposite wood,,96hr,reverse-stranded
+12_xylem_Tension wood_336hr_rep2,PRJNA398515,SRR5944867,12,xylem,WT,perturbation,no,Tension wood,,336hr,reverse-stranded
+12_xylem_Opposite wood_8hr_rep1,PRJNA398515,SRR5944868,12,xylem,WT,perturbation,no,Opposite wood,,8hr,reverse-stranded
+12_xylem_Tension wood_24hr_rep3,PRJNA398515,SRR5944869,12,xylem,WT,perturbation,no,Tension wood,,24hr,reverse-stranded
+12_xylem_Opposite wood_336hr_rep2,PRJNA398515,SRR5944870,12,xylem,WT,perturbation,no,Opposite wood,,336hr,reverse-stranded
+12_xylem_Opposite wood_96hr_rep3,PRJNA398515,SRR5944871,12,xylem,WT,perturbation,no,Opposite wood,,96hr,reverse-stranded
+12_xylem_Tension wood_96hr_rep2,PRJNA398515,SRR5944872,12,xylem,WT,perturbation,no,Tension wood,,96hr,reverse-stranded
+12_xylem_Tension wood_48hr_rep3,PRJNA398515,SRR5944873,12,xylem,WT,perturbation,no,Tension wood,,48hr,reverse-stranded
+12_xylem_Opposite wood_8hr_rep2,PRJNA398515,SRR5944874,12,xylem,WT,perturbation,no,Opposite wood,,8hr,reverse-stranded
+12_xylem_Tension wood_8hr_rep3,PRJNA398515,SRR5944875,12,xylem,WT,perturbation,no,Tension wood,,8hr,reverse-stranded
+12_xylem_Opposite wood_8hr_rep3,PRJNA398515,SRR5944876,12,xylem,WT,perturbation,no,Opposite wood,,8hr,reverse-stranded
+12_xylem_Opposite wood_24hr_rep3,PRJNA398515,SRR5944877,12,xylem,WT,perturbation,no,Opposite wood,,24hr,reverse-stranded
+12_xylem_Tension wood_2hr_rep3,PRJNA398515,SRR5944878,12,xylem,WT,perturbation,no,Tension wood,,2hr,reverse-stranded
+12_xylem_Opposite wood_48hr_rep3,PRJNA398515,SRR5944879,12,xylem,WT,perturbation,no,Opposite wood,,48hr,reverse-stranded
+14_fully expanded leaves_rep1,PRJNA776006,SRR16617189,14,leaf,WT,control,yes,control,,,unstranded
+14_fully expanded leaves_rep2,PRJNA776006,SRR16617190,14,leaf,WT,control,yes,control,,,unstranded
+14_fully expanded leaves_rep3,PRJNA776006,SRR16617196,14,leaf,WT,control,yes,control,,,unstranded
+16_root_LCO_8h_rep1,PRJNA799029,SAMN25143711_merged2lanes,16,root,WT,perturbation,no,LCO_8hr,,,reverse-stranded
+16_root_LCO_4h_rep1,PRJNA799029,SAMN25143712_merged2lanes,16,root,WT,perturbation,no,LCO_4hr,,,reverse-stranded
+16_root_LCO_30min_rep1,PRJNA799029,SAMN25143721_merged2lanes,16,root,WT,perturbation,no,LCO_30min,,,reverse-stranded
+16_root_LCO_24h_rep1,PRJNA799029,SRR17681574,16,root,WT,perturbation,no,LCO_24hr,,,reverse-stranded
+16_root_LCO_8h_rep2,PRJNA799029,SRR17681586,16,root,WT,perturbation,no,LCO_8hr,,,reverse-stranded
+16_root_LCO_4h_rep2,PRJNA799029,SRR17681596,16,root,WT,perturbation,no,LCO_4hr,,,reverse-stranded
+16_root_LCO_2h_rep1,PRJNA799029,SRR17681602,16,root,WT,perturbation,no,LCO_2hr,,,reverse-stranded
+16_root_LCO_1h_rep1,PRJNA799029,SRR17681614,16,root,WT,perturbation,no,LCO_1hr,,,reverse-stranded
+16_root_LCO_15min_rep1,PRJNA799029,SRR17681627,16,root,WT,perturbation,no,LCO_15min,,,reverse-stranded
+16_root_LCO_15min_rep2,PRJNA799029,SRR17681631,16,root,WT,perturbation,no,LCO_15min,,,reverse-stranded
+16_root_LCO control_rep1,PRJNA799029,SRR17681640,16,root,WT,control,yes,control,,,reverse-stranded
+16_root_LCO control_rep2,PRJNA799029,SRR17681643,16,root,WT,control,no,control,,,reverse-stranded
+17_stem_winter_a_rep1,PRJNA408724,SRR6256957,17,stem,WT,perturbation,yes,,winter_a,"Dec 5-12, 2014",reverse-stranded
+17_stem_winter_c_rep1,PRJNA408724,SRR6256934,17,stem,WT,perturbation,yes,,winter_c,"Jan 9-17, 2015",reverse-stranded
+17_stem_fall_b_rep1,PRJNA408724,SRR6256942,17,stem,WT,perturbation,yes,,fall_b,"Nov 21-29, 2014",reverse-stranded
+17_apical_bud_winter_d_rep1,PRJNA408724,SRR6256921,17,bud,WT,perturbation,yes,,winter_d,"Jan 27-Feb 10, 2015",reverse-stranded
+17_stem_winter_b_rep1,PRJNA408724,SRR6256920,17,stem,WT,perturbation,yes,,winter_b,"Dec 19, 2014 - Jan 3, 2015",reverse-stranded
+17_apical_bud_spring_b_rep1,PRJNA408724,SRR6256953,17,bud,WT,perturbation,yes,,spring_b,"Mar 17-31, 2015",reverse-stranded
+17_stem_winter_d_rep1,PRJNA408724,SRR6256954,17,stem,WT,perturbation,yes,,winter_d,"Jan 30- Feb 12, 2015",reverse-stranded
+17_stem_fall_b_rep2,PRJNA408724,SRR6256955,17,stem,WT,perturbation,yes,,fall_b,"Nov 21-29, 2014",reverse-stranded
+17_apical_bud_spring_c_rep1,PRJNA408724,SRR6256923,17,bud,WT,perturbation,yes,,spring_c,"Apr 7-14, 2015",reverse-stranded
+17_stem_spring_a_rep1,PRJNA408724,SRR6256922,17,stem,WT,perturbation,yes,,spring_a,"Mar 5-12, 2015",reverse-stranded
+17_stem_winter_c_rep2,PRJNA408724,SRR6256952,17,stem,WT,perturbation,yes,,winter_c,"Jan 9-17, 2015",reverse-stranded
+17_apical_bud_winter_c_rep1,PRJNA408724,SRR6256951,17,bud,WT,perturbation,yes,,winter_c,"Jan 13-20, 2015",reverse-stranded
+17_stem_winter_b_rep2,PRJNA408724,SRR6256950,17,stem,WT,perturbation,yes,,winter_b,"Dec 19, 2014 - Jan 3, 2015",reverse-stranded
+17_apical_bud_spring_a_rep1,PRJNA408724,SRR6256949,17,bud,WT,perturbation,yes,,spring_a,"Mar 3-10, 2015",reverse-stranded
+17_stem_fall_a_rep1,PRJNA408724,SRR6256948,17,stem,WT,perturbation,yes,,fall_a,"Nov 7-15, 2014",reverse-stranded
+17_apical_bud_spring_c_rep2,PRJNA408724,SRR6256937,17,bud,WT,perturbation,yes,,spring_c,"Apr 7-14, 2015",reverse-stranded
+17_stem_spring_b_rep1,PRJNA408724,SRR6256933,17,stem,WT,perturbation,yes,,spring_b,"Mar 21-26, 2015",reverse-stranded
+17_apical_bud_spring_b_rep2,PRJNA408724,SRR6256938,17,bud,WT,perturbation,yes,,spring_b,"Mar 17-31, 2015",reverse-stranded
+17_apical_bud_winter_c_rep2,PRJNA408724,SRR6256936,17,bud,WT,perturbation,yes,,winter_c,"Jan 13-20, 2015",reverse-stranded
+17_stem_winter_a_rep2,PRJNA408724,SRR6256931,17,stem,WT,perturbation,yes,,winter_a,"Dec 5-12, 2014",reverse-stranded
+17_stem_spring_b_rep2,PRJNA408724,SRR6256932,17,stem,WT,perturbation,yes,,spring_b,"Mar 21-26, 2015",reverse-stranded
+17_apical_bud_winter_d_rep2,PRJNA408724,SRR6256924,17,bud,WT,perturbation,yes,,winter_d,"Jan 27-Feb 10, 2015",reverse-stranded
+17_stem_winter_d_rep2,PRJNA408724,SRR6256927,17,stem,WT,perturbation,yes,,winter_d,"Jan 30- Feb 12, 2015",reverse-stranded
+17_stem_spring_c_rep1,PRJNA408724,SRR6256926,17,stem,WT,perturbation,yes,,spring_c,"Apr 1-9, 2015",reverse-stranded
+17_stem_winter_b_rep3,PRJNA408724,SRR6256925,17,stem,WT,perturbation,yes,,winter_b,"Dec 19, 2014 - Jan 3, 2015",reverse-stranded
+17_apical_bud_winter_d_rep3,PRJNA408724,SRR6256946,17,bud,WT,perturbation,yes,,winter_d,"Jan 27-Feb 10, 2015",reverse-stranded
+17_stem_spring_a_rep2,PRJNA408724,SRR6256929,17,stem,WT,perturbation,yes,,spring_a,"Mar 5-12, 2015",reverse-stranded
+17_apical_bud_winter_e_rep1,PRJNA408724,SRR6256928,17,bud,WT,perturbation,yes,,winter_e,"Feb 17-24, 2015",reverse-stranded
+17_apical_bud_spring_a_rep2,PRJNA408724,SRR6256943,17,bud,WT,perturbation,yes,,spring_a,"Mar 3-10, 2015",reverse-stranded
+17_stem_winter_e_rep1,PRJNA408724,SRR6256947,17,stem,WT,perturbation,yes,,winter_e,"Feb 19-26, 2015",reverse-stranded
+17_stem_spring_c_rep2,PRJNA408724,SRR6256944,17,stem,WT,perturbation,yes,,spring_c,"Apr 1-9, 2015",reverse-stranded
+17_stem_winter_d_rep3,PRJNA408724,SRR6256945,17,stem,WT,perturbation,yes,,winter_d,"Jan 30- Feb 12, 2015",reverse-stranded
+17_apical_bud_winter_e_rep2,PRJNA408724,SRR6256940,17,bud,WT,perturbation,yes,,winter_e,"Feb 17-24, 2015",reverse-stranded
+17_stem_fall_a_rep2,PRJNA408724,SRR6256941,17,stem,WT,perturbation,yes,,fall_a,"Nov 7-15, 2014",reverse-stranded
+17_apical_bud_spring_b_rep3,PRJNA408724,SRR6256939,17,bud,WT,perturbation,yes,,spring_b,"Mar 17-31, 2015",reverse-stranded
+17_stem_winter_e_rep2,PRJNA408724,SRR6256956,17,stem,WT,perturbation,yes,,winter_e,"Feb 19-26, 2015",reverse-stranded
+18_bark_old_inner_rep1,PRJNA335737,SRR3975578,18,bark,WT,control,yes,,old,inner,reverse-stranded
+18_bark_old_inner_rep2,PRJNA335737,SRR3975579,18,bark,WT,control,yes,,old,inner,reverse-stranded
+18_bark_old_inner_rep3,PRJNA335737,SRR3975580,18,bark,WT,control,yes,,old,inner,reverse-stranded
+18_bark_old_inner_rep4,PRJNA335737,SRR3975581,18,bark,WT,control,yes,,old,inner,reverse-stranded
+18_bark_old_outer_rep1,PRJNA335737,SRR3975582,18,bark,WT,control,yes,,old,outer,reverse-stranded
+18_bark_old_outer_rep2,PRJNA335737,SRR3975583,18,bark,WT,control,yes,,old,outer,reverse-stranded
+18_bark_old_outer_rep3,PRJNA335737,SRR3975584,18,bark,WT,control,yes,,old,outer,reverse-stranded
+18_bark_old_outer_rep4,PRJNA335737,SRR3975585,18,bark,WT,control,yes,,old,outer,reverse-stranded
+18_bark_young_inner_rep1,PRJNA335737,SRR3975586,18,bark,WT,control,yes,,young,inner,reverse-stranded
+18_bark_young_inner_rep2,PRJNA335737,SRR3975587,18,bark,WT,control,yes,,young,inner,reverse-stranded
+18_bark_young_inner_rep3,PRJNA335737,SRR3975588,18,bark,WT,control,yes,,young,inner,reverse-stranded
+18_bark_young_outer_rep1,PRJNA335737,SRR3975589,18,bark,WT,control,yes,,young,outer,reverse-stranded
+18_bark_young_outer_rep2,PRJNA335737,SRR3975590,18,bark,WT,control,yes,,young,outer,reverse-stranded
+18_bark_young_outer_rep3,PRJNA335737,SRR3975591,18,bark,WT,control,yes,,young,outer,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep1,PRJNA416870,SRR6249443,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep1,PRJNA416870,SRR6249444,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep1,PRJNA416870,SRR6249445,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_8_rep1,PRJNA416870,SRR6249446,19,leaf,SUT1_8,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep2,PRJNA416870,SRR6249447,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep3,PRJNA416870,SRR6249448,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI25_WT_rep1,PRJNA416870,SRR6249449,19,leaf,WT,control,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_WT_rep2,PRJNA416870,SRR6249450,19,leaf,WT,control,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep2,PRJNA416870,SRR6249451,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep3,PRJNA416870,SRR6249452,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep1,PRJNA416870,SRR6249453,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep2,PRJNA416870,SRR6249454,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep3,PRJNA416870,SRR6249455,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_WT_rep1,PRJNA416870,SRR6249456,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI15_WT_rep1,PRJNA416870,SRR6249457,19,leaf,WT,control,yes,,LPI15,,reverse-stranded
+19_leaf_LPI5_SUT1_12_rep1,PRJNA416870,SRR6249458,19,leaf,SUT1_12,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_12_rep2,PRJNA416870,SRR6249459,19,leaf,SUT1_12,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_12_rep3,PRJNA416870,SRR6249460,19,leaf,SUT1_12,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI15_WT_rep2,PRJNA416870,SRR6249461,19,leaf,WT,control,yes,,LPI15,,reverse-stranded
+19_leaf_LPI15_WT_rep3,PRJNA416870,SRR6249462,19,leaf,WT,control,no,,LPI15,,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep2,PRJNA416870,SRR6249463,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI5_WT_rep2,PRJNA416870,SRR6249464,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_WT_rep3,PRJNA416870,SRR6249465,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_WT_rep4,PRJNA416870,SRR6249466,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_WT_rep5,PRJNA416870,SRR6249467,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep4,PRJNA416870,SRR6249468,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_WT_rep6,PRJNA416870,SRR6249469,19,leaf,WT,control,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep5,PRJNA416870,SRR6249470,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_8_rep6,PRJNA416870,SRR6249471,19,leaf,SUT1_8,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_12_rep4,PRJNA416870,SRR6249472,19,leaf,SUT1_12,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI5_SUT1_12_rep5,PRJNA416870,SRR6249473,19,leaf,SUT1_12,perturbation,no,,LPI5,,reverse-stranded
+19_leaf_LPI15_SUT1_8_rep2,PRJNA416870,SRR6249474,19,leaf,SUT1_8,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_8_rep3,PRJNA416870,SRR6249475,19,leaf,SUT1_8,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep4,PRJNA416870,SRR6249476,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep5,PRJNA416870,SRR6249477,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_8_rep4,PRJNA416870,SRR6249478,19,leaf,SUT1_8,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_8_rep5,PRJNA416870,SRR6249479,19,leaf,SUT1_8,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_WT_rep4,PRJNA416870,SRR6249480,19,leaf,WT,control,yes,,LPI15,,reverse-stranded
+19_leaf_LPI15_WT_rep5,PRJNA416870,SRR6249481,19,leaf,WT,control,yes,,LPI15,,reverse-stranded
+19_leaf_LPI15_SUT1_12_rep6,PRJNA416870,SRR6249482,19,leaf,SUT1_12,perturbation,no,,LPI15,,reverse-stranded
+19_leaf_LPI15_WT_rep6,PRJNA416870,SRR6249483,19,leaf,WT,control,no,,LPI15,,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep3,PRJNA416870,SRR6249484,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep4,PRJNA416870,SRR6249485,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep5,PRJNA416870,SRR6249486,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_12_rep6,PRJNA416870,SRR6249487,19,leaf,SUT1_12,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_WT_rep3,PRJNA416870,SRR6249488,19,leaf,WT,control,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_WT_rep4,PRJNA416870,SRR6249489,19,leaf,WT,control,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_WT_rep5,PRJNA416870,SRR6249490,19,leaf,WT,control,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep4,PRJNA416870,SRR6249491,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep5,PRJNA416870,SRR6249492,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+19_leaf_LPI25_SUT1_8_rep6,PRJNA416870,SRR6249493,19,leaf,SUT1_8,perturbation,no,,LPI25,,reverse-stranded
+20_gall_CAD_rep1,PRJNA448704,SAMN08863492_merged4lanes,20,gall,CAD,perturbation,no,,,,partially stranded
+20_gall_CAD_rep2,PRJNA448704,SAMN08863493_merged4lanes,20,gall,CAD,perturbation,no,,,,partially stranded
+20_root_CAD_rep1,PRJNA448704,SAMN08863494_merged4lanes,20,root,CAD,perturbation,no,,,,partially stranded
+20_root_CAD_rep2,PRJNA448704,SAMN08863495_merged4lanes,20,root,CAD,perturbation,no,,,,partially stranded
+20_gall_WT_rep1,PRJNA448704,SAMN08863496_merged4lanes,20,gall,WT,perturbation,no,,,,partially stranded
+20_gall_WT_rep2,PRJNA448704,SAMN08863497_merged4lanes,20,gall,WT,perturbation,no,,,,partially stranded
+20_gall_WT_rep3,PRJNA448704,SAMN08863498_merged4lanes,20,gall,WT,perturbation,no,,,,partially stranded
+20_root_WT_rep1,PRJNA448704,SAMN08863499_merged4lanes,20,root,WT,control,yes,,,,partially stranded
+20_root_WT_rep2,PRJNA448704,SAMN08863500_merged4lanes,20,root,WT,control,yes,,,,partially stranded
+20_root_WT_rep3,PRJNA448704,SAMN08863501_merged4lanes,20,root,WT,control,yes,,,,partially stranded
+20_gall_CAD_rep3,PRJNA448704,SAMN08863503_merged4lanes,20,gall,CAD,perturbation,no,,,,partially stranded
+21_shoot_tip_WT_rep1,PRJNA558677,SRR9905115,21,bud,WT,control,yes,,,,reverse-stranded
+21_shoot_tip_WT_rep2,PRJNA558677,SRR9905116,21,bud,WT,control,yes,,,,reverse-stranded
+21_shoot_tip_WT_rep3,PRJNA558677,SRR9905117,21,bud,WT,control,yes,,,,reverse-stranded
+21_shoot_tip_siRNA-DDM1_rep1,PRJNA558677,SRR9905118,21,bud,siRNA-DDM1 ,perturbation,no,,,,reverse-stranded
+21_shoot_tip_siRNA-DDM1_rep2,PRJNA558677,SRR9905119,21,bud,siRNA-DDM1 ,perturbation,no,,,,reverse-stranded
+21_shoot_tip_siRNA-DDM1_rep3,PRJNA558677,SRR9905120,21,bud,siRNA-DDM1 ,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE3_729_rep1,PRJNA1072118,SRR27860464,22,leaf,P1_LINE3_729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE3_729_rep2,PRJNA1072118,SRR27860465,22,leaf,P1_LINE3_729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE3_729_rep3,PRJNA1072118,SRR27860466,22,leaf,P1_LINE3_729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE3_729_rep4,PRJNA1072118,SRR27860467,22,leaf,P1_LINE3_729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE3_729_rep5,PRJNA1072118,SRR27860468,22,leaf,P1_LINE3_729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE1_Mlp729_rep1,PRJNA1072118,SRR27860469,22,leaf,P1_LINE1_Mlp729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE1_Mlp729_rep2,PRJNA1072118,SRR27860470,22,leaf,P1_LINE1_Mlp729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE1_Mlp729_rep3,PRJNA1072118,SRR27860472,22,leaf,P1_LINE1_Mlp729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE1_Mlp729_rep4,PRJNA1072118,SRR27860473,22,leaf,P1_LINE1_Mlp729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE1_Mlp729_rep5,PRJNA1072118,SRR27860474,22,leaf,P1_LINE1_Mlp729,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE8_521_rep1,PRJNA1072118,SRR27860475,22,leaf,P1_LINE8_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE8_521_rep2,PRJNA1072118,SRR27860476,22,leaf,P1_LINE8_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE8_521_rep3,PRJNA1072118,SRR27860477,22,leaf,P1_LINE8_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE8_521_rep4,PRJNA1072118,SRR27860478,22,leaf,P1_LINE8_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE8_521_rep5,PRJNA1072118,SRR27860479,22,leaf,P1_LINE8_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE4_521_rep1,PRJNA1072118,SRR27860480,22,leaf,P1_LINE4_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE4_521_rep2,PRJNA1072118,SRR27860481,22,leaf,P1_LINE4_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE4_521_rep3,PRJNA1072118,SRR27860483,22,leaf,P1_LINE4_521,perturbation,no,,,,reverse-stranded
+22_leaves_P1_LINE4_521_rep4,PRJNA1072118,SRR27860484,22,leaf,P1_LINE4_521,perturbation,no,,,,reverse-stranded
+22_leaves_POPLAR_GFP_rep1,PRJNA1072118,SRR27860485,22,leaf,POPLAR_GFP,control,no,,,,reverse-stranded
+22_leaves_POPLAR_GFP_rep2,PRJNA1072118,SRR27860486,22,leaf,POPLAR_GFP,control,no,,,,reverse-stranded
+22_leaves_POPLAR_GFP_rep3,PRJNA1072118,SRR27860487,22,leaf,POPLAR_GFP,control,no,,,,reverse-stranded
+22_leaves_POPLAR_GFP_rep4,PRJNA1072118,SRR27860488,22,leaf,POPLAR_GFP,control,no,,,,reverse-stranded
+22_leaves_POPLAR_GFP_rep5,PRJNA1072118,SRR27860489,22,leaf,POPLAR_GFP,control,no,,,,reverse-stranded
+23_xylem_4cl1-58_rep1,PRJNA589632,SRR10505793,23,xylem,4cl1-58,perturbation,no,,,,reverse-stranded
+23_bark_4cl1-58_rep1,PRJNA589632,SRR10505794,23,bark,4cl1-58,perturbation,no,,,,reverse-stranded
+23_xylem_4cl1-50_rep1,PRJNA589632,SRR10505795,23,xylem,4cl1-50,perturbation,no,,,,reverse-stranded
+23_bark_4cl1-50_rep1,PRJNA589632,SRR10505796,23,bark,4cl1-50,perturbation,no,,,,reverse-stranded
+23_xylem_4cl1-39_rep1,PRJNA589632,SRR10505797,23,xylem,4cl1-39,perturbation,no,,,,reverse-stranded
+23_bark_4cl1-39_rep1,PRJNA589632,SRR10505798,23,bark,4cl1-39,perturbation,no,,,,reverse-stranded
+23_xylem_4cl1-21_rep1,PRJNA589632,SRR10505799,23,xylem,4cl1-21,perturbation,no,,,,reverse-stranded
+23_xylem_Cas9-39_rep1,PRJNA589632,SRR10505800,23,xylem,Cas9-39,control,no,,,,reverse-stranded
+23_bark_Cas9-39_rep1,PRJNA589632,SRR10505801,23,bark,Cas9-39,control,no,,,,reverse-stranded
+23_xylem_Cas9-18_rep1,PRJNA589632,SRR10505802,23,xylem,Cas9-18,control,no,,,,reverse-stranded
+23_bark_4cl1-21_rep1,PRJNA589632,SRR10505803,23,bark,4cl1-21,perturbation,no,,,,reverse-stranded
+23_bark_Cas9-18_rep1,PRJNA589632,SRR10505804,23,bark,Cas9-18,control,no,,,,reverse-stranded
+23_xylem_Cas9-16_rep1,PRJNA589632,SRR10505805,23,xylem,Cas9-16,control,no,,,,reverse-stranded
+23_bark_Cas9-16_rep1,PRJNA589632,SRR10505806,23,bark,Cas9-16,control,no,,,,reverse-stranded
+23_xylem_WT_rep1,PRJNA589632,SRR10505807,23,xylem,WT,control,yes,,,,reverse-stranded
+23_bark_WT_rep1,PRJNA589632,SRR10505808,23,bark,WT,control,yes,,,,reverse-stranded
+23_xylem_WT_rep2,PRJNA589632,SRR10505809,23,xylem,WT,control,yes,,,,reverse-stranded
+23_xylem_WT_rep3,PRJNA589632,SRR10505810,23,xylem,WT,control,yes,,,,reverse-stranded
+23_bark_WT_rep2,PRJNA589632,SRR10505811,23,bark,WT,control,yes,,,,reverse-stranded
+23_xylem_4cl1-61_rep1,PRJNA589632,SRR10505812,23,xylem,4cl1-61,perturbation,no,,,,reverse-stranded
+23_bark_4cl1-61_rep1,PRJNA589632,SRR10505813,23,bark,4cl1-61,perturbation,no,,,,reverse-stranded
+23_xylem_4cl1-13_rep1,PRJNA589632,SRR10505814,23,xylem,4cl1-13,perturbation,no,,,,reverse-stranded
+23_bark_4cl1-13_rep1,PRJNA589632,SRR10505815,23,bark,4cl1-13,perturbation,no,,,,reverse-stranded
+24_catkin_sut4_TT39_rep1,PRJNA1176577,SRR31126547,24,catkin,SUT4,perturbation,no,sut4_knockout,field_condition,,reverse-stranded
+24_catkin_sut4_TT36_rep1,PRJNA1176577,SRR31126542,24,catkin,SUT4,perturbation,no,sut4_knockout,field_condition,,reverse-stranded
+24_catkin_sut4_TT27_rep1,PRJNA1176577,SRR31126532,24,catkin,SUT4,perturbation,no,sut4_knockout,field_condition,,reverse-stranded
+24_catkin_sut4_TT30_rep1,PRJNA1176577,SRR31126538,24,catkin,SUT4,perturbation,no,sut4_knockout,field_condition,,reverse-stranded
+24_catkin_sut4_TT33_rep1,PRJNA1176577,SRR31126528,24,catkin,SUT4,perturbation,no,sut4_knockout,field_condition,,reverse-stranded
+24_catkin_Cas_TT21_rep1,PRJNA1176577,SRR31126512,24,catkin,Cas9,control,no,CRISPR_control,field_condition,,reverse-stranded
+24_catkin_Cas_TT15_rep1,PRJNA1176577,SRR31126518,24,catkin,Cas9,control,no,CRISPR_control,field_condition,,reverse-stranded
+24_catkin_WT_TT18_rep1,PRJNA1176577,SRR31126524,24,catkin,WT,control,yes,control,field_condition,,reverse-stranded
+24_catkin_WT_TT6_rep1,PRJNA1176577,SRR31126556,24,catkin,WT,control,yes,control,field_condition,,reverse-stranded
+24_catkin_Cas_TT3_rep1,PRJNA1176577,SRR31126550,24,catkin,Cas9,perturbation,no,CRISPR_control,field_condition,,reverse-stranded
+24_catkin_WT_TT12_rep1,PRJNA1176577,SRR31126503,24,catkin,WT,control,yes,control,field_condition,,reverse-stranded
+24_catkin_WT_TT9_rep1,PRJNA1176577,SRR31126509,24,catkin,WT,control,yes,control,field_condition,,reverse-stranded
+25_shoot_tip_PtaDML10_RNAi_rep1,PRJNA344826,SAMN05833248_merged4lanes,25,bud,PtaDML10 RNAi,perturbation,no,,,,partially stranded
+25_shoot_tip_PtaDML10_RNAi_rep2,PRJNA344826,SAMN05833249_merged4lanes,25,bud,PtaDML10 RNAi,perturbation,no,,,,partially stranded
+25_shoot_tip_wild_type_rep1,PRJNA344826,SAMN05833250_merged4lanes,25,bud,WT,control,no,,,,partially stranded
+26_AP2-1-OE_1_rep1,PRJNA1460759,AP2-1-OE_1,26,leaf,AP2-1-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_AP2-1-OE_2_rep1,PRJNA1460759,AP2-1-OE_2,26,leaf,AP2-1-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_AP2-1-OE_3_rep1,PRJNA1460759,AP2-1-OE_3,26,leaf,AP2-1-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_AP2-2-OE_1_rep1,PRJNA1460759,AP2-2-OE_1,26,leaf,AP2-2-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_AP2-2-OE_2_rep1,PRJNA1460759,AP2-2-OE_2,26,leaf,AP2-2-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_AP2-2-OE_3_rep1,PRJNA1460759,AP2-2-OE_3,26,leaf,AP2-2-OE,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_Control_1_rep1,PRJNA1460759,Control_1,26,leaf,WT-717-FT,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_Control_2_rep1,PRJNA1460759,Control_2,26,leaf,WT-717-FT,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_Control_3_rep1,PRJNA1460759,Control_3,26,leaf,WT-717-FT,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_1_rep1,PRJNA1460759,ap2-1_1,26,leaf,ap2-1,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_2_rep1,PRJNA1460759,ap2-1_2,26,leaf,ap2-1,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_3_rep1,PRJNA1460759,ap2-1_3,26,leaf,ap2-1,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_ap2-2_1_rep1,PRJNA1460759,ap2-1_ap2-2_1,26,leaf,ap2-1_ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_ap2-2_2_rep1,PRJNA1460759,ap2-1_ap2-2_2,26,leaf,ap2-1_ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-1_ap2-2_3_rep1,PRJNA1460759,ap2-1_ap2-2_3,26,leaf,ap2-1_ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-2_1_rep1,PRJNA1460759,ap2-2_1,26,leaf,ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-2_2_rep1,PRJNA1460759,ap2-2_2,26,leaf,ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+26_ap2-2_3_rep1,PRJNA1460759,ap2-2_3,26,leaf,ap2-2,perturbation,no,shoot induction medium (SIM),in vitro,7d,not measured
+27_SUT4-B-DR1_rep1,PRJNA247387,SUT4-B-DR1,27,bark,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-B-DR2_rep1,PRJNA247387,SUT4-B-DR2,27,bark,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-B-DR3_rep1,PRJNA247387,SUT4-B-DR3,27,bark,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-B-RC1_rep1,PRJNA247387,SUT4-B-RC1,27,bark,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-B-RC2_rep1,PRJNA247387,SUT4-B-RC2,27,bark,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-B-RC3_rep1,PRJNA247387,SUT4-B-RC3,27,bark,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-B-WW1_rep1,PRJNA247387,SUT4-B-WW1,27,bark,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-B-WW2_rep1,PRJNA247387,SUT4-B-WW2,27,bark,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-B-WW3_rep1,PRJNA247387,SUT4-B-WW3,27,bark,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-L-DR1_rep1,PRJNA247387,SUT4-L-DR1,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,,not measured
+27_SUT4-L-DR2_rep1,PRJNA247387,SUT4-L-DR2,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,,not measured
+27_SUT4-L-DR3_rep1,PRJNA247387,SUT4-L-DR3,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,,not measured
+27_SUT4-L-RC1_rep1,PRJNA247387,SUT4-L-RC1,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,recovered,not measured
+27_SUT4-L-RC2_rep1,PRJNA247387,SUT4-L-RC2,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,recovered,not measured
+27_SUT4-L-RC3_rep1,PRJNA247387,SUT4-L-RC3,27,leaf,SUT4-RNAi,perturbation,no,drought,LPI15,recovered,not measured
+27_SUT4-L-WW1_rep1,PRJNA247387,SUT4-L-WW1,27,leaf,SUT4-RNAi,perturbation,no,control,LPI15,,not measured
+27_SUT4-L-WW2_rep1,PRJNA247387,SUT4-L-WW2,27,leaf,SUT4-RNAi,perturbation,no,control,LPI15,,not measured
+27_SUT4-L-WW3_rep1,PRJNA247387,SUT4-L-WW3,27,leaf,SUT4-RNAi,perturbation,no,control,LPI15,,not measured
+27_SUT4-R-DR1_rep1,PRJNA247387,SUT4-R-DR1,27,root,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-R-DR2_rep1,PRJNA247387,SUT4-R-DR2,27,root,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-R-DR3_rep1,PRJNA247387,SUT4-R-DR3,27,root,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-R-RC1_rep1,PRJNA247387,SUT4-R-RC1,27,root,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-R-RC2_rep1,PRJNA247387,SUT4-R-RC2,27,root,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-R-RC3_rep1,PRJNA247387,SUT4-R-RC3,27,root,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-R-WW1_rep1,PRJNA247387,SUT4-R-WW1,27,root,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-R-WW2_rep1,PRJNA247387,SUT4-R-WW2,27,root,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-R-WW3_rep1,PRJNA247387,SUT4-R-WW3,27,root,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-X-DR1_rep1,PRJNA247387,SUT4-X-DR1,27,xylem,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-X-DR2_rep1,PRJNA247387,SUT4-X-DR2,27,xylem,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-X-DR3_rep1,PRJNA247387,SUT4-X-DR3,27,xylem,SUT4-RNAi,perturbation,no,drought,,,not measured
+27_SUT4-X-RC1_rep1,PRJNA247387,SUT4-X-RC1,27,xylem,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-X-RC2_rep1,PRJNA247387,SUT4-X-RC2,27,xylem,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-X-RC3_rep1,PRJNA247387,SUT4-X-RC3,27,xylem,SUT4-RNAi,perturbation,no,drought,,recovered,not measured
+27_SUT4-X-WW1_rep1,PRJNA247387,SUT4-X-WW1,27,xylem,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-X-WW2_rep1,PRJNA247387,SUT4-X-WW2,27,xylem,SUT4-RNAi,perturbation,no,control,,,not measured
+27_SUT4-X-WW3_rep1,PRJNA247387,SUT4-X-WW3,27,xylem,SUT4-RNAi,perturbation,no,control,,,not measured
+27_WT-B-DR1_rep1,PRJNA247387,WT-B-DR1,27,bark,WT,perturbation,no,drought,,,not measured
+27_WT-B-DR2_rep1,PRJNA247387,WT-B-DR2,27,bark,WT,perturbation,no,drought,,,not measured
+27_WT-B-DR3_rep1,PRJNA247387,WT-B-DR3,27,bark,WT,perturbation,no,drought,,,not measured
+27_WT-B-RC1_rep1,PRJNA247387,WT-B-RC1,27,bark,WT,perturbation,no,drought,,recovered,not measured
+27_WT-B-RC2_rep1,PRJNA247387,WT-B-RC2,27,bark,WT,perturbation,no,drought,,recovered,not measured
+27_WT-B-RC3_rep1,PRJNA247387,WT-B-RC3,27,bark,WT,perturbation,no,drought,,recovered,not measured
+27_WT-B-WW1_rep1,PRJNA247387,WT-B-WW1,27,bark,WT,control,yes,control,,,not measured
+27_WT-B-WW2_rep1,PRJNA247387,WT-B-WW2,27,bark,WT,control,yes,control,,,not measured
+27_WT-B-WW3_rep1,PRJNA247387,WT-B-WW3,27,bark,WT,control,yes,control,,,not measured
+27_WT-L-DR1_rep1,PRJNA247387,WT-L-DR1,27,leaf,WT,perturbation,no,drought,LPI15,,not measured
+27_WT-L-DR2_rep1,PRJNA247387,WT-L-DR2,27,leaf,WT,perturbation,no,drought,LPI15,,not measured
+27_WT-L-DR3_rep1,PRJNA247387,WT-L-DR3,27,leaf,WT,perturbation,no,drought,LPI15,,not measured
+27_WT-L-RC1_rep1,PRJNA247387,WT-L-RC1,27,leaf,WT,perturbation,no,drought,LPI15,recovered,not measured
+27_WT-L-RC2_rep1,PRJNA247387,WT-L-RC2,27,leaf,WT,perturbation,no,drought,LPI15,recovered,not measured
+27_WT-L-RC3_rep1,PRJNA247387,WT-L-RC3,27,leaf,WT,perturbation,no,drought,LPI15,recovered,not measured
+27_WT-L-WW1_rep1,PRJNA247387,WT-L-WW1,27,leaf,WT,control,yes,control,LPI15,,not measured
+27_WT-L-WW2_rep1,PRJNA247387,WT-L-WW2,27,leaf,WT,control,yes,control,LPI15,,not measured
+27_WT-L-WW3_rep1,PRJNA247387,WT-L-WW3,27,leaf,WT,control,yes,control,LPI15,,not measured
+27_WT-R-DR1_rep1,PRJNA247387,WT-R-DR1,27,root,WT,perturbation,no,drought,,,not measured
+27_WT-R-DR2_rep1,PRJNA247387,WT-R-DR2,27,root,WT,perturbation,no,drought,,,not measured
+27_WT-R-DR3_rep1,PRJNA247387,WT-R-DR3,27,root,WT,perturbation,no,drought,,,not measured
+27_WT-R-RC1_rep1,PRJNA247387,WT-R-RC1,27,root,WT,perturbation,no,drought,,recovered,not measured
+27_WT-R-RC2_rep1,PRJNA247387,WT-R-RC2,27,root,WT,perturbation,no,drought,,recovered,not measured
+27_WT-R-RC3_rep1,PRJNA247387,WT-R-RC3,27,root,WT,perturbation,no,drought,,recovered,not measured
+27_WT-R-WW1_rep1,PRJNA247387,WT-R-WW1,27,root,WT,control,yes,control,,,not measured
+27_WT-R-WW2_rep1,PRJNA247387,WT-R-WW2,27,root,WT,control,yes,control,,,not measured
+27_WT-R-WW3_rep1,PRJNA247387,WT-R-WW3,27,root,WT,control,yes,control,,,not measured
+27_WT-X-DR1_rep1,PRJNA247387,WT-X-DR1,27,xylem,WT,perturbation,no,drought,,,not measured
+27_WT-X-DR2_rep1,PRJNA247387,WT-X-DR2,27,xylem,WT,perturbation,no,drought,,,not measured
+27_WT-X-DR3_rep1,PRJNA247387,WT-X-DR3,27,xylem,WT,perturbation,no,drought,,,not measured
+27_WT-X-RC1_rep1,PRJNA247387,WT-X-RC1,27,xylem,WT,perturbation,no,drought,,recovered,not measured
+27_WT-X-RC2_rep1,PRJNA247387,WT-X-RC2,27,xylem,WT,perturbation,no,drought,,recovered,not measured
+27_WT-X-RC3_rep1,PRJNA247387,WT-X-RC3,27,xylem,WT,perturbation,no,drought,,recovered,not measured
+27_WT-X-WW1_rep1,PRJNA247387,WT-X-WW1,27,xylem,WT,control,yes,control,,,not measured
+27_WT-X-WW2_rep1,PRJNA247387,WT-X-WW2,27,xylem,WT,control,yes,control,,,not measured
+27_WT-X-WW3_rep1,PRJNA247387,WT-X-WW3,27,xylem,WT,control,yes,control,,,not measured
+28_WT_drought_rep1,PRJNA385042,WT_DR_Rep1,28,leaf,WT,perturbation,no,drought,,,not measured
+28_WT_drought_rep2,PRJNA385042,WT_DR_Rep2,28,leaf,WT,perturbation,no,drought,,,not measured
+28_WT_drought_rep3,PRJNA385042,WT_DR_Rep3,28,leaf,WT,perturbation,no,drought,,,not measured
+28_WT_drought_rep4,PRJNA385042,WT_DR_Rep4,28,leaf,WT,perturbation,no,drought,,,not measured
+28_WT_control_rep1,PRJNA385042,WT_WW_Rep1,28,leaf,WT,control,no,control,,,not measured
+28_WT_control_rep2,PRJNA385042,WT_WW_Rep2,28,leaf,WT,control,no,control,,,not measured
+28_WT_control_rep3,PRJNA385042,WT_WW_Rep3,28,leaf,WT,control,no,control,,,not measured
+28_WT_control_rep4,PRJNA385042,WT_WW_Rep4,28,leaf,WT,control,no,control,,,not measured
+28_TUA1dEY_drought_rep1,PRJNA385042,dEY11_DR_Rep1,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_drought_rep2,PRJNA385042,dEY11_DR_Rep2,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_drought_rep3,PRJNA385042,dEY11_DR_Rep3,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_drought_rep4,PRJNA385042,dEY11_DR_Rep4,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_control_rep1,PRJNA385042,dEY11_WW_Rep1,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep2,PRJNA385042,dEY11_WW_Rep2,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep3,PRJNA385042,dEY11_WW_Rep3,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep4,PRJNA385042,dEY11_WW_Rep4,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_drought_rep5,PRJNA385042,dEY12_DR_Rep1,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_drought_rep6,PRJNA385042,dEY12_DR_Rep2,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_drought_rep7,PRJNA385042,dEY12_DR_Rep3,28,leaf,TUA1dEY,perturbation,no,drought,,,not measured
+28_TUA1dEY_control_rep5,PRJNA385042,dEY12_WW_Rep1,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep6,PRJNA385042,dEY12_WW_Rep2,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep7,PRJNA385042,dEY12_WW_Rep3,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dEY_control_rep8,PRJNA385042,dEY12_WW_Rep4,28,leaf,TUA1dEY,perturbation,no,control,,,not measured
+28_TUA1dY_drought_rep1,PRJNA385042,dY_DR_Rep1,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep2,PRJNA385042,dY_DR_Rep10,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep3,PRJNA385042,dY_DR_Rep11,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep4,PRJNA385042,dY_DR_Rep2,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep5,PRJNA385042,dY_DR_Rep3,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep6,PRJNA385042,dY_DR_Rep4,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep7,PRJNA385042,dY_DR_Rep5,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep8,PRJNA385042,dY_DR_Rep6,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep9,PRJNA385042,dY_DR_Rep7,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep10,PRJNA385042,dY_DR_Rep8,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_drought_rep11,PRJNA385042,dY_DR_Rep9,28,leaf,TUA1dY,perturbation,no,drought,,,not measured
+28_TUA1dY_control_rep1,PRJNA385042,dY_WW_Rep1,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep2,PRJNA385042,dY_WW_Rep10,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep3,PRJNA385042,dY_WW_Rep11,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep4,PRJNA385042,dY_WW_Rep2,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep5,PRJNA385042,dY_WW_Rep3,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep6,PRJNA385042,dY_WW_Rep4,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep7,PRJNA385042,dY_WW_Rep5,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep8,PRJNA385042,dY_WW_Rep6,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep9,PRJNA385042,dY_WW_Rep7,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep10,PRJNA385042,dY_WW_Rep8,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+28_TUA1dY_control_rep11,PRJNA385042,dY_WW_Rep9,28,leaf,TUA1dY,perturbation,no,control,,,not measured
+29_vector control_rep1,PRJNA752367,DG_Rep1,29,leaf,vector control,control,no,control,,,not measured
+29_vector control_rep2,PRJNA752367,DG_Rep19,29,leaf,vector control,control,no,control,,,not measured
+29_vector control_rep3,PRJNA752367,DG_Rep9,29,leaf,vector control,control,no,control,,,not measured
+29_trichomeless-KO_rep1,PRJNA752367,KO-Rep10,29,leaf,trichomeless-KO,perturbation,no,control,,,not measured
+29_trichomeless-KO_rep2,PRJNA752367,KO-Rep18,29,leaf,trichomeless-KO,perturbation,no,control,,,not measured
+29_trichomeless-KO_rep3,PRJNA752367,KO-Rep25,29,leaf,trichomeless-KO,perturbation,no,control,,,not measured
+29_trichomeless-KO_rep4,PRJNA752367,KO-Rep4,29,leaf,trichomeless-KO,perturbation,no,control,,,not measured
+29_trichomeless-KO_rep5,PRJNA752367,KO-Rep5,29,leaf,trichomeless-KO,perturbation,no,control,,,not measured
+29_WT_rep1,PRJNA752367,WT_Rep1,29,leaf,WT,control,no,control,,,not measured
+29_WT_rep2,PRJNA752367,WT_Rep2,29,leaf,WT,control,no,control,,,not measured
+29_WT_rep3,PRJNA752367,WT_Rep3,29,leaf,WT,control,no,control,,,not measured
+30_LPI-15_rep1,PRJNA753499,LPI-15_rep1,30,leaf,WT,control,yes,control,LPI15,,not measured
+30_LPI-15_rep2,PRJNA753499,LPI-15_rep2,30,leaf,WT,control,yes,control,LPI15,,not measured
+30_LPI-15_rep3,PRJNA753499,LPI-15_rep3,30,leaf,WT,control,yes,control,LPI15,,not measured
+30_LPI-1_rep1,PRJNA753499,LPI-1_rep1,30,leaf,WT,control,no,control,LPI1,,not measured
+30_LPI-1_rep2,PRJNA753499,LPI-1_rep2,30,leaf,WT,control,yes,control,LPI1,,not measured
+30_LPI-1_rep3,PRJNA753499,LPI-1_rep3,30,leaf,WT,control,yes,control,LPI1,,not measured
+30_LPI-5_rep1,PRJNA753499,LPI-5_rep1,30,leaf,WT,control,yes,control,LPI5,,not measured
+30_LPI-5_rep2,PRJNA753499,LPI-5_rep2,30,leaf,WT,control,yes,control,LPI5,,not measured
+30_LPI-5_rep3,PRJNA753499,LPI-5_rep3,30,leaf,WT,control,yes,control,LPI5,,not measured
+31_leaf mature (LPI 15-16)_rep1,PRJNA408643,SRR6255836,31,leaf,WT,control,yes,control,,LPI15-16,not measured
+31_bark primary stem (internodes 3-6)_rep1,PRJNA408644,SRR6255833,31,bark,WT,control,yes,control,,internodes 3-6,not measured
+31_debarked primary stem (internodes 3-6)_rep1,PRJNA408645,SRR6255834,31,stem,WT,control,yes,control,,internodes 3-6,not measured
+31_bark secondary stem (internodes 12-15)_rep1,PRJNA408646,SRR6255842,31,bark,WT,control,yes,control,,internodes 12-15,not measured
+31_xylem secondary stem (internodes 12-15)_rep1,PRJNA408647,SRR6255832,31,xylem,WT,control,yes,control,,internodes 12-15,not measured
+31_root tip_rep1,PRJNA408648,SRR6255839,31,root,WT,control,yes,control,,,not measured
+31_callus_rep1,PRJNA411518,SRR6255841,31,callus,WT,control,no,control,,,not measured
+31_bud_rep1,PRJNA411519,SRR6255840,31,bud,WT,control,no,control,,,not measured
+31_shoot tip_rep1,PRJNA411520,SRR6255837,31,stem,WT,control,yes,control,,,not measured
+31_leaf newly emerged (LPI 1-2)_rep1,PRJNA411521,SRR6255838,31,leaf,WT,control,yes,control,,LPI1-2,not measured
+31_leaf expanding (LPI 5-6)_rep1,PRJNA411522,SRR6255835,31,leaf,WT,control,yes,control,,LPI5-6,not measured

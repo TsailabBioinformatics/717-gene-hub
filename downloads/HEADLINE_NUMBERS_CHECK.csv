@@ -1,0 +1,114 @@
+number,where_in_dissertation,haplotype,dissertation_value,value_from_release_tables,equal
+quality-filtered genes,Table 2.1,HAP1,31819.0,31819.0,True
+quality-filtered genes,Table 2.1,HAP2,31588.0,31588.0,True
+sWGD genes,Table 2.1,HAP1,14136.0,14136.0,True
+sWGD genes,Table 2.1,HAP2,14170.0,14170.0,True
+"sWGD genes, % of quality-filtered",Table 2.1,HAP1,44.4,44.4,True
+"sWGD genes, % of quality-filtered",Table 2.1,HAP2,44.9,44.9,True
+aWGT genes,Table 2.1,HAP1,5408.0,5408.0,True
+aWGT genes,Table 2.1,HAP2,5430.0,5430.0,True
+tandem duplicate genes,Table 2.1,HAP1,6663.0,6663.0,True
+tandem duplicate genes,Table 2.1,HAP2,6385.0,6385.0,True
+"tandem duplicate genes, %",Table 2.1,HAP1,20.9,20.9,True
+"tandem duplicate genes, %",Table 2.1,HAP2,20.2,20.2,True
+dispersed duplicate only,Table 2.1,HAP1,6545.0,6545.0,True
+dispersed duplicate only,Table 2.1,HAP2,6529.0,6529.0,True
+singletons,Table 2.1,HAP1,3665.0,3665.0,True
+singletons,Table 2.1,HAP2,3715.0,3715.0,True
+quality-flagged gene models,Table 2.S4,HAP1,318.0,318.0,True
+quality-flagged gene models,Table 2.S4,HAP2,235.0,235.0,True
+tandem arrays,"Results, tandem duplicates",HAP1,2119.0,2119.0,True
+tandem arrays,"Results, tandem duplicates",HAP2,2085.0,2085.0,True
+two-gene arrays,"Results, tandem duplicates",HAP1,1337.0,1337.0,True
+two-gene arrays,"Results, tandem duplicates",HAP2,1353.0,1353.0,True
+"arrays of six or more genes, %","Results, tandem duplicates",HAP1,9.2,9.2,True
+"arrays of six or more genes, %","Results, tandem duplicates",HAP2,8.0,8.0,True
+"largest array, genes","Results, tandem duplicates",HAP1,56.0,56.0,True
+"largest array, genes","Results, tandem duplicates",HAP2,38.0,38.0,True
+dated within-array tandem pairs,"Results, Ks",HAP1,8142.0,8142.0,True
+dated within-array tandem pairs,"Results, Ks",HAP2,8096.0,8096.0,True
+dated tandem pairs with Ks = 0,"Results, Ks",HAP1,167.0,167.0,True
+dated tandem pairs with Ks = 0,"Results, Ks",HAP2,361.0,361.0,True
+arrays with a datable Ks,"Results, Ks",HAP1,1859.0,1859.0,True
+arrays with a datable Ks,"Results, Ks",HAP2,1836.0,1836.0,True
+"dated arrays, aWGT_era","Results, Ks",HAP1,670.0,670.0,True
+"dated arrays, aWGT_era","Results, Ks",HAP2,690.0,690.0,True
+"dated arrays, sWGD_era","Results, Ks",HAP1,514.0,514.0,True
+"dated arrays, sWGD_era","Results, Ks",HAP2,541.0,541.0,True
+"dated arrays, before_species_split","Results, Ks",HAP1,558.0,558.0,True
+"dated arrays, before_species_split","Results, Ks",HAP2,485.0,485.0,True
+"dated arrays, after_species_split","Results, Ks",HAP1,117.0,117.0,True
+"dated arrays, after_species_split","Results, Ks",HAP2,120.0,120.0,True
+"dated arrays in the aWGT era, %","Results, Ks",HAP1,36.0,36.0,True
+"dated arrays in the aWGT era, %","Results, Ks",HAP2,37.6,37.6,True
+sWGD anchor pairs,Figure 2.S2 caption,HAP1,7081.0,7081.0,True
+sWGD anchor pairs,Figure 2.S2 caption,HAP2,7105.0,7105.0,True
+aWGT anchor pairs,Figure 2.S2 caption,HAP1,4445.0,4445.0,True
+aWGT anchor pairs,Figure 2.S2 caption,HAP2,4523.0,4523.0,True
+intra-chromosomal sWGD anchor pairs,Figure 2.S2 caption,,0.0,0.0,True
+syntelogs,"Results, synteny",HAP1,29766.0,29766.0,True
+syntelogs,"Results, synteny",HAP2,29560.0,29560.0,True
+1:1 syntelogs,"Results, synteny",HAP1,22704.0,22704.0,True
+1:1 syntelogs,"Results, synteny",HAP2,22704.0,22704.0,True
+N:N syntelog groups,"Results, synteny",,1280.0,1280.0,True
+N:N genes,"Results, synteny",HAP1,3067.0,3067.0,True
+N:N genes,"Results, synteny",HAP2,3067.0,3067.0,True
+CNV groups with more copies in HAP1,"Results, synteny",,596.0,596.0,True
+CNV groups with more copies in HAP2,"Results, synteny",,529.0,529.0,True
+genes in CNV groups with more HAP1 copies,"Results, synteny",HAP1,2634.0,2634.0,True
+genes in CNV groups with more HAP1 copies,"Results, synteny",HAP2,1593.0,1593.0,True
+genes in CNV groups with more HAP2 copies,"Results, synteny",HAP1,1361.0,1361.0,True
+genes in CNV groups with more HAP2 copies,"Results, synteny",HAP2,2196.0,2196.0,True
+hemizygous genes,"Results, synteny",HAP1,2053.0,2053.0,True
+hemizygous genes,"Results, synteny",HAP2,2028.0,2028.0,True
+strict PAV genes,"Results, synteny",HAP1,528.0,528.0,True
+strict PAV genes,"Results, synteny",HAP2,605.0,605.0,True
+"strict PAV, % of hemizygous","Results, synteny",HAP1,25.7,25.7,True
+"strict PAV, % of hemizygous","Results, synteny",HAP2,29.8,29.8,True
+"hemizygous, protein homolog elsewhere","Results, synteny",HAP1,1119.0,1119.0,True
+"hemizygous, protein homolog elsewhere","Results, synteny",HAP2,1053.0,1053.0,True
+"hemizygous, match at the syntenic position without annotation","Results, synteny",HAP1,247.0,247.0,True
+"hemizygous, match at the syntenic position without annotation","Results, synteny",HAP2,229.0,229.0,True
+genes in hemizygous TD arrays,"Results, synteny",HAP1,159.0,159.0,True
+genes in hemizygous TD arrays,"Results, synteny",HAP2,141.0,141.0,True
+hemizygous TD arrays,"Results, synteny",HAP1,48.0,48.0,True
+hemizygous TD arrays,"Results, synteny",HAP2,47.0,47.0,True
+hemizygous TD array genes without a protein homolog,"Results, synteny",HAP1,12.0,12.0,True
+hemizygous TD array genes without a protein homolog,"Results, synteny",HAP2,4.0,4.0,True
+"arrays, N:N (same copy number)",Figure 2.8A (deck v6.13),HAP1,1229.0,1229.0,True
+"arrays, N:N (same copy number)",Figure 2.8A (deck v6.13),HAP2,1228.0,1228.0,True
+"arrays, CNV, arrays in both haplotypes",Figure 2.8A (deck v6.13),HAP1,557.0,557.0,True
+"arrays, CNV, arrays in both haplotypes",Figure 2.8A (deck v6.13),HAP2,550.0,550.0,True
+"arrays, CNV, haplotype-specific expansion",Figure 2.8A (deck v6.13),HAP1,285.0,285.0,True
+"arrays, CNV, haplotype-specific expansion",Figure 2.8A (deck v6.13),HAP2,259.0,259.0,True
+genes in the tau analysis set,"Methods, tau",HAP1,15053.0,15053.0,True
+genes in the tau analysis set,"Methods, tau",HAP2,14931.0,14931.0,True
+tissue-specific genes (tau >= 0.85),"Results, tau",HAP1,1372.0,1372.0,True
+tissue-specific genes (tau >= 0.85),"Results, tau",HAP2,1305.0,1305.0,True
+"tissue-specific genes, %","Results, tau",HAP1,9.11,9.11,True
+"tissue-specific genes, %","Results, tau",HAP2,8.74,8.74,True
+median tau,"Methods, tau",HAP1,0.532,0.532,True
+median tau,"Methods, tau",HAP2,0.525,0.525,True
+"tissue-specific genes, both haplotypes listed","Results, tau",,2677.0,2677.0,True
+LSG candidates (PS18 or PS19),Table 3.1,HAP1,776.0,776.0,True
+LSG candidates (PS18 or PS19),Table 3.1,HAP2,835.0,835.0,True
+reassigned PS19 to PS18,Table 3.1,HAP1,104.0,104.0,True
+reassigned PS19 to PS18,Table 3.1,HAP2,100.0,100.0,True
+LSG candidates excluded by: Quality filter,Table 3.1,HAP1,26.0,26.0,True
+LSG candidates excluded by: Quality filter,Table 3.1,HAP2,13.0,13.0,True
+LSG candidates excluded by: abSENSE,Table 3.1,HAP1,74.0,74.0,True
+LSG candidates excluded by: abSENSE,Table 3.1,HAP2,104.0,104.0,True
+LSG candidates excluded by: Outgroup syntenic tBLASTn,Table 3.1,HAP1,90.0,90.0,True
+LSG candidates excluded by: Outgroup syntenic tBLASTn,Table 3.1,HAP2,94.0,94.0,True
+LSG candidates excluded by: Split gene model,Table 3.1,HAP1,3.0,3.0,True
+LSG candidates excluded by: Split gene model,Table 3.1,HAP2,3.0,3.0,True
+final LSG set,Table 3.1,HAP1,583.0,583.0,True
+final LSG set,Table 3.1,HAP2,621.0,621.0,True
+"final LSG set, PS18",Table 3.1,HAP1,380.0,380.0,True
+"final LSG set, PS18",Table 3.1,HAP2,418.0,418.0,True
+"final LSG set, PS19",Table 3.1,HAP1,203.0,203.0,True
+"final LSG set, PS19",Table 3.1,HAP2,203.0,203.0,True
+RNA-seq libraries,Table 2.S1,,652.0,652.0,True
+reference-panel libraries,Table 2.S1,,222.0,222.0,True
+control libraries,Chapter 3 Methods,,229.0,229.0,True
+perturbation libraries,Chapter 3 Methods,,423.0,423.0,True

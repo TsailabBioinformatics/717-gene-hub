@@ -14,6 +14,7 @@ import { browseHref } from '../core/browse.js';
 import { genesIn, matchingRegion, tissueList, tissueN } from '../core/locusfig.js';
 import { chromosomeBrowser } from '../core/locusbrowser.js';
 import { loadArrayStatus, statusName, STATUS_ORDER } from '../core/relationship.js';
+import { paperTau, paperTop, ageBinName } from '../core/paper.js';
 
 const HAP_OF = (aid) => (aid.startsWith('HAP2') ? 'hap2' : 'hap1');
 const CHR_RE = /^PtXa(?:TreH|AlbH)\.(\d+)G/;
@@ -114,7 +115,7 @@ function exprCard(genes) {
     el('thead', {}, el('tr', {}, el('th', {}, 'Member'),
       ...tissues.map((t) => el('th', {}, el('div', {}, t.replace(/_/g, ' ')),
         el('div', { class: 'arr-n' }, n[t] == null ? 'n –' : `n ${n[t]}`))),
-      el('th', {}, 'τ'))),
+      el('th', { title: 'tissue specificity as in the dissertation: mean TPM in 9 tissue groups of the 222-sample reference panel' }, 'τ'))),
     el('tbody', {}, ...genes.map((g) => el('tr', { 'data-arr-heat-row': g.id },
       el('th', {}, el('a', { href: `#/gene/${g.id}`, class: 'mono' }, short(g.id))),
       ...tissues.map((t) => {
@@ -124,7 +125,7 @@ function exprCard(genes) {
         return el('td', { class: `arr-h h${bin}`, title: `${g.id} ${t}: median ${v} TPM` },
           v >= 100 ? v.toFixed(0) : v.toFixed(1));
       }),
-      el('td', { class: 'num' }, g.x && g.x.tau != null ? g.x.tau.toFixed(2) : '–')))));
+      el('td', { class: 'num' }, paperTau(g) != null ? paperTau(g).toFixed(2) : '–')))));
   return el('div', { class: 'card', 'data-arr-expr': '' },
     el('h2', {}, 'Expression by tissue', el('span', { class: 'tag' }, 'median TPM, WT controls')),
     el('div', { class: 'scroll-x' }, table),
@@ -153,7 +154,7 @@ function memberTable(genes, other) {
     el('td', {}, v9Dup(g.dup) || na()),
     el('td', {}, g.allele ? el('span', {}, el('a', { href: `#/gene/${g.allele.id}`, class: 'mono' }, g.allele.id),
       ' ', el('a', { href: `#/pair/${g.id}`, class: 'arr-small' }, 'pair')) : na('none called')),
-    el('td', {}, (g.x && g.x.top) || na('–')),
+    el('td', {}, paperTop(g) || na('–')),
     el('td', { class: 'arr-desc' }, ((g.ann || {}).d) || na('no description'))));
   return el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
     el('thead', {}, el('tr', {}, el('th', { class: 'num' }, '#'), el('th', {}, 'Gene'), el('th', {}, 'Strand'),
@@ -166,13 +167,13 @@ function memberTable(genes, other) {
 
 function tsv(genes) {
   const head = ['gene', 'haplotype', 'chr', 'start', 'end', 'strand', 'exons', 'phylostratum_rank',
-    'phylostratum_name', 'synteny_class', 'wgd_canonical_v9', 'allele', 'peak_tissue', 'tau', 'description'];
+    'phylostratum_name', 'synteny_class_GENESPACE', 'wgd_events', 'duplication_class_code', 'allele', 'peak_tissue_reference_panel', 'tau_reference_panel', 'description'];
   const lines = [head.join('\t')];
   for (const g of genes) {
     lines.push([g.id, g.hap, g.chr, g.start, g.end, g.strand, g.gs ? g.gs.ex : '',
       g.ps && g.ps.rank != null ? g.ps.rank : '', g.ps ? g.ps.name || '' : '', (g.syn || {}).cls || '',
-      v9Dup(g.dup) || '', g.allele ? g.allele.id : '', (g.x || {}).top || '',
-      g.x && g.x.tau != null ? g.x.tau : '', ((g.ann || {}).d || '').replace(/[\t\n]/g, ' ')].join('\t'));
+      v9Dup(g.dup) || '', (g.dup || {}).t || '', g.allele ? g.allele.id : '', paperTop(g) || '',
+      paperTau(g) != null ? paperTau(g) : '', ((g.ann || {}).d || '').replace(/[\t\n]/g, ' ')].join('\t'));
   }
   return lines.join('\n');
 }
@@ -285,7 +286,7 @@ export async function arrayView(aid) {
       el('div', { class: 'stat' }, el('div', { class: 'n' }, genes.length), el('div', { class: 'l' }, 'members')),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, `${withAllele.length}/${genes.length}`), el('div', { class: 'l' }, `with an allele on ${hapLabel(other)}`)),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, genes[0].td && genes[0].td.ks != null ? genes[0].td.ks : '–'), el('div', { class: 'l' }, 'array median Ks')),
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, (genes[0].td && genes[0].td.age || '–').replace(/_/g, ' ').replace('aWGD', 'aWGT')), el('div', { class: 'l' }, 'age bin'))),
+      el('div', { class: 'stat' }, el('div', { class: 'n' }, (genes[0].td && genes[0].td.age ? ageBinName(genes[0].td.age) : '–')), el('div', { class: 'l' }, 'age bin'))),
     el('div', { class: 'arr-actions' },
       el('a', { class: 'btn', href: '#', 'data-arr-tsv': '', onclick: (e) => { e.preventDefault(); download(`717atlas_${aid}_members.tsv`, tsv(genes)); } }, 'Download members (TSV)'),
       saveBtn,

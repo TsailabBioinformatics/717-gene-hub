@@ -12,7 +12,7 @@
    "pfam_panther": "annotation_info.txt for HAP1; parsed from defline.txt for HAP2 because HAP2's annotation_info domain columns are empty in the release"
   }
  },
- "built": "2026-09-05T11:22:45-0400",
+ "built": "2026-10-13T19:08:17-0400",
  "chromatin": {
   "accessible_region_definition": "genic or within 2 kb of the start, replicates merged -- the source paper's own classification. A 500 bp window fails, because 55% of conserved gene starts have their nearest accessible region more than 2 kb away, which is that paper's headline finding about distal elements in plants.",
   "genes_whose_ortholog_is_ambiguous": 6329,
@@ -199,7 +199,138 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.17.1",
+ "data_version": "0.18.0",
+ "dissertation": {
+  "analysis_repository_commit": "59eec6bd",
+  "arabidopsis_hit_kept_from_older_annotation": 372,
+  "class_codes_quality_filtered": {
+   "HAP1": {
+    "A": 4,
+    "AD": 1594,
+    "ADS": 3305,
+    "ADST": 188,
+    "ADT": 317,
+    "C": 3665,
+    "D": 6545,
+    "DS": 10041,
+    "DST": 600,
+    "DT": 5532,
+    "S": 2,
+    "T": 26
+   },
+   "HAP2": {
+    "A": 1,
+    "AD": 1581,
+    "ADS": 3338,
+    "ADST": 191,
+    "ADT": 319,
+    "C": 3715,
+    "D": 6529,
+    "DS": 10039,
+    "DST": 602,
+    "DT": 5251,
+    "T": 22
+   }
+  },
+  "lsg": {
+   "HAP1": {
+    "candidates": 776,
+    "candidates_PS18": 537,
+    "candidates_PS19": 239,
+    "excluded_by_first_criterion": {
+     "gene_model_quality": 26,
+     "homolog_in_outgroup_syntenic_window": 90,
+     "homology_detection_failure": 74,
+     "split_gene_model": 3
+    },
+    "final": 583,
+    "final_PS18": 380,
+    "final_PS19": 203,
+    "reassigned_PS19_to_PS18": 104
+   },
+   "HAP2": {
+    "candidates": 835,
+    "candidates_PS18": 597,
+    "candidates_PS19": 238,
+    "excluded_by_first_criterion": {
+     "gene_model_quality": 13,
+     "homolog_in_outgroup_syntenic_window": 94,
+     "homology_detection_failure": 104,
+     "split_gene_model": 3
+    },
+    "final": 621,
+    "final_PS18": 418,
+    "final_PS19": 203,
+    "reassigned_PS19_to_PS18": 100
+   }
+  },
+  "quality_flagged_gene_models": {
+   "HAP1": 318,
+   "HAP2": 235
+  },
+  "source_tables": {
+   "Table_3.S1_S3_per_gene.tsv": "0b6f5aa8db57dbfdb59d1a554b64f07c2f96edd14476a564cad837da5ad41664",
+   "combined_tpm_k21_rounded_20260814.csv": "1531f3e883c207e75740c211551d0c68452fd7e9b9eeb68a2f5f9330c40bc8a9",
+   "master_per_gene_v12.csv": "d674c508f575e550d6dae2dcbf60d6af0233ee2c60ec14ecd24c858521949e73",
+   "v4_panel_20260814.csv": "4233f26c4165e489b06d4ed72595b2ba7ac06a5af852b838343bf58fb09e761c",
+   "wgd_pair_classes_FROZEN_1p05.csv": "a0d6eeb3f2e4c450384fd2dd5e62a264a8d59dba3982f5f6021040004cd5a10e"
+  },
+  "table_2_1": {
+   "HAP1": {
+    "aWGT": 5408,
+    "dispersed_only": 6545,
+    "quality_filtered_genes": 31819,
+    "sWGD": 14136,
+    "sWGD_and_aWGT": 3493,
+    "singleton": 3665,
+    "tandem": 6663
+   },
+   "HAP2": {
+    "aWGT": 5430,
+    "dispersed_only": 6529,
+    "quality_filtered_genes": 31588,
+    "sWGD": 14170,
+    "sWGD_and_aWGT": 3529,
+    "singleton": 3715,
+    "tandem": 6385
+   }
+  },
+  "tau": {
+   "definition": "tau over mean TPM of 9 tissue groups, 222-sample reference panel; defined where at least one tissue mean reaches 5 TPM; a gene is counted tissue-specific at tau >= 0.85 with mean TPM >= 5",
+   "panel_n": {
+    "bark": 38,
+    "bud": 17,
+    "catkin": 4,
+    "leaf": 34,
+    "leaf_old": 11,
+    "leaf_young": 11,
+    "root": 26,
+    "stem": 24,
+    "xylem": 57
+   },
+   "per_haplotype": {
+    "HAP1": {
+     "genes_at_mean_TPM_5_or_more": 15053,
+     "tissue_specific": 1372
+    },
+    "HAP2": {
+     "genes_at_mean_TPM_5_or_more": 14931,
+     "tissue_specific": 1305
+    }
+   }
+  },
+  "wgd_anchor_pairs": {
+   "HAP1": {
+    "aWGT": 4445,
+    "sWGD": 7081
+   },
+   "HAP2": {
+    "aWGT": 4523,
+    "sWGD": 7105
+   }
+  },
+  "what": "Summaries recomputed from the gene records, on the dissertation's gene basis: quality-filtered gene models, each haplotype separately."
+ },
  "duplicate_coexpr": {
   "basis": "Pearson r on log2(ComBat-corrected TPM + 1) over 652 samples -- the same matrix the neighbour co-expression (nb) uses, because a 652-sample correlation spans 28 studies and is therefore a cross-study comparison.",
   "coverage": "A pair needs BOTH partners in the ComBat matrix (59,599 of 63,960 genes), so 7,707 of 32,333 duplicate pairs have no value. Absence means 'not comparable', not 'uncorrelated'.",
@@ -300,7 +431,7 @@
   }
  },
  "facets": {
-  "bytes": 3060997,
+  "bytes": 3768390,
   "cols": [
    "hap",
    "chr",
@@ -320,7 +451,12 @@
    "w",
    "ms",
    "aek",
-   "rel"
+   "rel",
+   "dup",
+   "lsg",
+   "qc",
+   "tok",
+   "psg"
   ],
   "n_rows": 63960
  },
@@ -578,16 +714,17 @@
    "tandem arrays (union set)": "13663 genes in 4371 arrays"
   },
   "dup_class_dist": {
-   "A": 7,
-   "AD": 2492,
-   "ADS": 6676,
-   "ADST": 385,
-   "ADT": 570,
+   "A": 5,
+   "AD": 3189,
+   "ADS": 6644,
+   "ADST": 379,
+   "ADT": 636,
    "C": 7392,
    "D": 13567,
-   "DS": 20778,
-   "DST": 1262,
+   "DS": 20113,
+   "DST": 1202,
    "DT": 10783,
+   "S": 2,
    "T": 48
   },
   "dup_code": {

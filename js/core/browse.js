@@ -29,13 +29,20 @@ export const FILTERS = [
     options: ['core_syntenic', 'dispensable_syntenic', 'non_syntenic_ortholog',
               'private_no_ortholog', 'tandem_array_member'],
     test: (r, v) => r.cls === v },
+  // The final lineage-specific gene set of the dissertation (583 HAP1 / 621 HAP2), and the
+  // candidates that were excluded from it. Phylostratum alone is NOT the set.
+  { id: 'lsg', label: 'Lineage-specific gene (LSG)', kind: 'select',
+    options: ['final_set', 'candidate_excluded', 'not_a_candidate'],
+    test: (r, v) => ['not_a_candidate', 'final_set', 'candidate_excluded'][r.lsg] === v },
   { id: 'ps_min', label: 'Phylostratum ≥', kind: 'number', placeholder: '18',
     test: (r, v) => r.ps != null && r.ps >= +v },
   // exact, not >=: a stratum bar on the phylostratigraphy page means THAT stratum
   { id: 'ps', label: 'Phylostratum =', kind: 'number', placeholder: '18',
     test: (r, v) => r.ps === +v },
-  { id: 'tau_min', label: 'τ ≥', kind: 'number', placeholder: '0.8', step: '0.05',
+  { id: 'tau_min', label: 'τ ≥', kind: 'number', placeholder: '0.85', step: '0.05',
     test: (r, v) => r.tau != null && r.tau >= +v },
+  { id: 'tok', label: 'Mean TPM ≥ 5 (reference panel)', kind: 'select', options: ['yes', 'no'],
+    test: (r, v) => (r.tok ? 'yes' : 'no') === v },
   // Peak-tissue categories are release data, not a UI-owned list. browseView() fills this
   // control from facets.vocab.top so a new or split tissue appears without a source edit.
   { id: 'top', label: 'Peak tissue', kind: 'select',
@@ -45,6 +52,8 @@ export const FILTERS = [
     test: (r, v) => r.chr === v },
   { id: 'allele', label: 'Has allele', kind: 'select', options: ['yes', 'no'],
     test: (r, v) => (r.allele ? 'yes' : 'no') === v },
+  { id: 'qc', label: 'Flagged by quality control', kind: 'select', options: ['no', 'yes'],
+    test: (r, v) => (r.qc ? 'yes' : 'no') === v },
   { id: 'rel', label: 'Relationship to the other haplotype', kind: 'select',
     options: [...CATEGORY_ORDER, 'not_classified'],
     test: (r, v) => (r.rel || 'not_classified') === v },
@@ -55,28 +64,22 @@ export const FILTERS = [
   // `tandem_array_member` option, and the two are not interchangeable.
   { id: 'tandem', label: 'In curated tandem array', kind: 'select', options: ['yes', 'no'],
     test: (r, v) => (r.tandem ? 'yes' : 'no') === v },
-  // Events are not exclusive: a gene retained from both the gamma triplication and the salicoid
-  // WGD matches either choice.
-  //
-  // TWO calls, and the default is the one the current class figures are drawn from. Browsing
-  // on v9 while holding a route C Venn gave 191 for "HAP1 + tandem + both" against the
-  // figure's 229, which reads as a broken filter rather than as two different calls. The
-  // canonical v9 call stays selectable directly below, so the published numbers remain
-  // reproducible here. Neither is a correction of the other in this UI -- see the gene page.
-  { id: 'wgd', label: 'WGD event, exploratory re-check', kind: 'select',
-    options: ['salicoid', 'gamma', 'both', 'either', 'neither'],
-    test: (r, v) => ({ salicoid: (r.wgd & 1) > 0, gamma: (r.wgd & 2) > 0, both: r.wgd === 3,
-                       either: r.wgd > 0, neither: r.wgd === 0 })[v] },
-  // The disagreement itself, as a filter. It cannot be expressed with the two columns above:
-  // a gene carrying BOTH events under BOTH calls matches "route C salicoid AND v9 gamma"
-  // while agreeing completely, which is how a first draft of the home page's question
-  // reported 7,574 disagreements instead of 904.
-  { id: 'wgd_disputed', label: 'WGD call disputed (re-check vs primary call)', kind: 'select',
-    options: ['yes', 'no'], test: (r, v) => (r.ccd ? 'yes' : 'no') === v },
+  // Events are not exclusive: a gene retained from both aWGT and sWGD matches either choice.
+  // ONE call: the adopted one, which the dissertation uses. `wgd` is the same column under the
+  // name older links used (until 0.18.0 it was an exploratory re-check); it is not shown in the
+  // sidebar, but a saved link with ?wgd= still resolves, to the adopted call.
   { id: 'wgd9', label: 'WGD event', kind: 'select',
     options: ['salicoid', 'gamma', 'both', 'either', 'neither'],
     test: (r, v) => ({ salicoid: (r.wgd9 & 1) > 0, gamma: (r.wgd9 & 2) > 0, both: r.wgd9 === 3,
                        either: r.wgd9 > 0, neither: r.wgd9 === 0 })[v] },
+  { id: 'wgd', label: 'WGD event (older links)', kind: 'select',
+    options: ['salicoid', 'gamma', 'both', 'either', 'neither'],
+    test: (r, v) => ({ salicoid: (r.wgd9 & 1) > 0, gamma: (r.wgd9 & 2) > 0, both: r.wgd9 === 3,
+                       either: r.wgd9 > 0, neither: r.wgd9 === 0 })[v] },
+  // The full class code, one per gene (A, AD, ADS, ADST, ADT, C, D, DS, DST, DT, S, T).
+  { id: 'dup', label: 'Duplication class code', kind: 'select',
+    options: ['DS', 'D', 'DT', 'C', 'ADS', 'AD', 'DST', 'ADT', 'ADST', 'T', 'A', 'S'],
+    test: (r, v) => r.dup === v },
   // Exploratory (route C). A gamma copy number is a rank WITHIN one ancestral chromosome, so the
   // choice is a chromosome or one chromosome's copy; a bare "gamma copy 2" across all seven would
   // pool unrelated copies. "not placed" includes the HAP1 unplaced-scaffold genes, never assessed.
@@ -118,34 +121,39 @@ export const FILTERS = [
 // URL parameters and saved links depend on them; only the label follows the dissertation's
 // names for the two whole-genome events (aWGT, sWGD).
 const OPTION_LABEL = { salicoid: 'sWGD', gamma: 'aWGT', aWGD_era: 'aWGT era', not_classified: 'not classified (quality-flagged)',
+  final_set: 'in the final LSG set', candidate_excluded: 'candidate, excluded from the final set', not_a_candidate: 'not a candidate',
+  C: 'C (singleton)', D: 'D (dispersed only)',
   ...Object.fromEntries(Object.entries(CATEGORY).map(([k, c]) => [k, c.name])) };
 const optLabel = (v) => OPTION_LABEL[v]
   || String(v).replace(/gamma_copy/g, 'aWGT_copy').replace(/salicoid_copy/g, 'sWGD_copy').replace(/_/g, ' ');
 
 export const FILTER_GROUPS = [
-  { id: 'where', label: 'Genome', ids: ['hap', 'chr', 'allele', 'rel'] },
-  { id: 'age', label: 'Age and conservation', ids: ['ps_min', 'cls'] },
-  { id: 'dup', label: 'Duplication', ids: ['tandem', 'wgd9'] },
-  { id: 'expr', label: 'Expression', ids: ['xin', 'top', 'tau_min'] },
+  { id: 'where', label: 'Genome', ids: ['hap', 'chr', 'allele', 'rel', 'qc'] },
+  { id: 'age', label: 'Age and conservation', ids: ['lsg', 'ps_min', 'cls'] },
+  { id: 'dup', label: 'Duplication', ids: ['tandem', 'wgd9', 'dup'] },
+  { id: 'expr', label: 'Expression', ids: ['top', 'tau_min', 'tok', 'xin'] },
   { id: 'func', label: 'Function and protein', ids: ['at', 'ms'] },
   { id: 'sel', label: 'Selection against P. trichocarpa', ids: ['w_min', 'w_max'] },
-  { id: 'adv', label: 'Disputed and exploratory calls', ids: ['ps', 'wgd', 'wgd_disputed', 'aek'], adv: true },
+  { id: 'adv', label: 'More filters', ids: ['ps', 'aek', 'wgd'], adv: true },
 ];
 const HINTS = {
   hap: 'HAP1 is the tremula haplotype, HAP2 alba',
   cls: 'GENESPACE class across the 12-genome panel, which lacks P. alba',
-  ps_min: '18 and 19 are the lineage-specific candidate strata',
+  lsg: 'the dissertation\u2019s final set, 583 HAP1 / 621 HAP2, out of 776 / 835 candidates',
+  qc: 'gene models set aside as pseudogene-like or degenerate; choose "no" to match the dissertation\u2019s counts',
+  dup: 'S sWGD, A aWGT, T tandem, D dispersed, C singleton',
+  tok: 'the dissertation counts tissue-specific genes among these only',
+  ps_min: '18 and 19 are the lineage-specific candidate strata; PS19 genes reassigned to PS18 count as 18',
   ps: 'one stratum exactly',
-  tau_min: 'tissue specificity, 0 (even) to 1 (one tissue)',
-  top: 'tissue with the highest median TPM',
-  xin: 'median above 1 TPM in that tissue',
+  tau_min: 'tissue specificity as in the dissertation: 222-sample reference panel, 9 tissue groups; 0.85 is its cutoff',
+  top: 'tissue group with the highest mean TPM in the reference panel',
+  xin: 'a different statistic: median above 1 TPM over the wild-type control samples of that tissue',
   allele: 'a syntenic partner on the other haplotype',
   rel: 'counted per gene; tandem genes take their array\u2019s category',
   at: 'a best hit in Arabidopsis',
   tandem: 'the curated union set, 13,048 genes',
-  wgd: 'a proposed re-check from dS and ancestral topology, not adopted; the primary filter is above',
-  wgd_disputed: 'the exploratory re-check and the primary call disagree',
-  wgd9: 'retained from a whole-genome duplication',
+  wgd: 'the same call as "WGD event" above, kept for links made before version 0.18',
+  wgd9: 'retained from a whole-genome duplication (the adopted call: Ks and karyotype topology)',
   aek: 'ancestral eudicot chromosome and copy',
   w_min: 'Ka/Ks to the reciprocal-best ortholog',
   w_max: 'Ka/Ks to the reciprocal-best ortholog',
@@ -156,7 +164,8 @@ const KEYS = {
   hap: (r) => [r.hap], cls: (r) => [r.cls], top: (r) => [r.top], chr: (r) => [r.chr],
   allele: (r) => [r.allele ? 'yes' : 'no'], at: (r) => [r.at ? 'yes' : 'no'],
   tandem: (r) => [r.tandem ? 'yes' : 'no'], ms: (r) => [r.ms > 0 ? 'yes' : 'no'],
-  wgd_disputed: (r) => [r.ccd ? 'yes' : 'no'], xin: (r) => r.xin,
+  xin: (r) => r.xin, qc: (r) => [r.qc ? 'yes' : 'no'], tok: (r) => [r.tok ? 'yes' : 'no'], dup: (r) => [r.dup],
+  lsg: (r) => [['not_a_candidate', 'final_set', 'candidate_excluded'][r.lsg]],
   wgd: (r) => wgdKeys(r.wgd), wgd9: (r) => wgdKeys(r.wgd9), rel: (r) => [r.rel || 'not_classified'],
 };
 function wgdKeys(w) {
@@ -221,9 +230,10 @@ const COLUMNS = [
   { id: 'gene', label: 'Gene', key: (r, i) => i },
   { id: 'desc', label: 'Description', key: null },
   { id: 'chr', label: 'Chr', key: (r) => r.chr },
+  { id: 'dup', label: 'Class', key: (r) => r.dup, title: 'duplication class code: S sWGD, A aWGT, T tandem, D dispersed, C singleton' },
   { id: 'cls', label: 'Synteny class', key: (r) => r.cls },
-  { id: 'ps', label: 'PS', num: true, key: (r) => r.ps, title: 'phylostratum (genEra rank)' },
-  { id: 'tau', label: '\u03c4', num: true, greek: true, key: (r) => r.tau, title: 'tissue specificity' },
+  { id: 'ps', label: 'PS', num: true, key: (r) => r.ps, title: 'phylostratum as used in the dissertation (genEra rank; PS19 genes reassigned to PS18 count as 18)' },
+  { id: 'tau', label: '\u03c4', num: true, greek: true, key: (r) => r.tau, title: 'tissue specificity as in the dissertation (222-sample reference panel, 9 tissue groups)' },
   { id: 'top', label: 'Peak tissue', key: (r) => r.top },
   { id: 'npres', label: 'Genomes', num: true, key: (r) => r.npres || null,
     title: 'genomes in the orthogroup, of 12 (the panel lacks P. alba)' },
@@ -260,6 +270,7 @@ function resultsTable(state, onSort) {
       el('td', {}, el('a', { href: `#/gene/${state.ids[i]}`, class: 'mono' }, state.ids[i])),
       el('td', { class: 'bz-desc', title: d || '' }, d ? d.toLowerCase() : el('span', { class: 'muted' }, '\u2013')),
       el('td', {}, r.chr || '\u2013'),
+      el('td', { class: 'mono' }, r.dup || '\u2013'),
       el('td', {}, r.cls ? r.cls.replace(/_/g, ' ') : '\u2013'),
       el('td', { class: 'num' }, r.ps == null ? '\u2013' : 'PS' + r.ps),
       el('td', { class: 'num' }, r.tau == null ? '\u2013' : r.tau.toFixed(2)),
@@ -307,26 +318,40 @@ function safeFileStem(name) {
 }
 
 function exportTSV(state) {
-  const head = ['gene_id', 'haplotype', 'chr', 'synteny_class', 'phylostratum', 'tau',
-                'peak_tissue', 'genomes_in_orthogroup', 'has_allele', 'in_tandem_array',
-                'salicoid_wgd', 'gamma_wgd', 'omega_vs_ptrichocarpa', 'ms_datasets_detected_of_5',
-                'ancestral_chromosome_exploratory', 'gamma_copy', 'salicoid_copy'];
-  const lines = [head.join('\t')];
+  // Columns carry the adopted calls only, under the names the pages use. The first lines are
+  // comments (#) stating the release, so a file found later can be traced to its version.
+  const head = ['gene_id', 'haplotype', 'chr', 'description', 'duplication_class_code', 'sWGD', 'aWGT',
+                'in_tandem_array', 'relationship_category', 'has_allele', 'quality_flagged',
+                'phylostratum_used', 'phylostratum_genEra', 'LSG_status',
+                'tau_reference_panel', 'peak_tissue_reference_panel', 'mean_TPM_ge_5_reference_panel',
+                'synteny_class_GENESPACE', 'genomes_in_orthogroup', 'omega_vs_ptrichocarpa',
+                'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy'];
+  const lines = [
+    `# Poplar 717 gene atlas, data v${dataVersion()}, exported ${new Date().toISOString().slice(0, 10)}`,
+    '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology), as in the dissertation',
+    '# tau and peak tissue: mean TPM in 9 tissue groups of the 222-sample reference panel; empty where no group mean reaches 5 TPM',
+    '# The dissertation counts quality-filtered genes only: keep quality_flagged = no to reproduce its numbers',
+    head.join('\t')];
+  const LSG = ['not_a_candidate', 'final_set', 'candidate_excluded'];
   for (const i of state.matches) {
     const r = state.rows[i];
     // named states rather than blanks: "not placed" and "no copy assigned" are results
     const copy = (d) => (r.aek < 0 ? '' : (d || 'not_assigned'));
-    lines.push([state.ids[i], r.hap, r.chr ?? '', r.cls ?? '', r.ps ?? '',
-      r.tau == null ? '' : r.tau.toFixed(3), r.top ?? '', r.npres ?? '',
-      r.allele ? 'yes' : 'no', r.tandem ? 'yes' : 'no',
-      r.wgd & 1 ? 'yes' : 'no', r.wgd & 2 ? 'yes' : 'no',
+    const d = state.desc ? (state.desc[i] || '').replace(/[\t\n]/g, ' ') : '';
+    lines.push([state.ids[i], r.hap.toUpperCase(), r.chr ?? '', d, r.dup ?? '',
+      r.wgd9 & 1 ? 'yes' : 'no', r.wgd9 & 2 ? 'yes' : 'no', r.tandem ? 'yes' : 'no',
+      r.rel ? (CATEGORY[r.rel] ? CATEGORY[r.rel].name : r.rel) : 'not classified (quality-flagged)',
+      r.allele ? 'yes' : 'no', r.qc ? 'yes' : 'no',
+      r.ps ?? '', r.psg ?? '', LSG[r.lsg],
+      r.tau == null ? '' : r.tau.toFixed(3), r.top ?? '', r.tok ? 'yes' : 'no',
+      r.cls ?? '', r.npres ?? '',
       // an empty cell would read as "not measured"; these are measured absences
       r.w >= 0 ? (r.w / 1000).toFixed(4) : (r.w === -1 ? 'no_ortholog' : 'not_estimable'),
       r.ms >= 0 ? r.ms : '',
       r.aek >= 0 ? `AEK${Math.floor(r.aek / 100)}` : 'not_placed',
       copy(Math.floor(r.aek / 10) % 10), copy(r.aek % 10)].join('\t'));
   }
-  download(`717atlas_selection_${state.matches.length}genes.tsv`, lines.join('\n'));
+  download(`717atlas_v${dataVersion()}_selection_${state.matches.length}genes.tsv`, lines.join('\n') + '\n');
 }
 
 /** Build a Browse URL with filters pre-applied, for an overview chart to link to.

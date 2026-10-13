@@ -1,6 +1,16 @@
 // Provenance page. Renders what the build actually recorded -- every source file with its
 // sha256 and mtime -- rather than a hand-maintained prose list that drifts from the data.
 import { el, fmt, pct } from '../core/dom.js';
+import { SITE_URL, REPO_URL, CONTACT, GENOME, PAPER_TAU_HOW } from '../core/paper.js';
+
+// What each upstream table is, in a reader's words; the file names are in the build manifest.
+const SOURCE_LABEL = [
+  ['master_per_gene', 'per-gene table of the dissertation (under Downloads)'],
+  ['wgd_pair_classes', 'whole-genome duplication anchor-pair calls'],
+  ['v4_panel', 'sample list of the 222-sample reference panel'],
+  ['combined_tpm', 'TPM matrix, 652 samples'],
+  ['Table_3', 'lineage-specific gene table (dissertation Tables 3.S1 to 3.S3)'],
+];
 
 function overview(man) {
   const a = man.annotation || {};
@@ -11,16 +21,27 @@ function overview(man) {
   return el('div', {},
     el('h1', {}, 'About & provenance'),
     el('p', { class: 'sub' },
-      `Data version ${man.data_version || '–'}, assembled from `
-      + `${Object.keys(man.sources || {}).length} source files, each recorded with a checksum in the build manifest.`),
+      `Data version ${man.data_version || '–'}, built ${(man.built || '').slice(0, 10)}. ${GENOME}. `
+      + 'Duplication classes, whole-genome duplication pairs, relationship categories, tissue specificity and the '
+      + 'lineage-specific gene set are those of the accompanying dissertation.'),
+
+    el('div', { class: 'card', 'data-contact': '' },
+      el('h2', {}, 'Contact and feedback'),
+      el('p', { style: 'margin:0;font-size:13.5px' },
+        'Questions, corrections and requests: ', el('a', { href: `mailto:${CONTACT}?subject=Poplar%20717%20gene%20atlas` }, CONTACT),
+        ' (Tsai lab, University of Georgia). Site code and released data: ',
+        el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, REPO_URL.replace('https://', '')),
+        '. Terms are defined in the ', el('a', { href: '#/glossary' }, 'glossary'),
+        '; the tables behind the dissertation are under ', el('a', { href: '#/downloads' }, 'Downloads'), '.')),
 
     el('div', { class: 'card' },
       el('h2', {}, 'What this is'),
       el('p', { style: 'margin:0 0 10px;font-size:14px;color:var(--ink-2)' },
         'A browsable atlas of the 63,960 gene models in the two phased haplotypes of hybrid '
-        + 'poplar clone INRA 717-1B4 (Populus tremula × P. alba), v5.1. It is a companion to a '
-        + 'dissertation chapter on lineage-specific genes, and a general-purpose resource for '
-        + 'anyone working in this clone.'),
+        + 'poplar clone INRA 717-1B4 (Populus tremula × P. alba), genome and annotation v5.1 (Phytozome). '
+        + 'HAP1 is the maternal P. tremula haplotype and HAP2 the paternal P. alba haplotype. It is the '
+        + 'data supplement of a dissertation on gene duplication and lineage-specific genes in this clone, '
+        + 'and a general-purpose resource for anyone working in it.'),
       el('dl', { class: 'kv' },
         el('dt', {}, 'Genes'), el('dd', {}, `${fmt(man.n_genes)}: HAP1 32,137 (PtXaTreH), HAP2 31,823 (PtXaAlbH)`),
         el('dt', {}, 'Synteny'), el('dd', {}, 'GENESPACE over a 12-genome panel (10 syntenic + O. sativa / P. patens as orthogroup-only outgroups)'),
@@ -99,14 +120,25 @@ function overview(man) {
           'Tandem-array genes carry a curation flag (hand-rejected, pseudogene-like, or '
           + 'disagreeing with the automatic filter). The curator\'s identity and verbatim wording '
           + 'are deliberately not published.'),
-        el('li', {}, el('strong', {}, 'An independent τ was audited out, not shipped. '),
-          'It is computed on the n=202 expression panel, which the upstream analysis records as '
-          + 'superseded on 2026-08-24.'),
+        el('li', { 'data-two-tau': '' }, el('strong', {}, 'Two tissue-specificity statistics, and which one to quote. '),
+          `The τ and peak tissue shown first on every page, in Browse and in every export are the dissertation’s: ${PAPER_TAU_HOW}. `
+          + 'The gene page also shows a second view, the median TPM over wild-type control samples only '
+          + '(213 samples, 10 tissue groups, with single-sample callus and two-sample stem groups), with its own τ. '
+          + 'The two differ for many genes; the second is labelled as a different statistic wherever it appears and is not used in the dissertation.'),
+        el('li', {}, el('strong', {}, 'The lineage-specific gene set is the final one. '),
+          'Gene pages, Browse and the counts use the dissertation’s final set, 583 HAP1 and 621 HAP2 genes. '
+          + 'The 776 HAP1 and 835 HAP2 candidates at PS18 or PS19 stay visible, and an excluded candidate says why it was excluded.'),
+        el('li', {}, el('strong', {}, 'Stress responsiveness uses an earlier contrast set. '),
+          'The responsiveness value on gene pages is a median over 117 contrasts with a control group; '
+          + 'the dissertation’s perturbation statistics use its 149 curated perturbation contrasts. The value is labelled accordingly.'),
         el('li', {}, el('strong', {}, 'Presence/absence is the strict, protein-level set. '),
-          'A gene is Strict PAV when it has no syntelog on the other haplotype and no protein-level '
-          + 'match to it there: 528 HAP1 and 605 HAP2 genes. Genes without a syntelog whose sequence '
+          'A gene is Strict PAV when it is hemizygous, is not a tandem duplicate, has no protein-level '
+          + 'match on the other haplotype and no near-full-length match at the syntenic position: '
+          + '528 HAP1 and 605 HAP2 genes. Partial DNA at the syntenic position is tolerated, so the call '
+          + 'does not mean the DNA is absent. Genes without a syntelog whose sequence '
           + 'is present on the other haplotype are Non-PAV hemizygous, and tandem arrays with no '
-          + 'syntelog for any member are TD-associated PAV.'),
+          + 'syntelog for any member are Hemizygous TD arrays (not PAV: most of their members '
+          + 'still have a protein-level match on the other haplotype).'),
         el('li', {}, el('strong', {}, 'Chromatin and protein evidence is borrowed. '),
           'Chromatin accessibility and histone marks were measured in P. trichocarpa leaf '
           + '(GEO GSE128434) and are shown on each gene\'s 1:1 P. trichocarpa ortholog; nothing '
@@ -137,8 +169,15 @@ function overview(man) {
         + 'with its size, sha256 and date in the ',
         el('a', { href: 'data/meta/manifest.json' }, 'build manifest'),
         ', and each data layer ships a provenance record in the build files.'),
+      el('p', { style: 'margin:10px 0 0;font-size:13px' },
+        'The duplication, relationship, tissue-specificity and LSG layers come from the dissertation\u2019s tables '
+        + `(analysis repository commit ${((man.dissertation || {}).analysis_repository_commit) || '–'}):`),
+      el('ul', { class: 'mono', style: 'margin:4px 0 0;padding-left:18px;font-size:11.5px', 'data-source-tables': '' },
+        ...Object.entries((man.dissertation || {}).source_tables || {}).map(([f, h]) =>
+          el('li', {}, `${SOURCE_LABEL.find(([k]) => f.startsWith(k))?.[1] || 'analysis table'}  sha256 ${h.slice(0, 16)}…`))),
       el('p', { class: 'muted', style: 'margin:10px 0 0;font-size:12px' },
-        'The source files are not distributed with the site; the published data files are the record.'),
+        'The master tables, their data dictionary and the dissertation\u2019s supplementary tables are under ',
+        el('a', { href: '#/downloads' }, 'Downloads'), '. The raw expression matrix is not distributed with the site.'),
       // The page claims the data is validated; this is where the claim can be checked.
       el('p', { style: 'margin:10px 0 0;font-size:13px' },
         el('a', { href: '#/status' }, 'See the consistency checks run on this data →'))),
@@ -149,14 +188,15 @@ function overview(man) {
       el('p', { style: 'margin:0 0 6px;font-size:13.5px' }, 'Cite this atlas as:'),
       el('p', { class: 'cite-line', 'data-cite': '', style: 'margin:0 0 10px;font-size:13.5px;padding:8px 10px;border-left:3px solid var(--accent)' },
         `Hsieh et al., unpublished. Poplar 717 gene atlas, version ${man.data_version || ''}. `,
-        el('a', { href: 'https://chenhsieh.github.io/poplar-717-atlas/' }, 'https://chenhsieh.github.io/poplar-717-atlas/'),
+        el('a', { href: SITE_URL }, SITE_URL),
         `. Accessed ${new Date().toISOString().slice(0, 10)}.`),
       el('p', { style: 'margin:0 0 8px;font-size:13px;color:var(--ink-2)' },
         'Also cite the underlying study for any expression data you use; each study page carries its own DOI. '
         + 'A machine-readable record is in ', el('a', { href: 'CITATION.cff' }, 'CITATION.cff'), '.'),
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
-        'Code is MIT. The derived data is unpublished dissertation material and is not yet '
-        + 'openly licensed; CC BY 4.0 is intended at publication.')),
+        'Code is MIT (', el('a', { href: `${REPO_URL}/blob/main/LICENSE`, target: '_blank', rel: 'noopener' }, 'LICENSE'),
+        '). Data are provided for research use; please cite the atlas as above. A formal open data licence '
+        + 'has not been set yet; CC BY 4.0 is intended at publication.')),
   );
 }
 

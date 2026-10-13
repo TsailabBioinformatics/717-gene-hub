@@ -43,7 +43,7 @@ def main():
                     recs[gid] = (hap, r)
     assert len(recs) == len(order), f"{len(recs)} genes vs {len(order)} in genes.json"
 
-    chrs, clss, tops = [], [], []
+    chrs, clss, tops, dups = [], [], [], []
     # declared order (js/core/relationship.js CATEGORY_ORDER), not first-seen order
     rels = ["1:1", "N:N_TD", "N:N_nonTD", "CNV_TD", "CNV_nonTD", "hemizygous_strict_PAV",
             "hemizygous_TD_array", "hemizygous_nonPAV"]
@@ -60,6 +60,7 @@ def main():
         syn = r.get("syn") or {}
         ps = r.get("ps") or {}
         x = r.get("x") or {}
+        xp = x.get("p") or {}
         ann = r.get("ann") or {}
         flags = syn.get("flags") or {}
         ks = r.get("ks") or {}
@@ -70,10 +71,15 @@ def main():
             0 if hap == "hap1" else 1,
             idx(chrs, r.get("chr")),
             idx(clss, syn.get("cls")),
-            ps.get("rank") if ps.get("rank") is not None else -1,
-            # tau as an integer percent keeps the JSON short; -1 means not computable
-            int(round(x["tau"] * 100)) if x.get("tau") is not None else -1,
-            idx(tops, x.get("top")),
+            # The phylostratum USED in the dissertation: genEra's rank, except for the PS19
+            # candidates reassigned to PS18 (ps.fin.u). genEra's own rank is the `psg` column.
+            ((ps.get("fin") or {}).get("u") or ps.get("rank")) if ps.get("rank") is not None else -1,
+            # tau AS IN THE DISSERTATION (x.p: 222-sample reference panel, tissue-group means),
+            # integer per-mille, truncated so that ">= 0.85" here is ">= 0.85" on the source value.
+            # -1 = not computed (no tissue-group mean reaches 5 TPM). The atlas's own WT-control
+            # tau (x.tau) is not in this index at all, so Browse cannot mix the two.
+            int(xp["tau"] * 1000 + 1e-6) if xp.get("tau") is not None else -1,
+            idx(tops, xp.get("top")),
             1 if r.get("allele") else 0,
             1 if ann.get("at") else 0,
             # WGD events, non-exclusive: bit 0 salicoid, bit 1 gamma. A gene can carry both
@@ -86,9 +92,9 @@ def main():
             # Route C covers exactly the 32,170 genes that carry a v9 call and adds none, so
             # nothing is lost by leading with it except the 142 genes it deliberately sets
             # aside on split-evidence pairs.
-            ((1 if (dup.get("cc") or {}).get("s") else 0)
-             | (2 if (dup.get("cc") or {}).get("a") else 0)) if dup.get("cc")
-            else ((1 if dup.get("s") else 0) | (2 if dup.get("a") else 0)),
+            # (since 0.18.0 both columns hold the ADOPTED call, the one the dissertation uses;
+            # `wgd` is kept only so that older links with ?wgd= keep working.)
+            (1 if dup.get("s") else 0) | (2 if dup.get("a") else 0),
             (1 if dup.get("s") else 0) | (2 if dup.get("a") else 0),
             # Does the route C re-adjudication DISAGREE with the canonical v9 call for this
             # gene? Browsable rather than footnoted: the disagreement is currently visible
@@ -126,12 +132,22 @@ def main():
             (kar["c"] * 100 + kar.get("g", 0) * 10 + kar.get("s", 0) if kar.get("c") else -1),
             # relationship category (index into vocab.rel), -1 for quality-flagged gene models
             idx(rels, (r.get("rel") or {}).get("c")) if (r.get("rel") or {}).get("c") else -1,
+            # duplication class letters (index into vocab.dup)
+            idx(dups, dup.get("t")),
+            # lineage-specific genes: 1 = in the final set, 2 = candidate excluded from it, 0 = neither
+            (1 if (ps.get("fin") or {}).get("s") else 2) if ps.get("fin") else 0,
+            # gene model flagged by quality control (not in the dissertation's counts)
+            1 if (r.get("rel") or {}).get("qc") else 0,
+            # mean TPM over the 222-sample reference panel >= 5 (the dissertation's expression filter)
+            1 if xp.get("ok") else 0,
+            # genEra's own rank (differs from `ps` only for the reassigned PS19 genes)
+            ps.get("rank") if ps.get("rank") is not None else -1,
         ])
 
     out = {
         "cols": ["hap", "chr", "cls", "ps", "tau", "top", "allele", "at", "wgd", "wgd9", "ccd",
-                 "tandem", "npres", "amb", "xin", "w", "ms", "aek", "rel"],
-        "vocab": {"chr": chrs, "cls": clss, "top": tops, "xin": XIN_TISSUES, "rel": rels},
+                 "tandem", "npres", "amb", "xin", "w", "ms", "aek", "rel", "dup", "lsg", "qc", "tok", "psg"],
+        "vocab": {"chr": chrs, "cls": clss, "top": tops, "xin": XIN_TISSUES, "rel": rels, "dup": dups},
         "rows": rows,
     }
     # Short gene descriptions for the Browse table, aligned with genes.json like the rows
@@ -194,7 +210,7 @@ def main():
           f"peptide-detected: {n('ms', lambda v: v > 0)}")
     print(f"  expressed (>{XIN_MIN_TPM} TPM) in at least one tissue: "
           f"{n('xin', bool)}   in none: {n('xin', lambda v: not v)}")
-    print(f"  WGD called, route C: {n('wgd', lambda v: v > 0)}   canonical v9: {n('wgd9', lambda v: v > 0)}")
+    print(f"  WGD called (adopted call): {n('wgd9', lambda v: v > 0)}   final LSG set: {n('lsg', lambda v: v == 1)}")
     print(f"  ancestral karyotype placed, HAP1: "
           f"{sum(1 for r in rows if r[C['hap']] == 0 and r[C['aek']] >= 0)}   "
           f"HAP2: {sum(1 for r in rows if r[C['hap']] == 1 and r[C['aek']] >= 0)}")

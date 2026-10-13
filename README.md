@@ -8,7 +8,12 @@ RNA-seq samples.
 
 **Open the atlas:** <https://tsailabbioinformatics.github.io/poplar-717-atlas/>
 
-Tsai lab, University of Georgia. The data are unpublished dissertation material.
+Tsai lab, University of Georgia. The atlas is the data supplement of Chen Hsieh's dissertation:
+its duplication classes, whole-genome duplication pairs, cross-haplotype relationship categories,
+tissue specificity and lineage-specific gene set are the dissertation's, and the master tables
+behind them are on the atlas's Downloads page (`downloads/` here).
+
+Questions and corrections: Chen.Hsieh@uga.edu.
 
 ## How to cite
 
@@ -27,6 +32,8 @@ data you use; each study page carries its own DOI. A machine-readable record is 
 - `scripts/`: the build stages and the checks every release has to pass
   (`validate_data.py` for the data, `check.mjs` for the rendered pages).
 - `sources/`: small committed inputs and a provenance record for each data layer.
+- `downloads/`: the master tables, data dictionary and supplementary tables offered on the
+  Downloads page, with `MD5SUMS.txt`.
 - [`CHANGELOG.md`](CHANGELOG.md): what changed in each release, and why.
 - [`TODO.md`](TODO.md): planned enhancements.
 
@@ -46,5 +53,5 @@ then open <http://localhost:8931/>.
 
 ## License
 
-Code: MIT (see [`LICENSE`](LICENSE)). The data are unpublished and not yet openly licensed;
-CC BY 4.0 is intended at publication.
+Code: MIT (see [`LICENSE`](LICENSE)). Data are provided for research use; please cite the atlas
+as above. A formal open data licence has not been set yet; CC BY 4.0 is intended at publication.

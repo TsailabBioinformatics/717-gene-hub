@@ -16,8 +16,9 @@ export const CATEGORY = {
     what: 'a different number of copies on the two haplotypes, none in a tandem array' },
   'hemizygous_strict_PAV': { name: 'Strict PAV',
     what: 'no syntelog on the other haplotype and no protein-level match to it anywhere there' },
-  'hemizygous_TD_array': { name: 'TD-associated PAV',
-    what: 'a tandem array none of whose members has a syntelog on the other haplotype' },
+  'hemizygous_TD_array': { name: 'Hemizygous TD arrays',
+    what: 'a tandem array none of whose members has a syntelog on the other haplotype; hemizygous, '
+      + 'not absent: most members still have a protein-level match there' },
   'hemizygous_nonPAV': { name: 'Non-PAV hemizygous',
     what: 'no syntelog on the other haplotype, but the sequence is not absent there' },
 };
@@ -43,7 +44,7 @@ export function statusName(k) {
     diff_copy_number_arrays_both: 'CNV, arrays in both haplotypes',
     HAP1_specific_expansion: 'CNV, HAP1-specific expansion',
     HAP2_specific_expansion: 'CNV, HAP2-specific expansion',
-    TD_associated_PAV: 'PAV (whole array)',
+    TD_associated_PAV: 'Hemizygous (no syntelog)',
     diff_copy_number_array_on_smaller_side: 'CNV, array only on the side with fewer copies',
   })[k] || null;
 }

@@ -53,6 +53,10 @@ def allowed(rel: Path) -> bool:
         return rel.suffix == ".js" or posix == "js/vendor/3dmol/LICENSE"
     if parts[0] == "data":
         return rel.suffix in {".json", ".gz", ".gzb"}
+    if parts[0] == "downloads":
+        # The dissertation's tables, offered on the Downloads page (scripts/publish_downloads.py
+        # writes them with their checksums). Tables and their notes only.
+        return rel.suffix in {".csv", ".xlsx", ".md", ".txt", ".json"}
     if parts[0] == "sources":
         return len(parts) == 2 and rel.name.endswith(".provenance.json")
     return False

@@ -2,7 +2,7 @@
 // Answers a visitor's first three questions on the gene page: what is this gene, where is
 // its other allele, and which genomes have it.
 import { el, fmt } from '../core/dom.js';
-import { loadTerms, arrayAlleles } from '../core/data.js';
+import { loadTerms, arrayAlleles, getGene } from '../core/data.js';
 import { CATEGORY, detailText } from '../core/relationship.js';
 
 const PANEL = ['Ptrxalhap1', 'Ptrxalhap2', 'Pnigra', 'Ptrichocarpa', 'Pdeltoides',
@@ -73,6 +73,8 @@ function annotationCard(g) {
   const kv = el('dl', { class: 'kv' });
   const add = (k, ...v) => { kv.append(el('dt', {}, k), el('dd', {}, ...v)); };
 
+  if (a.sym && a.sym.length) add('Name', el('strong', { 'data-gene-name': '' }, a.sym.join(', ')),
+    el('span', { class: 'muted', style: 'font-size:12px' }, '  gene name or family code from the lab annotation'));
   if (a.d) add('Description', a.d);
   if (a.at) {
     add('Best Arabidopsis hit',
@@ -302,7 +304,8 @@ function relationshipCard(g) {
   if (!rel.c) {
     add('Category', el('span', { class: 'muted' }, 'not classified'),
       el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-        'This gene model is flagged by quality control, so it is outside the set the categories cover.'));
+        'This gene model is flagged by quality control (a pseudogene-like tandem copy or a short degenerate '
+        + 'fragment), so it is outside the set the categories cover and is not counted as a syntelog of another gene.'));
   } else {
     const c = CATEGORY[rel.c];
     add('Category', el('strong', { 'data-rel-category': rel.c }, c.name),
@@ -320,6 +323,24 @@ function relationshipCard(g) {
       add('Copies in its syntenic group', `HAP1 ${rel.n1}, HAP2 ${rel.n2}`,
         el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
           'Quality-filtered genes on each haplotype that share this syntenic locus.'));
+    }
+    // Two small sets where the category and the allele shown on this page seem to disagree.
+    // Both follow from quality filtering, so the page says so instead of leaving a puzzle.
+    if (rel.c === '1:1' && !(g.allele && g.allele.id)) {
+      add('Allele', el('span', { 'data-rel-note': 'unnamed-partner' },
+        'This syntenic group holds one gene on each haplotype, but the member-to-member pairing '
+        + 'is not on record for it (28 genes), so no allele is named on this page.'));
+    } else if (g.allele && g.allele.id) {
+      const note = el('dd', { 'data-rel-note': 'flagged-partner', style: 'display:none' });
+      const dt = el('dt', { style: 'display:none' }, 'Allele shown above');
+      kv.append(dt, note);
+      getGene(g.allele.id).then((p) => {
+        if (!p || !(p.rel && p.rel.qc)) return;
+        note.append(el('a', { href: `#/gene/${p.id}`, class: 'mono' }, p.id),
+          ' sits at the syntenic position but is a gene model flagged by quality control, which is '
+          + 'not counted. The category and copy numbers on this card are therefore assessed without it.');
+        dt.style.display = ''; note.style.display = '';
+      }).catch(() => {});
     }
   }
   return el('div', { class: 'card', 'data-card': 'relationship' },

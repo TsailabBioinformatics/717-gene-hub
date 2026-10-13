@@ -18,6 +18,7 @@
 // how many steps from the focal gene it is. Distance here is graph distance, and it is exact.
 import { el, fmt } from '../core/dom.js';
 import { getGene, hapLabel } from '../core/data.js';
+import { paperTop } from '../core/paper.js';
 
 let FAMS = null;
 async function loadFamilies() {
@@ -139,7 +140,7 @@ export async function familyView(geneId) {
       el('td', { class: 'muted', style: 'font-size:12px' }, r ? `${r.chr}` : '–'),
       el('td', { class: 'muted', style: 'font-size:12px' }, r ? hapLabel(r.hap).split(' ')[0] : '–'),
       el('td', { class: 'num' }, r && r.x && r.x.max != null ? r.x.max.toFixed(1) : el('span', { class: 'muted' }, '–')),
-      el('td', { class: 'muted', style: 'font-size:12px' }, r && r.x ? (r.x.top || '–') : '–'),
+      el('td', { class: 'muted', style: 'font-size:12px' }, r ? (paperTop(r) || '–') : '–'),
       el('td', {}, el('a', { href: `#/gene/${id}`, style: 'font-size:12px' }, 'gene →')));
   }));
 

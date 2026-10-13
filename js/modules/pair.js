@@ -15,6 +15,7 @@
 // two-column layout reads as "nothing there" instead of "not measured".
 import { el, fmt } from '../core/dom.js';
 import { getGene, hapLabel, loadExprVector } from '../core/data.js';
+import { paperTau, paperTop, ageBinName } from '../core/paper.js';
 import { svgEl, genesIn, tileRecord, matchingRegion, tissueList, tissueN } from '../core/locusfig.js';
 import { chromosomeBrowser } from '../core/locusbrowser.js';
 
@@ -60,7 +61,7 @@ function row(label, a, b, get, opts = {}) {
 }
 
 function comparisonTable(a, b) {
-  const t = (g) => (g.x && g.x.top) || null;
+  const t = (g) => paperTop(g);
   const rows = [
     // Never marked: two alleles have different ids and coordinates BY CONSTRUCTION, and
     // flagging that dilutes the rows where a difference actually means something.
@@ -88,7 +89,7 @@ function comparisonTable(a, b) {
         // array ids differ by construction (one per haplotype); membership and size do not
         differs: (x, y) => !!x.td !== !!y.td || (!!x.td && x.td.n !== y.td.n) }),
     row('Peak tissue', a, b, t),
-    row('τ (tissue specificity)', a, b, (g) => (g.x && g.x.tau != null ? g.x.tau.toFixed(2) : null)),
+    row('τ (tissue specificity)', a, b, (g) => (paperTau(g) != null ? paperTau(g).toFixed(2) : null)),
     row('Max TPM (652 samples)', a, b, (g) => (g.x && g.x.max != null ? g.x.max.toFixed(1) : null)),
     row('Arabidopsis hit', a, b, (g) => ((g.ann || {}).at || null), { absentLabel: 'none' }),
     row('Pfam domains', a, b, (g) => (((g.ann || {}).pf || []).join(', ') || null),

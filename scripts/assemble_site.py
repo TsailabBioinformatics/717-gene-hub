@@ -33,7 +33,7 @@ def fail(message: str) -> None:
 
 def hidden_public_path(rel: Path) -> bool:
     """Reject cleanup leftovers rather than silently treating them as data assets."""
-    return (rel.as_posix() != ".nojekyll" and rel.parts[0] in {"css", "js", "data", "sources"}
+    return (rel.as_posix() != ".nojekyll" and rel.parts[0] in {"css", "js", "data", "sources", "downloads"}
             and any(part.startswith(".") for part in rel.parts))
 
 def committed_files() -> list[Path]:
@@ -71,6 +71,10 @@ def allowed_source(rel: Path) -> bool:
         # Current data is JSON, range-addressed gzip-member blobs, and gzip-compressed model
         # buckets.  Add a type deliberately if a future client needs another one.
         return rel.suffix in {".json", ".gz", ".gzb"}
+    if parts[0] == "downloads":
+        # The dissertation's tables, offered on the Downloads page (scripts/publish_downloads.py
+        # writes them with their checksums). Tables and their notes only.
+        return rel.suffix in {".csv", ".xlsx", ".md", ".txt", ".json"}
     if parts[0] == "sources":
         # Only provenance sidecars are reader-facing.  Source tables remain in the repository.
         return len(parts) == 2 and rel.name.endswith(".provenance.json")

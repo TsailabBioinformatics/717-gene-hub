@@ -886,18 +886,15 @@ def main():
                 0 if hap == "hap1" else 1,
                 vi("chr", r.get("chr")),
                 vi("cls", syn.get("cls")),
-                ps.get("rank") if ps.get("rank") is not None else -1,
-                int(round(x["tau"] * 100)) if x.get("tau") is not None else -1,
-                vi("top", x.get("top")),
+                ((ps.get("fin") or {}).get("u") or ps.get("rank")) if ps.get("rank") is not None else -1,
+                # must track build_facets.py: the dissertation's tau (x.p), per-mille, truncated
+                int((x.get("p") or {})["tau"] * 1000 + 1e-6) if (x.get("p") or {}).get("tau") is not None else -1,
+                vi("top", (x.get("p") or {}).get("top")),
                 1 if r.get("allele") else 0,
                 1 if ann.get("at") else 0,
                 # must track build_facets.py: wgd = route C combined call (falling back to v9
                 # where route C never scored the gene), wgd9 = canonical v9.
-                (((1 if ((r.get("dup") or {}).get("cc") or {}).get("s") else 0)
-                  | (2 if ((r.get("dup") or {}).get("cc") or {}).get("a") else 0))
-                 if (r.get("dup") or {}).get("cc")
-                 else ((1 if (r.get("dup") or {}).get("s") else 0)
-                       | (2 if (r.get("dup") or {}).get("a") else 0))),
+                (1 if (r.get("dup") or {}).get("s") else 0) | (2 if (r.get("dup") or {}).get("a") else 0),
                 (1 if (r.get("dup") or {}).get("s") else 0) | (2 if (r.get("dup") or {}).get("a") else 0),
                 1 if (r.get("dup") or {}).get("ccd") else 0,
                 # must track build_facets.py: the CURATED union set, not GENESPACE's `ar`
@@ -915,6 +912,11 @@ def main():
                     r.get("aek") or {}),
                 # relationship category, index into vocab.rel; -1 for quality-flagged gene models
                 vi("rel", (r.get("rel") or {}).get("c")) if (r.get("rel") or {}).get("c") else -1,
+                vi("dup", (r.get("dup") or {}).get("t")),
+                (1 if (ps.get("fin") or {}).get("s") else 2) if ps.get("fin") else 0,
+                1 if (r.get("rel") or {}).get("qc") else 0,
+                1 if (x.get("p") or {}).get("ok") else 0,
+                ps.get("rank") if ps.get("rank") is not None else -1,
             ]
 
         # zip() truncates to the shorter list, so a column added to build_facets.py without

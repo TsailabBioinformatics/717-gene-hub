@@ -1,7 +1,11 @@
 import { el, clear, fmt } from './core/dom.js';
 import { studyMeta, cleanCitation } from './core/cite.js';
 import { getGene, loadManifest, hapLabel, loadExprStudies,
-         loadExprSamples, searchGenesRanked, loadFacets, facetRow, arrayAlleles, loadStructure, dataVersion } from './core/data.js';
+         loadExprSamples, searchGenesRanked, loadFacets, facetRow, arrayAlleles, loadStructure, dataVersion,
+         normalizeQuery } from './core/data.js';
+import { paperExpr, paperHighest, lsgStatus, qcBanner, isQcFlagged, releaseLine, CONTACT, REPO_URL } from './core/paper.js';
+import { glossaryView } from './modules/glossary.js';
+import { downloadsView } from './modules/downloads.js';
 import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE,
          EVIDENCE_TIERS } from './core/registry.js';
 import { dupTypeLabel } from './modules/duplication.js';
@@ -183,6 +187,8 @@ route(/^\/$/, async (navigation) => {
   const poolOf = (rows) => (rows || []).filter((r) => r.rank >= 18).reduce((acc, r) => acc + r.n, 0);
   const lsgH1 = poolOf((ps.ladder || {}).hap1);
   const lsgH2 = poolOf((ps.ladder || {}).hap2);
+  const dz = man.dissertation || {};
+  const lsgFin = (h) => ((dz.lsg || {})[h] || {}).final;
 
   // What each module ANSWERS, in a reader's terms -- not its filter count.
   const MODULE_BLURB = {
@@ -197,7 +203,7 @@ route(/^\/$/, async (navigation) => {
   // A search box that belongs to the page, not the header: a first-time reader's first act.
   // It submits to the same #/search route the header box uses, so there is one search.
   const heroInput = el('input', {
-    type: 'search', placeholder: 'Gene ID, keyword, Arabidopsis locus or Pfam',
+    type: 'search', placeholder: 'Gene ID, gene name, Potri ID, Arabidopsis locus, Pfam or keyword',
     'aria-label': 'Search genes', autocomplete: 'off', spellcheck: 'false',
   });
   const heroSearch = el('form', {
@@ -209,6 +215,7 @@ route(/^\/$/, async (navigation) => {
     },
   }, heroInput, el('button', { type: 'submit', class: 'btn primary' }, 'Search'));
   const EXAMPLES = [['PtXaTreH.05G120200', '#/gene/PtXaTreH.05G120200'],
+    ['CCoAOMT1', '#/search/CCoAOMT1'], ['Potri.010G150700', '#/search/Potri.010G150700'],
     ['arabinogalactan', '#/search/arabinogalactan'], ['AT1G06515', '#/search/AT1G06515'],
     ['PF00249', '#/search/PF00249']];
 
@@ -216,11 +223,13 @@ route(/^\/$/, async (navigation) => {
   const EXPLORE = [
     ['#/browse', 'Browse', 'Filter every gene across every layer; export or save the set.'],
     ['#/map', 'Genome map', 'Both haplotypes chromosome by chromosome, down to single genes.'],
-    ['#/karyotype', 'Ancestral karyotype', 'An exploratory placement of each gene on the ancestral eudicot karyotype.'],
+    ['#/karyotype', 'Ancestral karyotype', 'Each gene placed on the ancestral eudicot karyotype (dissertation Figure 2.S2).'],
     ['#/module/expression', 'Expression', `${fmt(e.n_samples)} samples from ${e.n_studies} curated studies.`],
     ['#/module/duplication', 'Duplication', 'Tandem arrays and whole-genome duplication partners.'],
-    ['#/module/phylostrat', 'Gene age', 'Phylostrata and the lineage-specific pool.'],
+    ['#/module/phylostrat', 'Gene age', 'Phylostrata and the lineage-specific gene set.'],
     ['#/arrays', 'Tandem arrays', 'Every curated array, per haplotype, with divergence and expression.'],
+    ['#/glossary', 'Glossary', 'The terms used on this site, as the dissertation defines them.'],
+    ['#/downloads', 'Downloads', 'The master tables, data dictionary and supplementary tables, with checksums.'],
   ];
 
   setView(el('div', { class: 'home' },
@@ -241,10 +250,10 @@ route(/^\/$/, async (navigation) => {
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(man.n_genes)), el('div', { class: 'l' }, 'gene models')),
       // n_allele counts GENES carrying an allele (both members of each pair), so pairs = half.
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(Math.round((a.n_allele || 0) / 2))),
-        el('div', { class: 'l' }, 'HAP1↔HAP2 allele pairs')),
+        el('div', { class: 'l' }, 'HAP1↔HAP2 syntelog pairs: 22,704 in 1:1 groups, the rest paired inside N:N and CNV groups')),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(e.n_samples)), el('div', { class: 'l' }, `RNA-seq samples, ${e.n_studies} studies`)),
-      el('div', { class: 'stat' }, el('div', { class: 'n' }, `${fmt(lsgH1)} / ${fmt(lsgH2)}`),
-        el('div', { class: 'l' }, 'lineage-specific candidates, HAP1 / HAP2 (PS ≥ 18)')),
+      el('div', { class: 'stat', 'data-home-lsg': '' }, el('div', { class: 'n' }, `${fmt(lsgFin('HAP1'))} / ${fmt(lsgFin('HAP2'))}`),
+        el('div', { class: 'l' }, `lineage-specific genes, HAP1 / HAP2 (final set, from ${fmt(lsgH1)} / ${fmt(lsgH2)} candidates at PS ≥ 18)`)),
     ),
 
     questionsCard(),
@@ -332,6 +341,13 @@ function questionsCard() {
       const facets = await loadFacets();
       const rows = facets.rows.map((_, i) => facetRow(facets, i));
       QUESTIONS.forEach((q, i) => {
+        // Per haplotype wherever the question is about a biological set (lab rule: HAP1 and
+        // HAP2 are reported separately, never summed).
+        if (q.byHap) {
+          const a = countQuestion(q, rows, FILTERS, 'hap1'), b = countQuestion(q, rows, FILTERS, 'hap2');
+          if (a != null) counts[i].textContent = `· ${fmt(a)} HAP1 / ${fmt(b)} HAP2 genes`;
+          return;
+        }
         const n = countQuestion(q, rows, FILTERS);
         if (n != null) counts[i].textContent = '· ' + fmt(n) + ' genes';
       });
@@ -376,15 +392,23 @@ function glanceCard(g, man) {
   }
 
   const x = g.x;
-  if (x && x.top) {
+  const px = paperExpr(g);
+  if (px && px.top) {
     bits.push(['Expression', el('span', {},
-      el('strong', {}, x.top), ` ${fmt(Math.round(x.t && x.t[x.top] != null ? x.t[x.top] : 0))} TPM`,
-      x.tau != null ? el('span', { class: 'muted' }, ` · τ ${x.tau}`) : null)]);
+      el('strong', {}, px.top), ` ${fmt(Math.round(px.t[px.top]))} TPM`,
+      el('span', { class: 'muted' }, ` mean · τ ${px.tau.toFixed(2)}`
+        + (px.tau >= 0.85 && px.ok ? ' (tissue-specific)' : '')))]);
+  } else if (px) {
+    const hi = paperHighest(g);
+    bits.push(['Expression', el('span', {},
+      el('strong', {}, hi.tissue), ` ${fmt(Math.round(hi.v))} TPM`,
+      el('span', { class: 'muted' }, ' mean, its highest tissue group · under 5 TPM in every group of the '
+        + 'reference panel, so no peak tissue or τ is called'))]);
   }
   if (g.resp && g.resp.v != null) {
     bits.push(['Responsiveness', el('span', {},
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} contrasts` : ''}`))]);
+      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} of the 117-contrast set` : ''}`))]);
   }
   if (g.allele && g.allele.id) {
     bits.push(['Allele', el('span', {},
@@ -648,14 +672,21 @@ function geneHeader(g, kb) {
   const desc = ann.d || (ann.atd ? `similar to ${ann.at || 'Arabidopsis'}: ${ann.atd}` : null);
   const ps = g.ps || {};
   const facts = [];
-  if (ps.rank != null) facts.push(el('span', { class: 'gh-fact' }, `PS${ps.rank}`,
-    ps.name ? el('span', { class: 'muted' }, ` ${ps.name}`) : null));
+  const used = (ps.fin && ps.fin.u) || ps.rank;
+  if (ps.rank != null) facts.push(el('span', { class: 'gh-fact' }, `PS${used}`,
+    used !== ps.rank ? el('span', { class: 'muted' }, ' Populus (reassigned from PS19)')
+      : (ps.name ? el('span', { class: 'muted' }, ` ${ps.name}`) : null)));
+  const lsg = lsgStatus(g);
+  if (lsg) facts.push(el('span', { class: 'gh-fact', 'data-lsg-chip': lsg.final ? 'final' : 'excluded' }, lsg.text));
+  if (isQcFlagged(g)) facts.push(el('span', { class: 'gh-fact', 'data-qc-chip': '' },
+    'gene model flagged by quality control, not in the dissertation\u2019s counts'));
   if (g.syn && g.syn.cls) facts.push(el('span', { class: 'gh-fact' }, g.syn.cls.replace(/_/g, ' ')));
   if (g.dup && g.dup.td) facts.push(el('span', { class: 'gh-fact' }, 'tandem array'));
   if (g.allele && g.allele.id) facts.push(el('span', { class: 'gh-fact' }, 'allele ',
     el('a', { href: `#/gene/${g.allele.id}`, class: 'mono' }, g.allele.id)));
   else {
-    const chip = el('span', { class: 'gh-fact muted' }, 'no 1:1 allele called');
+    const chip = el('span', { class: 'gh-fact muted' },
+      g.rel && g.rel.c === '1:1' ? '1:1 group; the partner is not named on record' : 'no 1:1 allele called');
     facts.push(chip);
     if (g.dup && g.dup.td) {
       arrayAlleles(g).then((r) => {
@@ -716,13 +747,21 @@ function geneHeader(g, kb) {
       faBtn, copyBtn, dlBtn));
 }
 
-route(/^\/gene\/(.+)$/, async (id, navigation) => {
+route(/^\/gene\/(.+)$/, async (rawId, navigation) => {
   const { setView, loading } = scopedView(navigation);
+  // A pasted ID often carries a transcript suffix or the wrong case; both resolve.
+  const id = normalizeQuery(decodeURIComponent(rawId));
   loading(`Loading ${id}…`);
-  const [g, man] = await Promise.all([getGene(id), loadManifest()]);
-  if (!g) return setView(el('div', { class: 'empty' },
-    el('h2', {}, 'No such gene'), el('p', { class: 'mono' }, id),
-    el('p', { class: 'muted' }, 'IDs look like PtXaTreH.01G000100 (HAP1) or PtXaAlbH.01G000100 (HAP2).')));
+  const [g, man] = await Promise.all([getGene(id).catch(() => null), loadManifest()]);
+  if (!g) {
+    // Not a 717 gene ID: a P. trichocarpa ID or a gene name goes to search, which knows both.
+    const { total } = await searchGenesRanked(id).catch(() => ({ total: 0 }));
+    if (total) return navigate('/search/' + encodeURIComponent(id));
+    return setView(el('div', { class: 'empty' },
+      el('h2', {}, 'No such gene'), el('p', { class: 'mono' }, id),
+      el('p', { class: 'muted' }, 'IDs look like PtXaTreH.01G000100 (HAP1) or PtXaAlbH.01G000100 (HAP2). '
+        + 'A transcript suffix (.1) and lower case are accepted. Unplaced-scaffold genes exist on HAP1 only (PtXaTreH.T…).')));
+  }
 
   const kb = ((g.end - g.start) / 1000).toFixed(2);
   const cards = el('div', { class: 'cards' },
@@ -803,6 +842,7 @@ route(/^\/gene\/(.+)$/, async (id, navigation) => {
   const ord = g.ord || {};
   setView(el('div', {},
     geneHeader(g, kb),
+    qcBanner(g),
     (ord.p || ord.n) ? el('p', { class: 'gh-nb' },
       ord.p ? el('a', { href: `#/gene/${ord.p}`, class: 'mono' }, '← ' + ord.p) : null,
       (ord.p && ord.n) ? el('span', { class: 'muted' }, '   neighbors on the chromosome   ') : null,
@@ -871,6 +911,19 @@ route(/^\/status$/, async (navigation) => {
   const { setView, loading } = scopedView(navigation);
   loading('Loading data checks\u2026');
   setView(await statusView());
+  markNav();
+});
+
+route(/^\/glossary$/, async (navigation) => {
+  const { setView } = scopedView(navigation);
+  setView(glossaryView(await loadManifest()));
+  markNav();
+});
+
+route(/^\/downloads$/, async (navigation) => {
+  const { setView, loading } = scopedView(navigation);
+  loading('Loading the file list\u2026');
+  setView(await downloadsView(await loadManifest()));
   markNav();
 });
 
@@ -1032,6 +1085,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     .forEach((m) => nav.append(el('a', { href: `#/module/${m.id}` }, m.label)));
 
   const about = byId('about');
+  nav.append(el('a', { href: '#/glossary' }, 'Glossary'), el('a', { href: '#/downloads' }, 'Downloads'));
   if (about && about.overview) nav.append(el('a', { href: '#/module/about' }, about.label));
   initSearch();
   start();
@@ -1041,9 +1095,12 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     const man = await loadManifest();
     const f = document.querySelector('footer.bot');
     if (f && man.data_version) {
-      f.append(el('div', { style: 'margin-top:5px' },
-        `data v${man.data_version}`,
-        man.data_released ? ` · ${man.data_released}` : '',
+      f.append(el('div', { style: 'margin-top:5px', 'data-release-line': '' },
+        releaseLine(man),
+        ' · ', el('a', { href: '#/downloads' }, 'downloads'),
+        ' · ', el('a', { href: '#/glossary' }, 'glossary'),
+        ' · ', el('a', { href: `mailto:${CONTACT}?subject=Poplar%20717%20gene%20atlas` }, 'contact / report a problem'),
+        ' · ', el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, 'repository'),
         ' · ', el('a', { href: '#/module/about' }, 'provenance'),
         // The footer already states which build you are reading; the gates that build passed
         // belong next to it, not two clicks away inside another page.

@@ -1,0 +1,1612 @@
+gene_id,haplotype,genera_phylostratum,reassigned_PS19_to_PS18,phylostratum_used,meets_quality_filter_exclusion,meets_abSENSE_exclusion,meets_outgroup_syntenic_tBLASTn_exclusion,meets_split_gene_model_exclusion,exclusion_reason,final_LSG_set
+PtXaTreH.01G001500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G006100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G012000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G012100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G016700,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G018800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G019400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G024300,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G034300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G044000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G044100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G045100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G047100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G048300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G048500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G051800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G052900,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G061800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G062300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G063200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G079800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G087900,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G094000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G102300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G103200,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G104000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G120400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G122900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G124300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G126600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G130200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G131500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G132500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G133500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G134700,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G139600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G147800,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G150900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G161000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G164800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G165600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G166400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G168900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G169600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G171100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G172100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G175200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G187200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G189200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G196500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G201000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G202000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G202400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G203000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G205900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G207500,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G209500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G211100,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G214900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G216300,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G219400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G236800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G240600,HAP1,PS19,False,PS19,False,False,False,True,Split gene model,False
+PtXaTreH.01G264500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.01G268200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G271200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G279300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G286300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.01G289600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G303000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G310700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G311900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.01G320300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G327200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G329400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G343200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G344000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G351500,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.01G351600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G351700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G353200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G357200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.01G362900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G364600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G367900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.01G374200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G001000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.02G004600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G014700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G014800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G019300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G022400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G025000,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.02G026100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G027600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G035000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G037900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G039900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G040800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G044000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G051700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G057900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G070300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G076300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G076400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G086600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.02G088700,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.02G092700,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.02G093800,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.02G095800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.02G097100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G097400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G104200,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.02G106000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G106100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.02G117100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G117800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G119200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G131600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.02G142900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G143100,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.02G146400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G146800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G147100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G166400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G177300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G179700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G179900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.02G186100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G191100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G191400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G204300,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.02G214800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.02G216000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G009800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G012400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G013200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.03G013300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G015400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.03G016400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.03G019700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.03G019800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G021000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G021300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G022100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G022400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G022700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G022800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G025500,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.03G028000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G033000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G034200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G035300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G036200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.03G040000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G041900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G048400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G051500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G056000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G069600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G070200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G070800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G072700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G076700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G089100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G099500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.03G104100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G107900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.03G112800,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.03G131000,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.03G135900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G142000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G149000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G152600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G155700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G157400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G162600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G164700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.03G166600,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.03G173400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.03G176400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.03G178300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.03G179800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G007400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G008900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G010900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G014200,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.04G018200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G023300,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G027700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G029800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G036700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G037000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.04G037700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G037800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G040000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G043900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G045100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G045600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G046100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G049900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G050500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G056500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G076700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G080400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G084100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G084500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G092700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G096900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G102800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G106800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G111600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G112200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.04G113000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.04G113900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G114000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.04G114100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G119500,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.04G119600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G120200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G127900,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.04G130500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G138600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G143600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G146200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G147900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G152800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G161600,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.04G167100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.04G168000,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.04G168700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G169700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.04G170700,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.05G001600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.05G019700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G020300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G021400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G027000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G028800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G032500,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.05G035700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G036900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G051400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G051700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G053100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G066500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G069800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G074700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G082200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G093800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G095800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G096900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G101800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G111400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G122600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G144600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G155200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G160800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G167900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G168800,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.05G171200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.05G174100,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.05G176900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G178800,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.05G184600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.05G188800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.05G190500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.06G011400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G012500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G013900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G014000,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G022600,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G024400,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.06G024600,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.06G026100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G030300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G030400,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G035400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.06G067400,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G074800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.06G079100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G079900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G085600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G087000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G090600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G092500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.06G095300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G098300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G098500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G110300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G111500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G118000,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G124000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G129900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G135500,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G141100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G155300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G158400,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G172000,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G172800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G179600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G180100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G198700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G199300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.06G206600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.06G206700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G212100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.06G223100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.06G231400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G003600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G006500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.07G006900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G016300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G018800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.07G021600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G028900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G034200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.07G041800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.07G044200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G052700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G052800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G053300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G054600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G055300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G058300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G064500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.07G066200,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.07G081200,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.07G088500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G089400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.07G096400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.07G098200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G100500,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.07G120900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G122100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.07G125100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G002500,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.08G010700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G017100,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G018400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.08G020200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G020300,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.08G022600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.08G022900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G029000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G040900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.08G042000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G045600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G057800,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G062200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.08G065500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G066700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G073000,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G073800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G081600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G083000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G087000,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G092900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G094600,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G096100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G097700,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G098000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G098900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G100800,HAP1,PS18,False,PS18,False,False,False,True,Split gene model,False
+PtXaTreH.08G103400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G104000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G105900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G107000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.08G109500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G112200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G112300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G114000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G114700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G115200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G115400,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G120200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G120600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G122500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.08G125900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G127700,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.08G133500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.08G144600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G164400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G169700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G170300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G170400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G173000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G173200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G178200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.08G180400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.08G183000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G000400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G005500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G020700,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.09G030500,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.09G036700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G036900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.09G041700,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.09G053800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G056100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G058500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G069100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G071400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G079000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G080600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G082100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G088900,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.09G091400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G094600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.09G104400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G109200,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.09G126000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.09G130800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G136500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.09G139800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G003500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G004600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G006900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G017100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G019200,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.10G019900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G021300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G022800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G024500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G030900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G031800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G038300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G041600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G053100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G058600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G059800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G063900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G072800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G075500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G079400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G081300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G081400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G084500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.10G088700,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G092600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G092900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G093600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G098400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.10G099600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.10G106700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G107900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G108300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G118800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G122300,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.10G123300,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.10G124400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G125200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G135700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G137700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.10G137900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G139800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.10G146400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G150400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G156200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G159900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G161200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G162400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G164600,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.10G164700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G174300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G186700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G190300,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.10G191500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G192500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.10G193000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G193900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G198000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.10G204200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.10G212100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G003700,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.11G003800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G006400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G006900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.11G008900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.11G011400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G012100,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.11G012400,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.11G024600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G028100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G030800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.11G033100,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.11G038200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G039400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G040300,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.11G042900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G044500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.11G055400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G056900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G057300,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.11G057600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G064800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.11G068100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G068800,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.11G071100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.11G071300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G076000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G078100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G078200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G078300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G078400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G080300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G080600,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.11G085600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G089100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.11G094600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G098600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G115600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.11G115900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G124800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G138500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.11G138700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.12G001400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G006400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.12G007400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G012400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G013600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G017800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.12G017900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G018200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G018800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G019300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G019700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.12G019800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G019900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G028100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G033000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G034000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G037800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G044100,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.12G044200,HAP1,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaTreH.12G044400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.12G045000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.12G053700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G056600,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.12G066000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.12G074400,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.12G080900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G081400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.12G082900,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.12G083900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G084500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.12G094500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.12G095100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.12G107600,HAP1,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaTreH.13G000300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G001500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G011900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G023000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G031700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.13G032400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.13G033400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G036600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G037500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.13G045100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G045300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G053700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G062700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G064900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G069600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G070100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G081400,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.13G083100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.13G084900,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.13G089000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.13G099700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.13G108100,HAP1,PS18,False,PS18,False,False,False,True,Split gene model,False
+PtXaTreH.13G115500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G000400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.14G002200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.14G004600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.14G008800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G014400,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.14G015300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G016100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G016400,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G017500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G019200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G023900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.14G029500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G030300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G038100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G041300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G045400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G050400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G054600,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G061100,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.14G065100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G066200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G069300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G069600,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G071100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G076500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G079900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.14G086100,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G105100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G107000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G111300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G111400,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G111600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G120500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G129900,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G136900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.14G139200,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G143000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.14G144300,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.14G149300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G149500,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.14G151900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.14G155600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G156300,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.14G156700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.14G157100,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.14G157700,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.15G010400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G011100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G015600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.15G025900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G026000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G026100,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.15G026200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.15G027600,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.15G028200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G039800,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.15G040900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G051200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.15G053900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G055400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G056400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G059400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.15G061300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.15G073200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.15G076700,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.15G077500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.15G077900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G088000,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.15G093500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G097700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G101500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G107700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.15G115900,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.16G003200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G003500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G003800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G010300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G019900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.16G026300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G032200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G036100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G045100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G051000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G054100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G054600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G075000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G077800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G077900,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G090200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G099100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G100800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G102300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G104200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.16G110700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G113000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G114800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.16G115500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G004800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G010100,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.17G022200,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G024200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G027400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G032700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G033300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G033400,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.17G033600,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.17G034000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G035400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.17G036000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G036100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G039300,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G041300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G048300,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G049700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G052000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G052100,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.17G052600,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.17G063500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G067300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G067600,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G069900,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.17G070000,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G071100,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G074500,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.17G086000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G087200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G089300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G093000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G095700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.17G097000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G098700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G111100,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G118600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.17G130800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G009000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.18G019900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G024200,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.18G027600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G027700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G033600,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G035500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G036600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G040300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G040800,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.18G047300,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.18G055500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G056300,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.18G056500,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.18G059700,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G060300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G071800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G078500,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G078700,HAP1,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.18G081400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.18G081900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G085600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G092700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.18G104800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.18G105800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G003100,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.19G005300,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.19G005600,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G011000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.19G011300,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G017100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G021400,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G022200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G023000,HAP1,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.19G023200,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.19G023800,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.19G027500,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.19G030200,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G034000,HAP1,PS19,True,PS18,False,False,False,False,none,True
+PtXaTreH.19G034300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G036800,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G039000,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.19G045300,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G050400,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G057800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G060100,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.19G079200,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G080500,HAP1,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaTreH.19G082000,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G088800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G093700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G097100,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G098500,HAP1,PS19,False,PS19,False,False,False,False,none,True
+PtXaTreH.19G099700,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.19G111800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.T000700,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.T003300,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.T003800,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.T004000,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T004800,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T008900,HAP1,PS18,False,PS18,False,False,False,False,none,True
+PtXaTreH.T009700,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T010100,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T010300,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T010500,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T010800,HAP1,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaTreH.T011400,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.T012900,HAP1,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaTreH.T013000,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaTreH.T013100,HAP1,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.01G001500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G012700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G013500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G027400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G034000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G039200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G044800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G045900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G048800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G051400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G052700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G053900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G054800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G057700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G063600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G063800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G063900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G065500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G065700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G066900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G072000,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G077000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G082500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G083900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G085600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G086300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G088800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G104800,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G105900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G121200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G122400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G124200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G124800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G125400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G126200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G128600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G133600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G145800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G150000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G152200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G153000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G153800,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G156600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G157200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G164100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G169100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G171500,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G171600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G171700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G171800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G172400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G178700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G186400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G186500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G189700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G190300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G194900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G197800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G202100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G203800,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G207600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G207800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G211300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G212800,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G235800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G238500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G242300,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G245500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G247600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G254700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G255900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G258100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G263100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G264100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G266200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G269700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G270600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G280700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G292400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G300400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G301400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G304100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G304400,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.01G309600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G318400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G321900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G328900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G340400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G346700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G347000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G347300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G348800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G354300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G355800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G357700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.01G357900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G359800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G363000,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.01G366100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.01G370800,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.01G370900,HAP2,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaAlbH.01G371000,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.01G371100,HAP2,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaAlbH.01G372300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.01G372800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.01G377000,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.02G000900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G001900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G002100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.02G013400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G023000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G023500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G025400,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.02G026600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G028100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G039100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G044700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G046700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G048900,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.02G049300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G050100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G055100,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.02G063400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G063900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G071100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G073800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G077300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G087100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G087600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G095700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G096000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G096700,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G098100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.02G100700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G102400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G105100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G106300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G107000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G107100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G107200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G112200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G113600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G113700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G114100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G122900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G123900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G131700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G135800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.02G145400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G146300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G147200,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.02G152400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.02G158400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G169000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G172900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G175300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.02G175800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G183300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G190200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G194900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.02G196000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.02G207700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.02G215600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G001300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G008700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G011700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G017800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G018300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G023400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G026700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.03G028100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.03G029300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.03G029500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G031600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G031900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G034700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.03G043100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.03G043400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G044700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G048900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G051600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G066000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G068400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G069100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.03G078100,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.03G085100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G091900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G102800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G117800,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.03G120900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G121900,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.03G130100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G131800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G133000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G144500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G156200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G157900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G160400,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.03G161500,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.03G162100,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.03G162500,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.03G169500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.03G170000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.03G173600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.03G179200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G002900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G004000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G006000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G007600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G007700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G007800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G010800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G019300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G020800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G024900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G028200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G031000,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G035800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G036000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G037300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G037400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G044600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G044900,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G045400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G047100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G050300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G050900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G056400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G056700,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G056900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G059200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G059300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G064000,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G068900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G077200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G083100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G083600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G084000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G086400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G094900,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G096200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G099000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G102200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G105900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G106200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G107600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G109500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G111300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G112800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G115600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G118300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G129000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G140900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G141300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G142000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G147600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G147900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G159300,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.04G162200,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.04G163600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G164200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G166200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.04G167800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.04G175300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.04G177200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.04G181400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.05G001400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.05G009900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.05G010700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G015600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G032800,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.05G033600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.05G036300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.05G037700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G053600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G063300,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G070000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G070900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G071200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G071800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G076600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G081700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G088900,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G098600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G104300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G120300,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G131600,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G140600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G141400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G143800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G147000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G161900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G173700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.05G177700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G180800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G190500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G190600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G192200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.05G192300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.05G196100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.05G200100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G001600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G007200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G012600,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.06G026900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G030400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G031000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G031600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G031700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G067600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G076200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G078700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G091900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.06G092500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G098000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G098100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G098300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G119600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G122500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G122600,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G130300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G135400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G141400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G146200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.06G152200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G155600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G166000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G173000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G180400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G181700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G198300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G199900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.06G200900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.06G213500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G218000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.06G219300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.06G219500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G220900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G223900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G227100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G229400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G229700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.06G231000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.06G234600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.06G234700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G001000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G003600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G016900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G024500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G026300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.07G029200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G031000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G033500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G034800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G039900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G041000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G049000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G057800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G064500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G066100,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.07G067700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G069700,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.07G074400,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.07G080900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.07G096000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.07G096200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G098200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G098400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.07G101300,HAP2,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaAlbH.07G117300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.07G118100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.07G121500,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.07G122000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G002500,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.08G009000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G010600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G012800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G021000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.08G021600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G023900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.08G028800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G031500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G032200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G040800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G046600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G051900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G053000,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G054500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G062600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G068900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G070700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G075900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G076000,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G079900,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G081600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G086300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G086800,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G090300,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G092600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G095900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G098000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G100600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G101500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G103300,HAP2,PS18,False,PS18,False,False,False,True,Split gene model,False
+PtXaAlbH.08G106300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G114700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G116600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.08G117400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G119600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G120400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G121000,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G122900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G123200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G126200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.08G129900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.08G133800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.08G143000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G153000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G153500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G159100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G165900,HAP2,PS18,False,PS18,False,False,False,True,Split gene model,False
+PtXaAlbH.08G171700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G171800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G175500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G181500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.08G182500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.08G184000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G000200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G002200,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G003900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G004500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.09G021600,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G025300,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G026700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G027500,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G031300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G035400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G037500,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G038000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G039600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G050300,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G054100,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G054400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G056800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G058700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G059200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G061500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G064700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G065700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G071300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G076900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.09G085500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G093100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.09G101500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G107200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G117300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G124400,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G127900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.09G137300,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.09G137400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.09G141500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G006600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G009600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G011100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G015400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G018400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G020200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.10G026900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G030200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G030300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G030600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.10G049400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G050500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G060500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G062300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G065400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G065600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G079800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G081800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G088500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G092600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G093800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G096600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G101200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G112600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G112900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G116300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G116600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G117400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G117600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.10G118500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G124400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G131000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G131300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G133000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.10G135400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G135500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G135600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G153400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G160700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G165800,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.10G169400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.10G171700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.10G175000,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.10G176000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.10G176800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G177800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G180300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G182300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G185200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.10G186500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G187400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.10G197100,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.10G199100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G005800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G009800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G010000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G014300,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.11G018800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G024600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G026400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.11G026900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G027900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G031300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G036200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.11G038200,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.11G038800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G039500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G040600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.11G040800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G053500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G061900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G062000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G062800,HAP2,PS19,False,PS19,True,False,False,False,Quality filter,False
+PtXaAlbH.11G062900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G063900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.11G064800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G065100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G068100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G071300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G074600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.11G074900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.11G075800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G085900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G086800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.11G088900,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.11G091500,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.11G095100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.11G109800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.11G127000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.11G128400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G002400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G004100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G005800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G007300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.12G009500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G013300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G018400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G019100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G020500,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.12G020600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G037500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G038300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G041700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G044200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G045800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G051900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.12G053900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G071400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G074500,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.12G074700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G081700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G082100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G089500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G090300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.12G096100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G097600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.12G099400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.13G000400,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.13G001400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G001500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G002600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G011900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.13G017800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G022700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.13G031200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.13G033000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G033300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G033700,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.13G033900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G037300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.13G037500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G038900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G050700,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.13G050900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G053400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G062400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G067900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G070300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G081100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G083800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G085100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.13G096800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.13G099000,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.13G104000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G109900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G110700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G111200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.13G117100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G118500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.13G127000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G005000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G006400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G008000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G015500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G016500,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G022800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G027800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.14G034900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G035400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G035500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G036400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G055300,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G057000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G060800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.14G061600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G061800,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G065800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G067200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G070200,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G070700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.14G077600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G080900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G082100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G093000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G095100,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G106800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G113400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G118300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G122000,HAP2,PS19,False,PS19,False,False,False,True,Split gene model,False
+PtXaAlbH.14G124000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G129700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G134500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G137200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G137900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G140300,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G143100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G143300,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G145400,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.14G150200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.14G150400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.14G152100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G152500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G152800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G157300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G159400,HAP2,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaAlbH.14G160100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.14G160300,HAP2,PS18,False,PS18,True,True,False,False,Quality filter,False
+PtXaAlbH.14G161500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.14G166900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G007700,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G007800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G011700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G013200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G016000,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.15G020800,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.15G026400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G026800,HAP2,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaAlbH.15G026900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G027000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G033800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G040500,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G040600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G042600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G050000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G052800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G057100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G058600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G058800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G075700,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.15G078000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G078800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G086700,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G086900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G098400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.15G099200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.15G102000,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.15G102900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G108200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G113400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.15G114800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.15G115600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.16G002200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G003400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G003900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.16G006400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G007800,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.16G009100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G019400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.16G026900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.16G032900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.16G033100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G037200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G041900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.16G043000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G046500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G052800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G052900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G059400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G062700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G064300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G070600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.16G077900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.16G090900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G091400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G092900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.16G094300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.16G095200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G099500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G101200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G105800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G117400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.16G119200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.16G119900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G006100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G007400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G016900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G021900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.17G030200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G037300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G040000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G041200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G043900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G048400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G051100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G052200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G053700,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G054300,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.17G056900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G057000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G059800,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G060900,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.17G069900,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G073600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G078200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G079100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G080300,HAP2,PS18,False,PS18,True,False,False,False,Quality filter,False
+PtXaAlbH.17G084700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G084800,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.17G087700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G089400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G093700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G096200,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.17G101800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.17G102200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G102900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G103600,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.17G103700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G105100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G109000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.17G119400,HAP2,PS19,False,PS19,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.17G120000,HAP2,PS18,False,PS18,False,True,True,False,abSENSE,False
+PtXaAlbH.17G120800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G009000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G015000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G016900,HAP2,PS19,True,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.18G017100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.18G020100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G020500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G021600,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G022600,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.18G024400,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G036900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G039500,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G040200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G043100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G046900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G049000,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G055500,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G056000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G059700,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.18G072700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G072900,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G079700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G083300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G083400,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G083500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.18G088500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.18G088600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G091000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G091100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G091200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G092100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.18G092800,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G092900,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.18G093200,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.18G095100,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.18G096300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G103900,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G106000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.18G109800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G001800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G002100,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G004700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G009200,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G009300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G010000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G014000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G017100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.19G021100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G021700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G022200,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G022300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G022800,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G023300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G029800,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G033000,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G036500,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G037700,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G038000,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G044600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G045600,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G054400,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.19G055200,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G061700,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G067100,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G072500,HAP2,PS18,False,PS18,False,True,False,False,abSENSE,False
+PtXaAlbH.19G078400,HAP2,PS18,False,PS18,False,False,True,False,Outgroup syntenic tBLASTn,False
+PtXaAlbH.19G086400,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G093100,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.19G094300,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G095300,HAP2,PS19,False,PS19,False,False,False,False,none,True
+PtXaAlbH.19G095600,HAP2,PS18,False,PS18,False,False,False,False,none,True
+PtXaAlbH.19G102500,HAP2,PS19,True,PS18,False,False,False,False,none,True
+PtXaAlbH.19G108000,HAP2,PS19,False,PS19,False,False,False,False,none,True

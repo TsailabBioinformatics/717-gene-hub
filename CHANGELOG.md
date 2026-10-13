@@ -9,6 +9,79 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.18.0 - 2026-10-13 - One set of calls and numbers: the dissertation's
+
+The atlas is the data supplement of the dissertation, so every summary, label and export now
+states the dissertation's call. Gene-level class letters, relationship categories, allele partners,
+tandem flags and age bins already equalled the per-gene master table on all 63,960 genes and are
+unchanged. A new release gate, `scripts/check_dissertation.py`, holds all of this.
+
+**Anchor-pair events (data).** The event on each whole-genome duplication anchor pair is now the
+frozen pair call (Ks with the karyotype topology, dS above 1.05 assigned to aWGT). 638 of 23,154
+pairs changed label. Pair totals, HAP1 / HAP2: sWGD 7,081 / 7,105, aWGT 4,445 / 4,523 (were
+7,392 / 7,360 and 4,134 / 4,268). No gene page shows "the call and the anchor table differ" any
+more (1,042 did); the gate requires zero.
+
+**Duplication page (data).** The class table and tiles were drawn from a class distribution written
+by an older build stage (29,101 sWGD and 10,130 aWGT genes). They are now recomputed from the gene
+records, per haplotype, on quality-filtered genes, and equal the dissertation's Table 2.1:
+sWGD 14,136 / 14,170, aWGT 5,408 / 5,430, tandem 6,663 / 6,385, dispersed only 6,545 / 6,529,
+singleton 3,665 / 3,715 of 31,819 / 31,588 genes. Each number links to the Browse query that returns it.
+
+**One WGD call.** The exploratory "topology re-check" is no longer offered beside the adopted call,
+in Browse, on gene pages or as a home-page question ("disputed, 1,355 genes"): the adopted call
+already combines Ks and topology. A saved link with `?wgd=` resolves to the adopted call.
+
+**Browse export.** Export TSV writes the adopted WGD call (it wrote the re-check: 14,748 / 14,747
+sWGD genes where the call has 14,152 / 14,188), and now carries the class code, relationship
+category, quality flag, LSG status, both phylostratum values and the dissertation's tissue
+specificity, under a comment header with the data version and date.
+
+**Tissue specificity (data).** The tau and peak tissue shown first on gene pages, in Browse, search
+and exports are the dissertation's: mean TPM in 9 tissue groups of the 222-sample reference panel,
+tau where a group mean reaches 5 TPM, tissue-specific at tau >= 0.85 with mean TPM >= 5
+(1,372 HAP1 and 1,305 HAP2 genes). The per-tissue means are recomputed at source generation and
+required to reproduce the master table's tau (largest difference 1.2e-07). The site's earlier
+statistic (median over 213 wild-type controls in 10 groups) stays on the gene page as a second
+view, labelled as a different statistic.
+
+**Lineage-specific genes (data).** The final set of the dissertation, 583 HAP1 (380 PS18, 203 PS19)
+and 621 HAP2 (418 PS18, 203 PS19), is on every candidate's record, in Browse (filter and column),
+on the home page and on the Gene age page with the step-by-step counts. 104 HAP1 and 100 HAP2
+candidates read PS18 with their genEra PS19 beside it. An excluded candidate reads "candidate,
+excluded" with its reason (first criterion met). The line labelled abSENSE printed the
+synteny-window search verdict; the two checks now have a line each.
+
+**Names and wording.** Hemizygous TD arrays (was "TD-associated PAV"; committed from the pending
+rename). Age bins read "after / before the species split, sWGD era, aWGT era" with their Ks limits
+(0.02, 0.16, 1.07). Quality-flagged gene models carry a banner. The 28 genes in a 1:1 group with no
+partner on record, and the genes whose listed allele is a quality-flagged model, say so.
+
+**Search.** Accepts a transcript suffix (.1), lower case, P. trichocarpa IDs, gene names from the
+lab annotation, and queries that start with a digit; two-letter names work.
+
+**Arabidopsis best hit (data).** From the per-gene master table (lab annotation): 59,162 genes,
+up from 43,748. 372 genes keep an older hit where the master table has none.
+
+**New pages.** Glossary (terms as the dissertation defines them) and Downloads (master tables,
+data dictionary, supplementary tables, with size and md5).
+
+**About, citation, footer.** One address (tsailabbioinformatics.github.io), working repository and
+licence links, a contact address, the build date and genome version in the footer. "Not for
+redistribution" is replaced by "provided for research use; please cite"; no open licence is set yet.
+
+Not changed, and said so on the page: stress responsiveness is still the median over the earlier
+117-contrast set (the dissertation uses 149 curated perturbation contrasts); the free-text search
+index still holds the older Arabidopsis hits; the stored age-bin and array-status keys keep their
+table values, only their displayed names changed.
+
+## Tandem arrays with no syntelog are hemizygous, not PAV
+
+Site only. Follows the dissertation's renaming: the gene category is "Hemizygous TD arrays" and
+the array status "Hemizygous (no syntelog)". Only a small minority of those arrays' genes lack a
+protein-level match on the other haplotype, so "PAV" overstated it. Codes and counts unchanged;
+`wording:no-internal-names` now also refuses the two retired labels.
+
 ## How to cite: Hsieh et al., unpublished
 
 Site only. The About page's citation now reads "Hsieh et al., unpublished. Poplar 717 gene atlas,

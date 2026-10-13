@@ -3,6 +3,8 @@
 // 652-sample vector is a second fetch via loadExprVector(gene) -- see core/data.js.
 import { el, clear, fmt, pct } from '../core/dom.js';
 import { studyMeta } from '../core/cite.js';
+import { paperExpr, PAPER_TAU_HOW, TAU_SPECIFIC } from '../core/paper.js';
+import { browseHref } from '../core/browse.js';
 import { loadExprSamples, loadExprStudies, loadExprVector, loadCombatVector,
   loadContrasts } from '../core/data.js';
 
@@ -189,7 +191,38 @@ function contrastCard(g) {
   return card;
 }
 
-function geneCard(g) {
+const PAPER_TISSUES = ['leaf_young', 'leaf', 'leaf_old', 'xylem', 'bark', 'root', 'stem', 'bud', 'catkin'];
+
+/** Tissue specificity exactly as the dissertation computes it. This is the value to quote. */
+function paperBlock(g, man) {
+  const p = paperExpr(g);
+  if (!p) return null;
+  const n = (((man || {}).dissertation || {}).tau || {}).panel_n || {};
+  const max = Math.max(...PAPER_TISSUES.map((t) => p.t[t] || 0), 0.01);
+  const verdict = p.tau == null
+    ? el('span', {}, 'No tissue group reaches a mean of 5 TPM, so no τ or peak tissue is computed.')
+    : el('span', {}, 'τ = ', el('strong', { 'data-paper-tau': '' }, p.tau.toFixed(3)),
+        ', peak tissue ', el('strong', { 'data-paper-top': '' }, p.top.replace(/_/g, ' ')), '. ',
+        p.tau >= TAU_SPECIFIC && p.ok
+          ? el('strong', {}, 'Counted as tissue-specific')
+          : el('span', {}, 'Not counted as tissue-specific'),
+        ` (τ ≥ ${TAU_SPECIFIC} and mean TPM ≥ 5; this gene’s mean is ${p.m != null ? p.m.toFixed(2) : '–'} TPM).`);
+  return el('div', { 'data-paper-expr': '' },
+    el('p', { class: 'sub', style: 'margin:0 0 8px' }, verdict),
+    el('table', { class: 'data' },
+      el('thead', {}, el('tr', {}, el('th', {}, 'Tissue group'), el('th', { class: 'num' }, 'Mean TPM'),
+        el('th', {}, ''), el('th', {}, ''))),
+      el('tbody', {}, ...PAPER_TISSUES.map((t) => el('tr', {},
+        el('td', {}, t === p.top ? el('strong', {}, t.replace(/_/g, ' ')) : t.replace(/_/g, ' ')),
+        el('td', { class: 'num' }, fmt(p.t[t])),
+        el('td', { class: 'muted', style: 'font-size:11px' }, n[t] != null ? `n=${n[t]}` : ''),
+        el('td', { style: 'width:46%' }, el('div', { class: 'bar',
+          style: `width:${Math.max((p.t[t] / max) * 100, p.t[t] > 0 ? 1.5 : 0)}%;background:var(--accent)` })))))),
+    el('p', { class: 'muted', style: 'font-size:11px;margin:6px 0 0' },
+      `As in the dissertation: ${PAPER_TAU_HOW}. Leaf ages are kept as separate groups.`));
+}
+
+function geneCard(g, man) {
   if (!g.x) return null;
   const x = g.x;
   const card = el('div', {
@@ -200,16 +233,19 @@ function geneCard(g) {
     'data-view-tag': 'kallisto k21',
   },
     el('h2', {}, 'Expression', el('span', { class: 'tag' }, 'kallisto k21')),
-    el('p', { class: 'sub', style: 'margin:0 0 10px' },
-      'Median TPM across the WT-control subset (used for the baseline and τ below only; '
-      + 'perturbation and the full 652-sample profile are separate views, see below). ',
+    paperBlock(g, man),
+    el('h3', { style: 'font-size:13px;margin:16px 0 4px' }, 'A second view: wild-type control samples only'),
+    el('p', { class: 'sub', style: 'margin:0 0 10px', 'data-atlas-tau': '' },
+      'This is a different statistic from the one above and is not the dissertation’s: median TPM '
+      + 'over the wild-type control samples of each of 10 tissue groups (213 samples), with its own τ. '
+      + 'It can name a different peak tissue. ',
       isLow(x)
         ? el('span', {}, `Below ${LOW_TPM} TPM in every tissue: no peak tissue or τ is interpreted. `)
         : el('span', {}, peakNote(x), '. '),
-      `τ = ${x.tau ?? '–'}, ${tauNote(x)}.`),
+      `WT-control τ = ${x.tau ?? '–'}, ${tauNote(x)}.`),
     baselineChart(x),
     el('p', { class: 'muted', style: 'font-size:11px;margin:6px 0 0' },
-      `τ (Yanai) computed on median TPM over ${orderTissues(Object.keys(x.t).filter((t) => t !== 'callus')).join(' / ')}; `,
+      `WT-control τ (Yanai) computed on median TPM over ${orderTissues(Object.keys(x.t).filter((t) => t !== 'callus')).join(' / ')}; `,
       'callus (1 sample) is excluded from τ but still shown above and can still be the highest tissue. ',
       `The ${TAU_MID} and ${TAU_NARROW} bins are display cutoffs, not calibrated thresholds. `,
       'Each tissue draws on different studies (stem, callus and catkin on one study each; ',
@@ -226,7 +262,7 @@ function geneCard(g) {
       el('strong', {}, 'Responsiveness: '),
       'median |log2 fold-change| across perturbation contrasts is ',
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible contrasts`) : null,
+      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible contrasts of the 117-contrast set (the dissertation’s statistics use its 149 curated perturbation contrasts, a different set)`) : null,
       el('span', { class: 'muted' }, '. A descriptive number pooled across studies, not a '
         + 'differential-expression test.')) : null,
     g.nb && g.nb.k5 != null ? el('p', { style: 'font-size:12.5px;margin:9px 0 0' },
@@ -448,6 +484,20 @@ async function overview(man) {
       `${fmt(e.n_samples)} samples, ${e.n_studies} curated studies, ${e.n_bioprojects} BioProjects. `
       + `kallisto k21 pseudoalignment against the combined HAP1+HAP2 v5.1 transcriptome. `
       + `TPM, raw (not batch-corrected), see each study for design and caveats.`),
+    (() => {
+      const t = ((man.dissertation || {}).tau || {}).per_haplotype;
+      if (!t) return null;
+      return el('div', { class: 'card', 'data-paper-tau-card': '' },
+        el('h2', {}, 'Tissue specificity', el('span', { class: 'tag' }, 'as in the dissertation')),
+        el('div', { class: 'stat-row' }, ...['HAP1', 'HAP2'].map((h) => el('a', {
+          class: 'stat', style: 'text-decoration:none;color:inherit',
+          href: browseHref({ hap: h.toLowerCase(), tau_min: '0.85', tok: 'yes', qc: 'no' }) },
+          el('div', { class: 'n' }, fmt(t[h].tissue_specific)),
+          el('div', { class: 'l' }, `${h} tissue-specific genes: ${(100 * t[h].tissue_specific / t[h].genes_at_mean_TPM_5_or_more).toFixed(2)}% of `
+            + `${fmt(t[h].genes_at_mean_TPM_5_or_more)} quality-filtered genes with mean TPM ≥ 5`)))),
+        el('p', { class: 'muted', style: 'font-size:12.5px;margin:8px 0 0' },
+          `${PAPER_TAU_HOW[0].toUpperCase()}${PAPER_TAU_HOW.slice(1)}. This τ and its peak tissue are the ones shown first on gene pages and used in Browse.`));
+    })(),
     el('div', { class: 'stat-row' },
       el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(e.n_samples)), el('div', { class: 'l' }, 'samples')),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, e.n_studies), el('div', { class: 'l' }, 'studies')),

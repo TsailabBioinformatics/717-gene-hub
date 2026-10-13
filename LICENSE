@@ -22,13 +22,13 @@ SOFTWARE.
 
 ---
 
-DATA — proposed CC BY 4.0, NOT YET IN EFFECT
+DATA — no open licence is set yet
 
-The derived data under data/ is unpublished dissertation material and is NOT
-released under an open licence while the chapter is in preparation. The
-intended licence at publication is Creative Commons Attribution 4.0
-International (CC BY 4.0). Until then it is shared for review and
-collaboration only; please do not redistribute.
+The derived data under data/ and the tables under downloads/ are dissertation
+material. Data are provided for research use; please cite the atlas (see
+CITATION.cff) and, for expression data, the underlying study. A formal open
+licence has not been set; Creative Commons Attribution 4.0 International
+(CC BY 4.0) is intended at publication.
 
 Upstream data carries its own terms:
   - 717 v5.1 genome and annotation — Phytozome / JGI, subject to the JGI data

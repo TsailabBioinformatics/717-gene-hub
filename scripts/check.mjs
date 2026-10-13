@@ -122,7 +122,8 @@ await check('home', '#/',
   // Per haplotype since 2026-09-21. The pool is the rerun that added Idesia (C5, Chen
   // 2026-09-21 evening); 0.15.0 served the frozen call's 842 / 883 here for five days.
   { expect: ['63,960', 'Start here', 'Browse all genes', 'Modules', 'Before you cite anything',
-             'lineage-specific candidates, HAP1 / HAP2', '776 / 835',
+             // the FINAL lineage-specific gene set of the dissertation leads; the candidates follow
+             'lineage-specific genes, HAP1 / HAP2 (final set', '583 / 621', '776 / 835 candidates',
              'PS18 in the frozen genEra call, PS17 Saliceae in the current one'],
     forbid: ['842 / 883', 'carries four evidence flags'] });
 await check('gene-ps18-to-ps17', '#/gene/PtXaTreH.05G120200',
@@ -305,9 +306,11 @@ await check('browse', '#/browse',
 // 2026-09-21 evening); the frozen call is named as superseded, with its count.
 await check('module-phylostrat', '#/module/phylostrat',
   { expect: ['Genes per stratum', 'ambiguous', 'cellular organisms', 'log-scaled',
-             'HAP1 LSG pool: 433 PS18 · 343 PS19', 'HAP2 LSG pool: 497 PS18 · 338 PS19',
+             'HAP1 LSG candidates (genEra: 433 PS18 · 343 PS19)', 'HAP2 LSG candidates (genEra: 497 PS18 · 338 PS19)',
+             'HAP1 final LSG set: 380 PS18 · 203 PS19', 'HAP2 final LSG set: 418 PS18 · 203 PS19',
+             'From candidates to the final LSG set', 'Reassigned from PS19 to PS18',
              'PS ≥ 18 in the genEra rerun that added Idesia polycarpa: 776 HAP1 and 835 HAP2 genes',
-             '602 HAP1 and 635 HAP2 carry neither flag',
+             'is 583 HAP1 and 621 HAP2 genes', '104 HAP1 and 100 HAP2 PS19 candidates are reassigned to PS18',
              'superseded as the pool, had 842 HAP1 and 883 HAP2',
              'the 66 HAP1 and 48 HAP2 genes that left', 'unplaced by genEra: 27 HAP1 · 18 HAP2'],
     // '1,725' and '1,611' would be the two haplotypes' pools summed; nothing should do that.
@@ -334,17 +337,21 @@ await check('gene-strict-pav', '#/gene/PtXaTreH.01G006100',
 // forbidden fields are a real publication risk -- assert neither ever appears in the
 // rendered page, not just that the two intended checks pass.
 await check('gene-lsg-qc-flagged', '#/gene/PtXaTreH.12G056600',
-  { expect: ['Evidence quality', 'synteny window', 'retracts the young call', 'Flags, not filters',
-             'The two QC checks are abSENSE and the synteny window search'],
-    forbid: ['WGD-era Ks', 'four checks'], wait: 900 });
+  { expect: ['Evidence quality', 'synteny window', 'contradicts the young call',
+             'candidate, excluded from the final set', 'a homolog lies in an outgroup syntenic window',
+             'LSG candidate, excluded:', 'four exclusion criteria applied in order',
+             // abSENSE cannot run on a PS19 gene, and the page must not say it "supports" or "retracts"
+             'abSENSE: no prediction'],
+    forbid: ['WGD-era Ks', 'four checks', 'abSENSE retracts', 'abSENSE supports', 'post-QC set', '59 to 61%'], wait: 900 });
 await check('gene-lsg-qc-clean', '#/gene/PtXaTreH.01G001500',
-  { expect: ['Evidence quality', 'post-QC set (neither QC flag): yes',
-             'Neither QC check flags this gene', 'abSENSE supports lineage-specific'],
+  { expect: ['Evidence quality', 'yes, in the final set (PS18)', 'lineage-specific gene (final set)',
+             'Neither abSENSE nor the synteny-window search flags this gene',
+             'Search of outgroup syntenic windows: no homolog found'],
     forbid: ['No evidence-quality flag raised', 'Passes the QC funnel'], wait: 900 });
 // Clean on the funnel's three checks, but synteny-contested (twin route) and a short ORF. Until
 // 2026-09-21 a clean gene read "No evidence-quality flag raised" and hid both: 389 pool genes.
 await check('gene-lsg-qc-clean-but-flagged', '#/gene/PtXaTreH.08G114000',
-  { expect: ['post-QC set (neither QC flag): yes', 'Other evidence, not QC flags',
+  { expect: ['yes, in the final set (PS18)', 'Other evidence, not QC flags',
              'disputes this gene', 'Short ORF (72 aa)'],
     forbid: ['No evidence-quality flag raised'], wait: 900 });
 // sens_stable is DIAMOND default vs --ultra-sensitive stability (repro audit E3). The card used
@@ -357,7 +364,7 @@ await check('gene-lsg-qc-unstable', '#/gene/PtXaTreH.12G066000',
 // a rank change, not as failing a QC check, with no QC record, and with the frozen call named
 // as superseded and neutrally (never "withdrawn", never a "12-species panel"; MS2 audit A38).
 await check('gene-left-the-pool', '#/gene/PtXaTreH.05G120200',
-  { expect: ['no (pool is PS ≥ 18)', 'Frozen call', 'superseded as the pool, placed this gene at PS18',
+  { expect: ['no (candidates are PS ≥ 18)', 'Frozen call', 'superseded as the pool, placed this gene at PS18',
              'left the pool', 'not by failing a QC check', 'not always due to Idesia',
              // the family now comes from the same run as the rank: 2 members, same stratum.
              // From the frozen run it read "originates at PS18" beside the gene's PS17.
@@ -372,7 +379,7 @@ await check('gene-family-same-run', '#/gene/PtXaTreH.01G003100',
     forbid: ['originates at PS11 in the frozen call', 'not available'], wait: 900 });
 // A pool gene in a family from cellular organisms: not a lineage-specific family, and it says so.
 await check('gene-family-young-in-old', '#/gene/PtXaTreH.11G057300',
-  { expect: ['yes, PS18', '1,435 members', 'family originates at PS1',
+  { expect: ['candidate, excluded from the final set', 'plausible detection failure (abSENSE)', '1,435 members', 'family originates at PS1',
              'A young gene in an older family', 'not a lineage-specific family'], wait: 900 });
 // Family origin cannot be shown on 45 unranked genes, two disjoint groups: 39 have a family but
 // no gene age (this one), 6 have no family assignment. The card gives the reason true of both.
@@ -393,8 +400,11 @@ await check('module-about-numbers', '#/module/about',
   { expect: ['no rank for 27 HAP1 and 18 HAP2 genes in the current call',
              '55 leaf (plus 11 young-leaf and 11 old-leaf)',
              'ComBat-seq', 'the strict, protein-level set', '528 HAP1 and 605 HAP2',
-             'Hsieh et al., unpublished. Poplar 717 gene atlas, version', 'https://chenhsieh.github.io/poplar-717-atlas/'],
-    forbid: ['no rank for 50 genes', '77 leaf', 'is not in the mirror', 'v6 master', 'held on v9', 'for browsing, not quoting'] });
+             'Hsieh et al., unpublished. Poplar 717 gene atlas, version', 'https://tsailabbioinformatics.github.io/poplar-717-atlas/',
+             'Contact and feedback', 'Chen.Hsieh@uga.edu', 'Data are provided for research use',
+             'Two tissue-specificity statistics', 'per-gene table of the dissertation'],
+    forbid: ['no rank for 50 genes', '77 leaf', 'is not in the mirror', 'v6 master', 'held on v9', 'for browsing, not quoting',
+             'chenhsieh.github.io', 'Not for redistribution'] });
 {
   const fp = await browser.newPage();
   const ferrs = [];
@@ -412,13 +422,17 @@ await check('module-about-numbers', '#/module/about',
 // pool one matters most: the site published the withdrawn pool for four days, and a check
 // that only asserts "a pool number renders" would have passed throughout.
 await check('gene-ps19-to-ps18', '#/gene/PtXaAlbH.17G073600',
-  { expect: ['yes, PS18', 'Frozen call', 'PS19 (no homolog detected outside this assembly) in the frozen call, PS18 (Populus) in the current one',
-             '179 pool genes do this', 'post-QC set (neither QC flag): yes'],
+  { expect: ['yes, in the final set (PS18)', 'Frozen call', 'PS19 (no homolog detected outside this assembly) in the frozen call, PS18 (Populus) in the current one',
+             '179 pool genes do this'],
     forbid: ['left the pool'], wait: 900 });
 // The abSENSE calibration must travel with the flag, not sit in a doc nobody opens.
-await check('gene-absense-calibration', '#/gene/PtXaTreH.12G056600',
+// Shown where abSENSE made a prediction (this PS18 gene: a plausible detection failure), and
+// not on a PS19 gene, where abSENSE cannot run (asserted on the gene above).
+await check('gene-absense-calibration', '#/gene/PtXaTreH.04G037000',
   { expect: ['Evidence quality', 'Salix purpurea', '59 to 61%',
-             'that support is too generous'], wait: 900 });
+             'that support is too generous', 'abSENSE: the absence of older homologs is a plausible detection failure',
+             'candidate, excluded from the final set'],
+    forbid: ['abSENSE: abSENSE'], wait: 900 });
 await check('gene-peptide-detected', '#/gene/PtXaAlbH.17G050300',
   { expect: ['Peptide matches', 'peptide match in', 'spectrum match',
              'tryptic peptide', 'P. tomentosa'], wait: 1000 });
@@ -651,7 +665,7 @@ await check('genemodel-not-testable', '#/gene/PtXaAlbH.17G050200',
 
 await check('module-about', '#/module/about',
   { expect: ['About & provenance', 'Known limitations', 'HAP2 domain annotation is thin',
-             'audited out', 'derived here, not imported', 'Sources'] });
+             'Two tissue-specificity statistics', 'derived here, not imported', 'Sources'] });
 await check('home-dark', '#/', { expect: ['63,960', 'Start here'], theme: 'dark' });
 
 // --- v0.11: duplication layers + the copies-over-all-samples heatmap ---------------------
@@ -770,28 +784,19 @@ await check('gene-array-history', '#/gene/PtXaTreH.04G044000',
   await dp.close();
 }
 
-// Route C re-adjudication shown BESIDE the canonical call, never instead of it. The risk is
-// that a reader takes the proposed call for the called one, so assert that the canonical
-// letters are still what the page leads with, that the badge says it is not adopted, and that
-// a disagreeing gene says so in words. PtXaTreH.09G077400: canonical gamma, route C salicoid.
-await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
-  { expect: ['topology re-check', 'proposed, not adopted', 'canonical call',
-             'combined ks + topology call', 'the two calls disagree for this gene',
-             'the primary call', 'retained duplicate'], wait: 1800 });
-// A gene where the two agree must NOT show the disagreement warning.
-{
-  const ap = await browser.newPage({ viewport: { width: 1180, height: 1000 } });
-  const aerrs = [];
-  ap.on('pageerror', (e) => aerrs.push(e.message));
-  await ap.goto(base + '/#/gene/PtXaTreH.01G176200', { waitUntil: 'networkidle' });
-  await ap.waitForTimeout(1600);
-  const txt = (await viewText(ap)).toLowerCase();
-  const ok = !aerrs.length && txt.includes('topology re-check')
-    && !txt.includes('the two calls disagree for this gene');
-  if (!ok) failures++;
-  console.log(`\n### routec:agreeing-gene-has-no-warning  ${ok ? 'OK' : 'FAIL'}`);
-  aerrs.forEach((e) => console.log('   !! ' + e));
-  await ap.close();
+// ONE whole-genome duplication call. Until 0.18.0 an exploratory "topology re-check" was drawn
+// beside the adopted call and 1,355 genes were advertised as disputed, although the adopted call
+// already combines Ks and topology. PtXaTreH.09G077400 was the showcase "disagreeing" gene: it
+// must now state one call, and name no second one.
+await check('gene-one-wgd-call', '#/gene/PtXaTreH.09G077400',
+  { expect: ['The call combines anchor-pair Ks with the position of the two segments', 'retained duplicate'],
+    forbid: ['topology re-check', 'proposed, not adopted', 'the two calls disagree', 'call and the anchor table differ'],
+    wait: 1800 });
+// The four genes the audit of 2026-10-13 opened: each showed an anchor partner labelled with the
+// other event than its own class, and the "call and the anchor table differ" box.
+for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
+  await check('gene-anchor-events-agree:' + gid, '#/gene/' + gid,
+    { expect: ['aWGT'], forbid: ['call and the anchor table differ', 'topology re-check'], wait: 1500 });
 }
 
 // Browse must return the SAME numbers as the duplication class figures. It did not: the
@@ -814,9 +819,19 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
     ['tandem=yes&wgd9=salicoid', 1581, 'tandem AND sWGD, primary call'],
     ['tandem=yes&wgd9=gamma', 1015, 'tandem AND aWGT, primary call'],
     ['wgd9=neither&tandem=no', 20959, 'neither WGD nor curated tandem, primary call'],
-    // the exploratory topology re-check stays selectable with its own numbers
-    ['hap=hap1&tandem=yes&wgd=both', 229, 'HAP1 tandem + both WGDs, re-check'],
-    ['tandem=yes&wgd=both', 462, 'tandem + both WGDs, re-check'],
+    // a link saved before 0.18.0 with ?wgd= (then an exploratory re-check) resolves to the adopted call
+    ['hap=hap1&tandem=yes&wgd=both', 188, 'HAP1 tandem + both WGDs, old ?wgd= link'],
+    // the dissertation's Table 2.1, as Browse queries: quality-filtered genes, per haplotype
+    ['hap=hap1&qc=no', 31819, 'HAP1 quality-filtered genes'],
+    ['hap=hap1&qc=no&wgd9=salicoid', 14136, 'HAP1 sWGD'],
+    ['hap=hap2&qc=no&wgd9=gamma', 5430, 'HAP2 aWGT'],
+    ['hap=hap2&qc=no&dup=D', 6529, 'HAP2 dispersed only'],
+    ['hap=hap1&qc=no&dup=C', 3665, 'HAP1 singleton'],
+    // tissue-specific genes and the final LSG set, as the dissertation counts them
+    ['hap=hap1&qc=no&tok=yes&tau_min=0.85', 1372, 'HAP1 tissue-specific'],
+    ['hap=hap2&qc=no&tok=yes&tau_min=0.85', 1305, 'HAP2 tissue-specific'],
+    ['hap=hap1&lsg=final_set', 583, 'HAP1 final LSG set'],
+    ['hap=hap2&lsg=final_set', 621, 'HAP2 final LSG set'],
   ];
   const got = [];
   for (const [q, n] of want) {
@@ -929,13 +944,13 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
   const card = qp.locator('.card').filter({ has: qp.locator('h2', { hasText: 'Start from a question' }) }).first();
   const found = await card.count();
   const txt = found ? await card.innerText() : '';
-  const counts = (txt.match(/\u00b7 [\d,]+ genes/g) || []);
+  const counts = (txt.match(/\u00b7 [\d,]+ (?:HAP1 \/ [\d,]+ HAP2 )?genes/g) || []);
   const links = found ? await card.locator('a').evaluateAll((ns) => ns.map((n) => n.getAttribute('href'))) : [];
 
   // follow three of them and check the destination agrees
   const checks = [
-    ['#/browse?tandem=yes&top=xylem&tau_min=0.8', 283],
-    ['#/browse?wgd_disputed=yes', 1355],
+    ['#/browse?tandem=yes&top=xylem&tau_min=0.85&tok=yes&qc=no', 214],
+    ['#/browse?lsg=final_set', 1204],
     ['#/browse?rel=hemizygous_strict_PAV', 1133],
   ];
   const got = [];
@@ -950,7 +965,9 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
   const ok = !qerrs.length && found > 0
     && counts.length === 8                                   // every question got a live count
     && links.length === 8
-    && txt.includes('1,355')                                 // the real disagreement count
+    && txt.includes('528 HAP1 / 605 HAP2')                   // per haplotype, never summed
+    && txt.includes('583 HAP1 / 621 HAP2')                   // the final LSG set
+    && !/disagree|disputed/i.test(txt)                       // no second WGD call is advertised
     && checks.every(([, want], i) => got[i] === want);        // home count == destination count
   if (!ok) failures++;
   console.log(`\n### home:questions-round-trip  ${ok ? 'OK' : 'FAIL'}`);
@@ -1341,7 +1358,7 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
   // every module that publishes an overview must be reachable from the header, grouped or not
   const wantHrefs = ['#/', '#/browse', '#/map', '#/karyotype', '#/module/duplication',
     '#/module/synteny', '#/module/expression', '#/module/protein', '#/module/phylostrat',
-    '#/module/about'];
+    '#/module/about', '#/glossary', '#/downloads'];
   const reachable = wantHrefs.every((w) => h.hrefs.includes(w));
 
   // the group must mark itself when the current page is one of its children
@@ -1356,7 +1373,8 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
   }));
 
   const ok = !herrs.length && reachable && h.closedAtLoad
-    && h.visible.length === 6 && h.visible[0] === 'Home'
+    && h.visible.length === 8 && h.visible[0] === 'Home'
+    && h.visible.includes('Glossary') && h.visible.includes('Downloads')
     && h.visible[h.visible.length - 1] === 'About'
     && h.inMenu.length === 5 && h.inMenu[0] === 'Duplication'
     && after.hash === '#/module/expression' && after.groupOn && after.closed;
@@ -1393,13 +1411,13 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
     '1:1': ['PtXaTreH.01G000200', '1:1'], 'N:N_TD': ['PtXaTreH.01G000300', 'TD-associated N:N'],
     'N:N_nonTD': ['PtXaTreH.01G017400', 'Non-TD N:N'], 'CNV_TD': ['PtXaTreH.01G002200', 'TD-associated CNV'],
     'CNV_nonTD': ['PtXaTreH.01G319400', 'Non-TD CNV'], 'hemizygous_strict_PAV': ['PtXaTreH.01G006100', 'Strict PAV'],
-    'hemizygous_TD_array': ['PtXaTreH.03G012100', 'TD-associated PAV'],
+    'hemizygous_TD_array': ['PtXaTreH.03G012100', 'Hemizygous TD arrays'],
     'hemizygous_nonPAV': ['PtXaTreH.01G000100', 'Non-PAV hemizygous'], none: ['PtXaTreH.01G006600', 'not classified'],
   };
   const arrays = {
     HAP1_U00000: 'N:N (same copy number)', HAP1_U00001: 'CNV, arrays in both haplotypes',
     HAP1_U00021: 'CNV, HAP1-specific expansion', HAP2_U02223: 'CNV, HAP2-specific expansion',
-    HAP1_U00361: 'PAV (whole array)',
+    HAP1_U00361: 'Hemizygous (no syntelog)',
   };
   const rp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
   const rerrs = [];
@@ -1442,11 +1460,13 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
 
 // No internal version or project names in page text (Chen, 2026-10-03): provenance belongs in
 // the changelog, the citation file and build metadata. A planted positive control proves the
-// scan can see a hit before its silence is trusted.
+// scan can see a hit before its silence is trusted. Also retired labels: a tandem array with no
+// syntelog for any member is hemizygous, never PAV (Chen, 2026-10-05).
 {
-  const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\//i;
+  const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\/|TD-associated PAV|PAV \(whole array\)/i;
   const routes = ['/', '/browse', '/arrays', '/array/HAP1_U00120', '/pair/PtXaTreH.05G120200', '/map/hap1/Chr01',
-    '/karyotype', '/status', '/module/about', '/module/duplication', '/gene/PtXaTreH.08G070200',
+    '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads',
+    '/gene/PtXaTreH.08G070200', '/gene/PtXaAlbH.18G016900', '/gene/PtXaTreH.19G087400',
     '/gene/PtXaAlbH.05G122300', '/gene/PtXaTreH.10G046700', '/gene/PtXaTreH.01G006100', '/family/PtXaTreH.08G070200'];
   const ip = await browser.newPage({ viewport: { width: 1180, height: 900 } });
   const hits = [];
@@ -1458,7 +1478,10 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
       document.querySelectorAll('[hidden]').forEach((d) => d.removeAttribute('hidden'));
       return document.body.innerText;
     });
-    const m = INTERNAL.exec(t);
+    // The contact address is published on purpose (About, 2026-10-13); nothing else may name a person.
+    // Likewise the names of the downloadable tables (717_genes.csv ...), which begin with the clone's
+    // number and would otherwise read as an analysis-folder name.
+    const m = INTERNAL.exec(t.replace(/Chen\.Hsieh@uga\.edu/g, '<contact>').replace(/\b717_[A-Za-z_]+\.csv\b/g, '<table>'));
     if (m) hits.push(`${r}: "${t.slice(Math.max(0, m.index - 40), m.index + 40).replace(/\n/g, ' ')}"`);
   }
   const control = await ip.evaluate(() => { const p = document.createElement('p'); p.textContent = 'held on master v9'; document.body.append(p); return document.body.innerText; });
@@ -1476,7 +1499,7 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
 // page's genes, and the links it draws are classified -- the focus genes' own alleles are
 // counted separately from the alignment anchors and from every other allele pair in view.
 // HAP1_U00120: all 3 members have an allele, 2 of them in HAP2_U02345, which must be named as
-// the matching array. HAP1_U00361 (PAV, whole array): no member has an allele, so every emphasised link is an
+// the matching array. HAP1_U00361 (hemizygous, no syntelog): no member has an allele, so every emphasised link is an
 // anchor and the page must say nothing on HAP2 is this array's allele.
 {
   const cases = [
@@ -1508,7 +1531,7 @@ await check('gene-routec-disagree', '#/gene/PtXaTreH.09G077400',
     }, host);
     let extra = true;
     if (label === 'array-linked') extra = r.matching && r.matching[0] === 'HAP2_U02345';
-    if (label === 'array-anchored') extra = /PAV \(whole array\)/.test(r.linkedText || '') && /No member has its own allele/.test(r.linkedText || '');
+    if (label === 'array-anchored') extra = /Hemizygous \(no syntelog\)/.test(r.linkedText || '') && /No member has its own allele/.test(r.linkedText || '');
     const ok = !r.missing && r.colours > 5 && linksOk(r.d || {}) && extra && !lerrs.length;
     if (!ok) failures++;
     console.log(`\n### locus-browser:${label}  ${ok ? 'OK' : 'FAIL'}`);
