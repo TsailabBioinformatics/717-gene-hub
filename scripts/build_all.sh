@@ -64,11 +64,12 @@ STAGES=(
   "repo|patch_karyotype.py|build_data.py|ancestral eudicot karyotype, route C"
   "repo|patch_copies.py|build_data.py|copies of an array on both haplotypes"
 
+  "repo|patch_dissertation_layer.py|patch_wgd_pairs.py,patch_syntelog_categories.py,patch_lsg_qc.py,build_expression.py,build_annotation.py,patch_kaks.py|dissertation's tissue specificity, final LSG set, Arabidopsis hit, names; class summaries"
+
   "onedrive|build_combat.py|build_expression.py|ComBat-seq view"
   "onedrive|build_expr_ranges.py|build_expression.py,build_combat.py|range-addressable expression blobs"
   "onedrive|build_contrasts.py|build_expression.py|contrast index"
-  "onedrive|build_locus.py|build_data.py|locus tiles + genome map"
-  "repo|patch_dissertation_layer.py|patch_wgd_pairs.py,patch_syntelog_categories.py,patch_lsg_qc.py,build_expression.py,build_annotation.py,patch_kaks.py|dissertation's tissue specificity, final LSG set, Arabidopsis hit, names; class summaries"
+  "onedrive|build_locus.py|build_data.py,patch_dissertation_layer.py|locus tiles + genome map"
   "repo|patch_map_overlays.py|build_locus.py,patch_lsg_pool.py,patch_proteomics_v2.py,patch_kaks.py,patch_chromatin.py|genome-map overlays from current shards"
   "repo|build_families.py|build_annotation.py,build_duplication.py,patch_wgd_pairs.py,patch_duplicate_partners.py|descent-family index"
   "any|build_facets.py|build_families.py|facet index (MUST be last)"

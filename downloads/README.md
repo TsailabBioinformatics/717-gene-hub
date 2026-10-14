@@ -1,8 +1,10 @@
 # 717 dissertation tables, release 2026-10-13
 
-Tables behind Chapter 2 (gene duplication and expression in hybrid poplar 717) and Chapter 3
-(lineage-specific genes) of Chen Hsieh's dissertation (University of Georgia, 2026), and the
-supplementary tables of both chapters. Built by `data/138_dissertation_release_20261013/build_release.py`
+Gene duplication and cross-haplotype tables and lineage-specific gene tables for hybrid poplar 717,
+from Chen Hsieh's dissertation (University of Georgia, 2026), with its supplementary tables.
+A manuscript describing this resource will be submitted soon. Until it is published, please cite the
+atlas website (version and access date); once the manuscript is available, please cite the manuscript.
+Built by `data/138_dissertation_release_20261013/build_release.py`
 (66 checks before this file was written; 113 dissertation numbers recomputed from these files alone, all equal: see
 `HEADLINE_NUMBERS_CHECK.csv`).
 
@@ -35,8 +37,8 @@ Supplementary tables: 2.S1 RNA-seq libraries (652; with the 222-library referenc
 2.S2 read-separability exclusion; 2.S3 tandem genes per chromosome, array-intact permutation test
 (calls at q < 0.05); 2.S4 quality-flagged gene models; 2.S5 array size by age; 2.S6 arrays spanning
 several ages; 2.S7 sensitivity of the tandem age bins; 3.S1 LSG candidates; 3.S2 LSGs vs. controls;
-3.S3 codon usage. Their legends are in the dissertation (and in the Legend sheet of each Chapter 3
-workbook). `717_LSG_candidates.csv` is Table 3.S1 as a flat file.
+3.S3 codon usage. Their legends are in the dissertation (and in the Legend sheet of each lineage-specific
+gene workbook). `717_LSG_candidates.csv` is Table 3.S1 as a flat file.
 
 Missing values are empty cells in every file. No placeholder numbers are used: a Ks or Ka/Ks that
 the source stored as 99 is empty here and explained by `Ks_flag` / `Ka_Ks_flag`.

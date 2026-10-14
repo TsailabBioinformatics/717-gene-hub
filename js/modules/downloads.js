@@ -2,7 +2,7 @@
 // The list is downloads/index.json, written by scripts/make_downloads.py from the release
 // bundle; nothing on this page is typed by hand.
 import { el, fmt } from '../core/dom.js';
-import { SITE_URL, CONTACT } from '../core/paper.js';
+import { SITE_URL, CONTACT, CITE_NOTE } from '../core/paper.js';
 
 const size = (b) => (b >= 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1e3))} kB`);
 
@@ -14,7 +14,7 @@ export async function downloadsView(man) {
   } catch { /* shown below */ }
   const head = [el('h1', {}, 'Downloads'),
     el('p', { class: 'sub' },
-      'The tables behind the dissertation chapters, as versioned files with checksums. '
+      'Gene duplication and cross-haplotype tables, lineage-specific gene tables and the dissertation\u2019s supplementary tables, as versioned files with checksums. '
       + `Site data version ${man.data_version}.`)];
   if (!idx || !(idx.files || []).length) {
     return el('div', { 'data-downloads': 'empty' }, ...head,
@@ -31,6 +31,7 @@ export async function downloadsView(man) {
         `Release ${idx.release}. ${idx.files.length} files, ${size(idx.files.reduce((a, f) => a + f.bytes, 0))} in total. `
         + 'Check a download with ', el('span', { class: 'mono' }, 'md5sum <file>'), ' (', el('span', { class: 'mono' }, 'md5 <file>'),
         ' on macOS), or all of them against ', el('a', { href: 'downloads/MD5SUMS.txt' }, 'MD5SUMS.txt'), '.'),
+      el('p', { style: 'margin:0 0 6px;font-size:13px', 'data-cite-note': '' }, CITE_NOTE),
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
         'Data are provided for research use; please cite the atlas (see ', el('a', { href: '#/module/about' }, 'About'),
         ') and the underlying study for any expression data. The raw expression matrix is not distributed here; '

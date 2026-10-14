@@ -506,7 +506,8 @@ export async function arrayAlleles(gene) {
   const arrayId = m.get(gene.id);
   if (!arrayId) return null;
   const recs = await Promise.all(arrays[arrayId].map((id) => (id === gene.id ? gene : getGene(id))));
-  const members = recs.filter(Boolean).map((r) => ({ id: r.id, allele: r.allele ? r.allele.id : null }));
+  const members = recs.filter(Boolean).map((r) => ({ id: r.id, allele: r.allele ? r.allele.id : null,
+    td: !!(r.dup && r.dup.td) }));
   const paired = [...new Set(members.filter((x) => x.allele).map((x) => m.get(x.allele)).filter(Boolean))].sort();
   const counted = recs.some((r) => r && r.dup && r.dup.td);
   return { arrayId, members, pairedArrays: paired, counted };

@@ -1,13 +1,13 @@
 {
  "release": "2026-10-13",
- "atlas_version": "0.18.0",
+ "atlas_version": "0.18.1",
  "files": [
   {
    "group": "Start here",
    "name": "DATA_DICTIONARY.csv",
    "href": "downloads/DATA_DICTIONARY.csv",
-   "bytes": 27067,
-   "md5": "5cb8a787ddd8cf6bf2380f3cf4921e08",
+   "bytes": 27063,
+   "md5": "8d45dd019ecd2e4a2eeda7a05454465e",
    "version": "2026-10-13",
    "description": "Every column of the four tables and of Table 2.S1: type, units, allowed values, definition."
   },
@@ -15,8 +15,8 @@
    "group": "Start here",
    "name": "HEADLINE_NUMBERS_CHECK.csv",
    "href": "downloads/HEADLINE_NUMBERS_CHECK.csv",
-   "bytes": 7589,
-   "md5": "54b04828058a6e02305947132fdb57e7",
+   "bytes": 7569,
+   "md5": "a1a986f33a9aafc26bee2144a429dcb2",
    "version": "2026-10-13",
    "description": "113 numbers of the dissertation recomputed from these files, each beside the printed value."
   },
@@ -24,22 +24,13 @@
    "group": "Start here",
    "name": "README.md",
    "href": "downloads/README.md",
-   "bytes": 7714,
-   "md5": "58b4eede6c99f8743b49ce7d5138cf9d",
+   "bytes": 7898,
+   "md5": "dff136cbf59414a40bac0a10693817fb",
    "version": "2026-10-13",
    "description": "What each file is, the gene basis, how each dissertation number is obtained from the tables, and known caveats."
   },
   {
-   "group": "Tables",
-   "name": "717_LSG_candidates.csv",
-   "href": "downloads/717_LSG_candidates.csv",
-   "bytes": 124053,
-   "md5": "4dd9dfc5bf4ec6b536b00a2fa9f4a86e",
-   "version": "2026-10-13",
-   "description": "One row per lineage-specific gene candidate (1,611): phylostratum, each exclusion criterion, reason, final-set flag (Table 3.S1 as a flat file)."
-  },
-  {
-   "group": "Tables",
+   "group": "Gene duplication and cross-haplotype tables",
    "name": "717_gene_pairs.csv",
    "href": "downloads/717_gene_pairs.csv",
    "bytes": 6334073,
@@ -48,16 +39,16 @@
    "description": "One row per gene pair (47,923): sWGD and aWGT anchor pairs, tandem pairs with Ks and Ka/Ks, pairings inside multi-copy syntelog groups."
   },
   {
-   "group": "Tables",
+   "group": "Gene duplication and cross-haplotype tables",
    "name": "717_genes.csv",
    "href": "downloads/717_genes.csv",
-   "bytes": 25831686,
-   "md5": "4d3ca29945e73fe0b2a62b1e7466a3e1",
+   "bytes": 25766426,
+   "md5": "ee1384fc67af5586fe61307edbf5e38c",
    "version": "2026-10-13",
    "description": "One row per gene (63,960): duplication classes, tandem array, syntelog category, strict PAV, tau and expression summaries, annotation."
   },
   {
-   "group": "Tables",
+   "group": "Gene duplication and cross-haplotype tables",
    "name": "717_tandem_arrays.csv",
    "href": "downloads/717_tandem_arrays.csv",
    "bytes": 584974,
@@ -66,7 +57,16 @@
    "description": "One row per tandem array (4,204): size, median Ks, age bin, status compared with the other haplotype."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Lineage-specific gene tables",
+   "name": "717_LSG_candidates.csv",
+   "href": "downloads/717_LSG_candidates.csv",
+   "bytes": 124053,
+   "md5": "4dd9dfc5bf4ec6b536b00a2fa9f4a86e",
+   "version": "2026-10-13",
+   "description": "One row per lineage-specific gene candidate (1,611): phylostratum, each exclusion criterion, reason, final-set flag (Table 3.S1 as a flat file)."
+  },
+  {
+   "group": "Supplementary tables",
    "name": "Table_2.S1_RNAseq_libraries.csv",
    "href": "downloads/supplementary_tables/Table_2.S1_RNAseq_libraries.csv",
    "bytes": 73983,
@@ -75,7 +75,7 @@
    "description": "Table 2.S1. The 652 RNA-seq libraries with accessions, tissue group and the 222-library reference panel marked."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S2_read_separability_exclusion.csv",
    "href": "downloads/supplementary_tables/Table_2.S2_read_separability_exclusion.csv",
    "bytes": 2058,
@@ -84,7 +84,7 @@
    "description": "Table 2.S2. Pairs excluded because their reads cannot be assigned to one copy, with the effect on each pair metric."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S3_tandem_chromosome_enrichment.csv",
    "href": "downloads/supplementary_tables/Table_2.S3_tandem_chromosome_enrichment.csv",
    "bytes": 4769,
@@ -93,7 +93,7 @@
    "description": "Table 2.S3. Tandem genes per chromosome compared with expectation, array-intact permutation test."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S4_qc_excluded_gene_models.csv",
    "href": "downloads/supplementary_tables/Table_2.S4_qc_excluded_gene_models.csv",
    "bytes": 37586,
@@ -102,7 +102,7 @@
    "description": "Table 2.S4. The 553 gene models flagged by quality control, with the reason."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S5_array_size_by_age.csv",
    "href": "downloads/supplementary_tables/Table_2.S5_array_size_by_age.csv",
    "bytes": 1051,
@@ -111,7 +111,7 @@
    "description": "Table 2.S5. Tandem array size by age bin and haplotype."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S6_multiage_arrays.xlsx",
    "href": "downloads/supplementary_tables/Table_2.S6_multiage_arrays.xlsx",
    "bytes": 931251,
@@ -120,7 +120,7 @@
    "description": "Table 2.S6. Tandem arrays whose member pairs span several age bins."
   },
   {
-   "group": "Supplementary tables, Chapter 2",
+   "group": "Supplementary tables",
    "name": "Table_2.S7_td_agebin_sensitivity.xlsx",
    "href": "downloads/supplementary_tables/Table_2.S7_td_agebin_sensitivity.xlsx",
    "bytes": 631044,
@@ -129,7 +129,7 @@
    "description": "Table 2.S7. Sensitivity of the results to the rule that assigns an array to an age bin."
   },
   {
-   "group": "Supplementary tables, Chapter 3",
+   "group": "Supplementary tables",
    "name": "Table_3.S1_LSG_candidates.xlsx",
    "href": "downloads/supplementary_tables/Table_3.S1_LSG_candidates.xlsx",
    "bytes": 69723,
@@ -138,7 +138,7 @@
    "description": "Table 3.S1. Lineage-specific gene candidates with per-gene exclusion reasons and the final set."
   },
   {
-   "group": "Supplementary tables, Chapter 3",
+   "group": "Supplementary tables",
    "name": "Table_3.S2_LSG_vs_controls.xlsx",
    "href": "downloads/supplementary_tables/Table_3.S2_LSG_vs_controls.xlsx",
    "bytes": 71212,
@@ -147,7 +147,7 @@
    "description": "Table 3.S2. Lineage-specific genes compared with control gene sets."
   },
   {
-   "group": "Supplementary tables, Chapter 3",
+   "group": "Supplementary tables",
    "name": "Table_3.S3_codon_RSCU.xlsx",
    "href": "downloads/supplementary_tables/Table_3.S3_codon_RSCU.xlsx",
    "bytes": 8816,

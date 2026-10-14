@@ -1,7 +1,7 @@
 // Provenance page. Renders what the build actually recorded -- every source file with its
 // sha256 and mtime -- rather than a hand-maintained prose list that drifts from the data.
 import { el, fmt, pct } from '../core/dom.js';
-import { SITE_URL, REPO_URL, CONTACT, GENOME, PAPER_TAU_HOW } from '../core/paper.js';
+import { SITE_URL, REPO_URL, CONTACT, GENOME, PAPER_TAU_HOW, CITE_NOTE, AI_ACK } from '../core/paper.js';
 
 // What each upstream table is, in a reader's words; the file names are in the build manifest.
 const SOURCE_LABEL = [
@@ -72,7 +72,7 @@ function overview(man) {
             `genEra returned no rank for ${fmt(unplaced.hap1)} HAP1 and ${fmt(unplaced.hap2)} HAP2 `
             + 'genes in the current call; they are excluded from the pool, not defaulted.'],
           ['Expression baseline', (man.expression || {}).n_genes_with_baseline || null,
-            'A gene with an all-zero baseline has no tissue profile and no \u03c4.'],
+            'A gene with an all-zero baseline has no tissue profile. \u03c4 needs a tissue-group mean of at least 5 TPM.'],
           ['Ka/Ks vs P. trichocarpa', (man.kaks || {}).n_genes,
             'No reciprocal-best ortholog. Expected for PS19, where only 1 of 681 genes has one.'],
           ['Peptide evidence', ((man.proteomics || {}).genes_with_a_hit
@@ -115,16 +115,14 @@ function overview(man) {
           'Use it for tissue specificity and per-gene magnitude. A ComBat-seq batch-corrected '
           + `profile is a separate, opt-in view on the gene page, for the `
           + `${fmt((man.expression || {}).combat_eligible_genes)} genes that passed the upstream `
-          + 'low-count filter; the tissue baselines and τ are always computed on raw TPM.'),
+          + 'low-count filter; tissue values and τ are always computed on raw TPM.'),
         el('li', {}, el('strong', {}, 'Curation notes are summarised, not quoted. '),
           'Tandem-array genes carry a curation flag (hand-rejected, pseudogene-like, or '
           + 'disagreeing with the automatic filter). The curator\'s identity and verbatim wording '
           + 'are deliberately not published.'),
-        el('li', { 'data-two-tau': '' }, el('strong', {}, 'Two tissue-specificity statistics, and which one to quote. '),
-          `The τ and peak tissue shown first on every page, in Browse and in every export are the dissertation’s: ${PAPER_TAU_HOW}. `
-          + 'The gene page also shows a second view, the median TPM over wild-type control samples only '
-          + '(213 samples, 10 tissue groups, with single-sample callus and two-sample stem groups), with its own τ. '
-          + 'The two differ for many genes; the second is labelled as a different statistic wherever it appears and is not used in the dissertation.'),
+        el('li', { 'data-one-tau': '' }, el('strong', {}, 'Tissue specificity is the dissertation\u2019s. '),
+          `The τ and peak tissue on every page, in Browse, on the genome map and in every export: ${PAPER_TAU_HOW}. `
+          + 'No other tissue-specificity value is shown.'),
         el('li', {}, el('strong', {}, 'The lineage-specific gene set is the final one. '),
           'Gene pages, Browse and the counts use the dissertation’s final set, 583 HAP1 and 621 HAP2 genes. '
           + 'The 776 HAP1 and 835 HAP2 candidates at PS18 or PS19 stay visible, and an excluded candidate says why it was excluded.'),
@@ -156,11 +154,11 @@ function overview(man) {
           + 'inferences from synteny and Ks, not observations.'),
         // Read from the manifest: the hand-typed "77 leaf" was the pooled count from before the
         // 2026-09-05 leaf regrouping (manifest.corrections), and nothing checked it.
-        el('li', {}, el('strong', {}, 'Thin tissue baselines. '),
-          `Median TPM per tissue rests on ${fmt(tw.leaf)} leaf (plus ${fmt(tw.leaf_young)} `
+        el('li', {}, el('strong', {}, 'Thin per-tissue medians. '),
+          `The per-tissue tables on the array and allele-pair pages show median TPM over WT-control samples, which rests on ${fmt(tw.leaf)} leaf (plus ${fmt(tw.leaf_young)} `
           + `young-leaf and ${fmt(tw.leaf_old)} old-leaf) and ${fmt(tw.xylem)} xylem WT-control `
           + `samples but only ${fmt(tw.bud)} bud, ${fmt(tw.catkin)} catkin, ${fmt(tw.stem)} stem `
-          + `and ${fmt(tw.callus)} callus. Every bar carries its n.`))),
+          + `and ${fmt(tw.callus)} callus. Every column carries its n. τ and peak tissue do not use these medians.`))),
 
     el('div', { class: 'card' },
       el('h2', {}, 'Sources', el('span', { class: 'tag' }, 'checksummed at build')),
@@ -185,7 +183,8 @@ function overview(man) {
 
     el('div', { class: 'card' },
       el('h2', {}, 'Citation & licence'),
-      el('p', { style: 'margin:0 0 6px;font-size:13.5px' }, 'Cite this atlas as:'),
+      el('p', { style: 'margin:0 0 8px;font-size:13.5px', 'data-cite-note': '' }, CITE_NOTE),
+      el('p', { style: 'margin:0 0 6px;font-size:13.5px' }, 'Until then, cite this atlas as:'),
       el('p', { class: 'cite-line', 'data-cite': '', style: 'margin:0 0 10px;font-size:13.5px;padding:8px 10px;border-left:3px solid var(--accent)' },
         `Hsieh et al., unpublished. Poplar 717 gene atlas, version ${man.data_version || ''}. `,
         el('a', { href: SITE_URL }, SITE_URL),
@@ -196,7 +195,8 @@ function overview(man) {
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
         'Code is MIT (', el('a', { href: `${REPO_URL}/blob/main/LICENSE`, target: '_blank', rel: 'noopener' }, 'LICENSE'),
         '). Data are provided for research use; please cite the atlas as above. A formal open data licence '
-        + 'has not been set yet; CC BY 4.0 is intended at publication.')),
+        + 'has not been set yet; CC BY 4.0 is intended at publication.'),
+      el('p', { class: 'muted', style: 'margin:8px 0 0;font-size:12.5px', 'data-ai-ack': '' }, AI_ACK)),
   );
 }
 

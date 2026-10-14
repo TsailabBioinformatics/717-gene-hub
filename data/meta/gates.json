@@ -1,5 +1,5 @@
 {
- "data_version": "0.18.0",
+ "data_version": "0.18.1",
  "n_checks": 98,
  "n_failed": 0,
  "checks": [
@@ -281,7 +281,7 @@
   {
    "name": "no embargoed LSG candidate label in any published file",
    "ok": true,
-   "detail": "1362 text files"
+   "detail": "1387 text files"
   },
   {
    "name": "ancestral karyotype counts match the placement coverage, per haplotype",

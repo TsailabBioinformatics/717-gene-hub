@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this atlas, please cite it as below, and cite the underlying studies listed on each study page."
+message: "A manuscript describing this resource will be submitted soon. Until it is published, please cite this website as below, with the version and your access date; once the manuscript is available, please cite the manuscript. Also cite the underlying studies listed on each study page."
 title: "717 Atlas: a haplotype-resolved gene atlas for Populus tremula x alba clone INRA 717-1B4"
 abstract: >-
   A static, browsable atlas of the 63,960 gene models in the two phased haplotypes of hybrid
@@ -22,8 +22,6 @@ authors:
   - family-names: Hsieh
     given-names: Chen
     affiliation: "Tsai Lab, University of Georgia"
-  - name: "Claude (Anthropic)"
-    alias: "software assistance"
 repository-code: "https://github.com/TsailabBioinformatics/poplar-717-atlas"
 url: "https://tsailabbioinformatics.github.io/poplar-717-atlas/"
 keywords:
@@ -35,5 +33,5 @@ keywords:
   - lineage-specific genes
   - expression atlas
 license-url: "https://github.com/TsailabBioinformatics/poplar-717-atlas/blob/main/LICENSE"
-version: "0.18.0"
+version: "0.18.1"
 date-released: "2026-10-13"

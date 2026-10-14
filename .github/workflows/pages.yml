@@ -98,6 +98,20 @@ jobs:
           CI_CHROME="$(node -e "console.log(require('playwright-core').chromium.executablePath())")" \
             node scripts/check.mjs
 
+      # The atlas is cited at the lab address. This workflow file is shared by two repositories
+      # (publish_lab.py copies it): in the lab repository the validated site above is what gets
+      # published; in the development repository, whose Pages address is the OLD one, the same
+      # validated tree is discarded here and a redirect to the lab address is published instead.
+      # The gates above still run in both, so a broken build is caught before either deploys.
+      - name: Old address only, publish the redirect instead of the site
+        if: github.repository == 'ChenHsieh/poplar-717-atlas'
+        run: |
+          rm -rf "$SITE_DIR"
+          mkdir -p "$SITE_DIR"
+          cp redirect/index.html "$SITE_DIR/index.html"
+          cp redirect/index.html "$SITE_DIR/404.html"
+          touch "$SITE_DIR/.nojekyll"
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

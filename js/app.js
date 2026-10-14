@@ -681,7 +681,18 @@ function geneHeader(g, kb) {
   if (isQcFlagged(g)) facts.push(el('span', { class: 'gh-fact', 'data-qc-chip': '' },
     'gene model flagged by quality control, not in the dissertation\u2019s counts'));
   if (g.syn && g.syn.cls) facts.push(el('span', { class: 'gh-fact' }, g.syn.cls.replace(/_/g, ' ')));
-  if (g.dup && g.dup.td) facts.push(el('span', { class: 'gh-fact' }, 'tandem array'));
+  // Same form as the allele chip: the label, then the ID as a link. Every gene of a counted
+  // tandem array gets it (genes of hemizygous TD arrays included); the size is the number of
+  // members counted in the array, filled in once its members are read.
+  if (g.dup && g.dup.td && g.td && g.td.aid) {
+    const size = el('span', { class: 'muted', 'data-array-chip-size': '' }, '');
+    facts.push(el('span', { class: 'gh-fact', 'data-array-chip': g.td.aid }, 'tandem array ',
+      el('a', { href: `#/array/${g.td.aid}`, class: 'mono', title: 'open the array page' }, g.td.aid), size));
+    arrayAlleles(g).then((r) => {
+      const n = r ? r.members.filter((m) => m.td).length : 0;
+      if (n) size.textContent = ` · ${n} genes`;
+    }).catch(() => {});
+  }
   if (g.allele && g.allele.id) facts.push(el('span', { class: 'gh-fact' }, 'allele ',
     el('a', { href: `#/gene/${g.allele.id}`, class: 'mono' }, g.allele.id)));
   else {
@@ -1020,7 +1031,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     el('p', { class: 'muted', style: 'margin:11px 0 0;font-size:12px' },
       `${mine.filter((x) => x.ctrl === 'control').length} control, `
       + `${mine.filter((x) => x.ctrl === 'perturbation').length} perturbation. `
-      + 'Only WT controls contribute to the tissue baselines shown on gene pages.'));
+      + 'Only WT controls contribute to the per-tissue medians shown on the array and allele-pair pages.'));
 
   // Lead with the paper, not the serial number; the number stays in the subtitle.
   const meta = studyMeta(s.citation);

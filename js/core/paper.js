@@ -5,6 +5,8 @@ import { el, fmt } from './dom.js';
 export const SITE_URL = 'https://tsailabbioinformatics.github.io/poplar-717-atlas/';
 export const REPO_URL = 'https://github.com/TsailabBioinformatics/poplar-717-atlas';
 export const CONTACT = 'Chen.Hsieh@uga.edu';
+export const CITE_NOTE = 'A manuscript describing this resource will be submitted soon. Until it is published, please cite this website (version and access date); once the manuscript is available, please cite the manuscript.';
+export const AI_ACK = 'Analysis and site code were developed with assistance from Claude (Anthropic); the authors reviewed all content and take responsibility for it.';
 export const GENOME = 'Populus tremula × P. alba INRA 717-1B4, genome and annotation v5.1 (Phytozome)';
 
 /* ---------- tandem-array age bins ---------- */

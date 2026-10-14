@@ -4,11 +4,11 @@
 Reads sources/dissertation_layer.tsv.gz (see make_dissertation_layer_source.py) and the shards.
 
 On each gene record:
+  x.tau, x.top   REPLACED by the dissertation's values (see x.p); no second statistic is kept.
   x.p      tissue specificity as in the dissertation: {tau, top, ok, m, t{9 tissue groups}}.
            tau (truncated to 3 decimals) and top are absent where no tissue-group mean reaches
            5 TPM; ok = mean TPM over
-           the 222-sample reference panel >= 5. The atlas's own x.tau / x.top stay beside it and
-           are labelled as a different statistic on the page.
+           the 222-sample reference panel >= 5.
   ann.at, ann.atd   Arabidopsis best hit from the per-gene master table (lab annotation); a hit
            the record already had is kept only where the master table has none.
   ann.sym  gene names from the lab annotation.
@@ -75,6 +75,14 @@ def main():
                             pp["tau"] = int(float(s["tau"]) * 1000 + 1e-9) / 1000
                             pp["top"] = s["peak_tissue"]
                         x["p"] = pp
+                        # ONE tissue-specificity statistic on the record (Chen, 2026-10-13): tau
+                        # and peak tissue are the dissertation's. The value build_expression.py
+                        # wrote here (tau over wild-type-control medians) is replaced, so the
+                        # genome map, the gene record and every page read the same number.
+                        # x.t (per-tissue medians of the wild-type controls) is kept: tissue
+                        # tables on the array and pair pages draw it and label it as such.
+                        x["tau"] = pp.get("tau")
+                        x["top"] = pp.get("top")
                     # --- annotation ----------------------------------------------------------
                     ann = rec.get("ann")
                     if ann is None:

@@ -28,6 +28,8 @@ NEVER = re.compile(r"tpm|est_counts|fpkm|\.bam$|\.fastq|\.fa$|\.py$|\.sh$|\.ipyn
 # contain it: publish_lab.py refuses any file that does)
 FORBID = re.compile(rb"/Users/|/scratch/|/home/[a-z]|ch29576|ghp_[A-Za-z0-9]{20}|curator" rb" wrote|cj_2026\d{4}"
                     rb"|LSG\d+\.\d+g|TD-associated PAV|aWGD|(?:post|pre)[ _]divergence")
+# In the notes a reader sees (README), tables are described by content, never by chapter.
+NO_CHAPTER = re.compile(rb"Chapters? [23]|dissertation chapter", re.I)
 
 # group, one line per file. A file in the bundle that is not listed here stops the run: every
 # published file gets a description a reader can act on.
@@ -35,22 +37,23 @@ DESCRIBE = {
     "README.md": ("Start here", "What each file is, the gene basis, how each dissertation number is obtained from the tables, and known caveats."),
     "DATA_DICTIONARY.csv": ("Start here", "Every column of the four tables and of Table 2.S1: type, units, allowed values, definition."),
     "HEADLINE_NUMBERS_CHECK.csv": ("Start here", "113 numbers of the dissertation recomputed from these files, each beside the printed value."),
-    "717_genes.csv": ("Tables", "One row per gene (63,960): duplication classes, tandem array, syntelog category, strict PAV, tau and expression summaries, annotation."),
-    "717_gene_pairs.csv": ("Tables", "One row per gene pair (47,923): sWGD and aWGT anchor pairs, tandem pairs with Ks and Ka/Ks, pairings inside multi-copy syntelog groups."),
-    "717_tandem_arrays.csv": ("Tables", "One row per tandem array (4,204): size, median Ks, age bin, status compared with the other haplotype."),
-    "717_LSG_candidates.csv": ("Tables", "One row per lineage-specific gene candidate (1,611): phylostratum, each exclusion criterion, reason, final-set flag (Table 3.S1 as a flat file)."),
-    "supplementary_tables/Table_2.S1_RNAseq_libraries.csv": ("Supplementary tables, Chapter 2", "Table 2.S1. The 652 RNA-seq libraries with accessions, tissue group and the 222-library reference panel marked."),
-    "supplementary_tables/Table_2.S2_read_separability_exclusion.csv": ("Supplementary tables, Chapter 2", "Table 2.S2. Pairs excluded because their reads cannot be assigned to one copy, with the effect on each pair metric."),
-    "supplementary_tables/Table_2.S3_tandem_chromosome_enrichment.csv": ("Supplementary tables, Chapter 2", "Table 2.S3. Tandem genes per chromosome compared with expectation, array-intact permutation test."),
-    "supplementary_tables/Table_2.S4_qc_excluded_gene_models.csv": ("Supplementary tables, Chapter 2", "Table 2.S4. The 553 gene models flagged by quality control, with the reason."),
-    "supplementary_tables/Table_2.S5_array_size_by_age.csv": ("Supplementary tables, Chapter 2", "Table 2.S5. Tandem array size by age bin and haplotype."),
-    "supplementary_tables/Table_2.S6_multiage_arrays.xlsx": ("Supplementary tables, Chapter 2", "Table 2.S6. Tandem arrays whose member pairs span several age bins."),
-    "supplementary_tables/Table_2.S7_td_agebin_sensitivity.xlsx": ("Supplementary tables, Chapter 2", "Table 2.S7. Sensitivity of the results to the rule that assigns an array to an age bin."),
-    "supplementary_tables/Table_3.S1_LSG_candidates.xlsx": ("Supplementary tables, Chapter 3", "Table 3.S1. Lineage-specific gene candidates with per-gene exclusion reasons and the final set."),
-    "supplementary_tables/Table_3.S2_LSG_vs_controls.xlsx": ("Supplementary tables, Chapter 3", "Table 3.S2. Lineage-specific genes compared with control gene sets."),
-    "supplementary_tables/Table_3.S3_codon_RSCU.xlsx": ("Supplementary tables, Chapter 3", "Table 3.S3. Codon usage (RSCU)."),
+    "717_genes.csv": ("Gene duplication and cross-haplotype tables", "One row per gene (63,960): duplication classes, tandem array, syntelog category, strict PAV, tau and expression summaries, annotation."),
+    "717_gene_pairs.csv": ("Gene duplication and cross-haplotype tables", "One row per gene pair (47,923): sWGD and aWGT anchor pairs, tandem pairs with Ks and Ka/Ks, pairings inside multi-copy syntelog groups."),
+    "717_tandem_arrays.csv": ("Gene duplication and cross-haplotype tables", "One row per tandem array (4,204): size, median Ks, age bin, status compared with the other haplotype."),
+    "717_LSG_candidates.csv": ("Lineage-specific gene tables", "One row per lineage-specific gene candidate (1,611): phylostratum, each exclusion criterion, reason, final-set flag (Table 3.S1 as a flat file)."),
+    "supplementary_tables/Table_2.S1_RNAseq_libraries.csv": ("Supplementary tables", "Table 2.S1. The 652 RNA-seq libraries with accessions, tissue group and the 222-library reference panel marked."),
+    "supplementary_tables/Table_2.S2_read_separability_exclusion.csv": ("Supplementary tables", "Table 2.S2. Pairs excluded because their reads cannot be assigned to one copy, with the effect on each pair metric."),
+    "supplementary_tables/Table_2.S3_tandem_chromosome_enrichment.csv": ("Supplementary tables", "Table 2.S3. Tandem genes per chromosome compared with expectation, array-intact permutation test."),
+    "supplementary_tables/Table_2.S4_qc_excluded_gene_models.csv": ("Supplementary tables", "Table 2.S4. The 553 gene models flagged by quality control, with the reason."),
+    "supplementary_tables/Table_2.S5_array_size_by_age.csv": ("Supplementary tables", "Table 2.S5. Tandem array size by age bin and haplotype."),
+    "supplementary_tables/Table_2.S6_multiage_arrays.xlsx": ("Supplementary tables", "Table 2.S6. Tandem arrays whose member pairs span several age bins."),
+    "supplementary_tables/Table_2.S7_td_agebin_sensitivity.xlsx": ("Supplementary tables", "Table 2.S7. Sensitivity of the results to the rule that assigns an array to an age bin."),
+    "supplementary_tables/Table_3.S1_LSG_candidates.xlsx": ("Supplementary tables", "Table 3.S1. Lineage-specific gene candidates with per-gene exclusion reasons and the final set."),
+    "supplementary_tables/Table_3.S2_LSG_vs_controls.xlsx": ("Supplementary tables", "Table 3.S2. Lineage-specific genes compared with control gene sets."),
+    "supplementary_tables/Table_3.S3_codon_RSCU.xlsx": ("Supplementary tables", "Table 3.S3. Codon usage (RSCU)."),
 }
-GROUP_ORDER = ["Start here", "Tables", "Supplementary tables, Chapter 2", "Supplementary tables, Chapter 3"]
+GROUP_ORDER = ["Start here", "Gene duplication and cross-haplotype tables", "Lineage-specific gene tables",
+               "Supplementary tables"]
 
 
 def md5(p):
@@ -99,6 +102,10 @@ def main():
             m = FORBID.search(open(p, "rb").read())
             if m:
                 problems.append(f"{rel}: contains {m.group(0)!r}, which is never published")
+        if rel.endswith(".md"):
+            m = NO_CHAPTER.search(open(p, "rb").read())
+            if m:
+                problems.append(f"{rel}: says {m.group(0)!r}; describe tables by content, not by chapter")
     missing = sorted(set(sums) - set(files))
     if missing:
         problems.append(f"listed in MD5SUMS.txt but absent: {missing}")

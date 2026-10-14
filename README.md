@@ -20,6 +20,8 @@ Questions and corrections: Chen.Hsieh@uga.edu.
 > Hsieh et al., unpublished. Poplar 717 gene atlas, version X.Y.Z.
 > https://tsailabbioinformatics.github.io/poplar-717-atlas/. Accessed YYYY-MM-DD.
 
+A manuscript describing this resource will be submitted soon. Until it is published, please cite this website (version and access date); once the manuscript is available, please cite the manuscript.
+
 Use the version shown on the atlas's About page. Also cite the underlying study for any expression
 data you use; each study page carries its own DOI. A machine-readable record is in
 [`CITATION.cff`](CITATION.cff).
@@ -50,6 +52,10 @@ python3 scripts/serve_ranges.py 8931 .
 ```
 
 then open <http://localhost:8931/>.
+
+## Acknowledgement
+
+Analysis and site code were developed with assistance from Claude (Anthropic); the authors reviewed all content and take responsibility for it.
 
 ## License
 

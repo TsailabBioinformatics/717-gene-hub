@@ -47,7 +47,9 @@ REL = {"HAP1": {"1:1": 22704, "hemizygous_strict_PAV": 528, "hemizygous_TD_array
 RETIRED = [("TD-associated PAV", re.compile(r"TD-associated PAV")),
            ("PAV (whole array)", re.compile(r"PAV \(whole array\)")),
            ("aWGD", re.compile(r"aWGD(?!_era)")),
-           ("post/pre divergence", re.compile(r"\b(?:post|pre)[ -]divergence\b", re.I))]
+           ("post/pre divergence", re.compile(r"\b(?:post|pre)[ -]divergence\b", re.I)),
+           # tables and pages are described by content, never as chapters (Chen, 2026-10-13)
+           ("Chapter 2 / Chapter 3", re.compile(r"Chapters? [23]\b|dissertation chapter", re.I))]
 # In code, a retired name may appear in a comment that explains the rename; rendered strings
 # may not. The scan therefore reads string literals in JS and all text in HTML and data.
 JS_STRING = re.compile(r"'(?:\\.|[^'\\\n])*'|\"(?:\\.|[^\"\\\n])*\"|`(?:\\.|[^`\\])*`")
@@ -86,7 +88,8 @@ def scan_retired():
     # positive control: each pattern must catch its own name
     probe = Counter()
     for name, pat in RETIRED:
-        for s in ("TD-associated PAV", "PAV (whole array)", "an aWGD pair", "post divergence", "pre-divergence"):
+        for s in ("TD-associated PAV", "PAV (whole array)", "an aWGD pair", "post divergence", "pre-divergence",
+                  "see Chapter 3"):
             if pat.search(s):
                 probe[name] += 1
     check("invariant", "the retired-name scan can see each retired name (positive control)",
@@ -307,10 +310,11 @@ def main():
     print("\n== downloadable tables against the gene records ==")
     dl = os.path.join(ROOT, "downloads")
     if os.path.exists(os.path.join(dl, "717_genes.csv")):
-        CAT = {"1:1": "1:1", "N:N_TD": "N:N, TD-associated", "N:N_nonTD": "N:N, non-TD",
-               "CNV_TD": "CNV, TD-associated", "CNV_nonTD": "CNV, non-TD",
-               "hemizygous_strict_PAV": "hemizygous, strict PAV", "hemizygous_TD_array": "hemizygous TD array",
-               "hemizygous_nonPAV": "hemizygous, non-PAV"}
+        # the download uses the site's display names, word for word: read them from the site's
+        # own table (js/core/relationship.js) so the two cannot be compared against a third copy
+        rj = open(os.path.join(ROOT, "js", "core", "relationship.js")).read()
+        CAT = dict(re.findall(r"'([^']+)': \{ name: '([^']+)'", rj))
+        check("invariant", "the site's eight category names were read", len(CAT) == 8, sorted(CAT.values()))
         T = lambda v: v == "True"
         bad = Counter()
         n = 0
@@ -359,6 +363,27 @@ def main():
         check("invariant", "no download exceeds the 100 MB per-file limit", not big, big)
     else:
         print("  (no downloads/ in this tree; nothing to compare)")
+
+    # ---- 5c. tandem-array chips: every one must have an array page to open ------------------
+    print("\n== tandem-array links ==")
+    arrays = json.load(open(os.path.join(DATA, "index", "arrays.json")))
+    status = json.load(open(os.path.join(DATA, "index", "array_status.json")))
+    td_genes = [g for g, (_, r) in recs.items() if (r.get("dup") or {}).get("td")]
+    dead = [g for g in td_genes
+            if not (recs[g][1].get("td") or {}).get("aid")
+            or recs[g][1]["td"]["aid"] not in arrays or g not in arrays[recs[g][1]["td"]["aid"]]
+            or recs[g][1]["td"]["aid"] not in status]
+    check("invariant", f"each of the {len(td_genes):,} tandem genes names an array that has a page and lists it",
+          td_genes and not dead, f"{len(dead)} without, e.g. {dead[:3]}" if dead else "")
+    hemi = [g for g in td_genes if (recs[g][1].get("rel") or {}).get("c") == "hemizygous_TD_array"]
+    check("invariant", "genes of hemizygous TD arrays are among them", len(hemi) == 300 and not set(hemi) & set(dead), len(hemi))
+    check("invariant", "positive control: a made-up array id would be caught", "HAP1_U99999" not in arrays)
+    for gid, (_, r) in recs.items():
+        x = r.get("x") or {}
+        if x and (x.get("tau") != (x.get("p") or {}).get("tau") or x.get("top") != (x.get("p") or {}).get("top")):
+            fails.append("one tau"); print(f"  FAIL  [invariant] {gid} carries a second tau or peak tissue"); break
+    else:
+        print("  PASS  [invariant] one tissue-specificity value per record: x.tau and x.top are the dissertation's")
 
     # ---- 6. names ----------------------------------------------------------------------------
     print("\n== retired names ==")

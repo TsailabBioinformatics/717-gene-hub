@@ -45,9 +45,9 @@ const METRIC_NOTE = {
   genes: 'Genes per 100 kb bin.',
   tandem: 'Share of genes in the bin that belong to a tandem array.',
   lsg: 'Share in the lineage-specific pool (PS ≥ 18 in the genEra rerun that added Idesia).',
-  tau: 'Mean τ (Yanai tissue-specificity index) of genes in the bin that have a baseline at '
-    + 'all. It includes genes under 1 TPM everywhere, whose τ is mostly noise, and tissues '
-    + 'sampled by a single study, so read it as expression breadth, not tissue identity.',
+  tau: 'Mean τ of the genes in the bin that have one: τ over mean TPM in 9 tissue groups of the '
+    + '222-sample reference panel, computed where a group mean reaches 5 TPM. Read it as '
+    + 'expression breadth, not tissue identity.',
   omega: 'Mean Ka/Ks over the genes in the bin that HAVE a reciprocal-best P. trichocarpa '
     + 'ortholog, 81.7% of genes, and the ones without are the youngest, so a bin’s '
     + 'value describes its pairable genes.',

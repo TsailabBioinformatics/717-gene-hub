@@ -489,7 +489,7 @@ export async function chromosomeBrowser(opts) {
       row('Duplication', ...DUP.map((d) => item(d.tok, d.label, nums((g) => dupOf(g.c) === d)))),
       row('Synteny', ...SYN.map((c) => item(c.tok, c.label,
         tilesReady ? `${cnt(A, (g) => synA(g) === c.k)} / ${cnt(B, (g) => synB(g) === c.k)}` : '…'))),
-      row('τ', el('span', { class: 'map-li' }, 'bar height = τ (Yanai index), 0 to 1; with a value ',
+      row('τ', el('span', { class: 'map-li' }, 'bar height = τ (222-sample reference panel), 0 to 1; with a value ',
         el('span', { class: 'mono' }, nums((g) => g.t != null)))),
       row('LSG pool', item('accent', 'in the lineage-specific pool (phylostratum ≥ 18)', nums((g) => g.l))),
       row('Alleles', el('span', { class: 'map-li' }, 'curves join a gene to its allele on the other haplotype; drawn ',

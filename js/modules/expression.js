@@ -17,54 +17,6 @@ const orderTissues = (keys) => TISSUE_ORDER.filter((t) => keys.includes(t)).conc
 // needs. Regenerate if the expression release changes.
 const TISSUE_STUDIES = { leaf_young: 1, leaf_old: 1, bark: 7, root: 6, xylem: 10, leaf: 11,
   bud: 3, catkin: 1, stem: 1, callus: 1 };
-// τ bins are DISPLAY cutoffs, not calibrated thresholds; the card says so where it uses them.
-const TAU_NARROW = 0.85, TAU_MID = 0.5;
-// Below this in every tissue, τ is dominated by noise (a gene at 0.3 TPM in one tissue and 0
-// elsewhere scores τ = 1), so the card reports it but does not interpret it.
-const LOW_TPM = 1;
-
-const isLow = (x) => Object.values(x.t).every((v) => v < LOW_TPM);
-
-function tauNote(x) {
-  if (x.tau == null) return 'not computable (zero in every tissue)';
-  if (isLow(x)) return 'not interpreted';
-  if (x.tau >= TAU_NARROW) return `narrow expression breadth (at or above the ${TAU_NARROW} display cutoff)`;
-  if (x.tau >= TAU_MID) return `intermediate breadth (between the ${TAU_MID} and ${TAU_NARROW} display cutoffs)`;
-  return `broad expression (below the ${TAU_MID} display cutoff)`;
-}
-
-/** "highest in stem (n=2, single study)": the peak is only as good as its tissue's sample. */
-function peakNote(x) {
-  const t = x.top;
-  if (!t) return el('span', {}, '–');
-  const n = x.n[t];
-  const ns = TISSUE_STUDIES[t];
-  const bits = [`n=${n}`];
-  if (ns === 1) bits.push('single study');
-  const thin = n < 3 || ns === 1;
-  return el('span', {}, 'Highest in ', el('strong', {}, t),
-    ` (${bits.join(', ')}), ${fmt(x.t[t])} TPM`,
-    thin ? el('span', { class: 'muted' },
-      '. That tissue rests on too few samples or a single study to call the gene specific to it')
-      : null);
-}
-
-function baselineChart(x) {
-  const tissues = orderTissues(Object.keys(x.t));
-  const max = Math.max(...tissues.map((t) => x.t[t]), 0.01);
-  const rows = tissues.map((t) => el('tr', {},
-    el('td', {}, t === x.top ? el('strong', {}, t) : t),
-    el('td', { class: 'num' }, fmt(x.t[t])),
-    el('td', { class: 'muted', style: 'font-size:11px' }, `n=${x.n[t]}`),
-    el('td', { style: 'width:46%' },
-      el('div', { class: 'bar', style: `width:${Math.max((x.t[t] / max) * 100, x.t[t] > 0 ? 1.5 : 0)}%;background:var(--accent)` })),
-  ));
-  return el('table', { class: 'data' },
-    el('thead', {}, el('tr', {}, el('th', {}, 'Tissue'), el('th', { class: 'num' }, 'Median TPM'),
-      el('th', {}, ''), el('th', {}, ''))),
-    el('tbody', {}, ...rows));
-}
-
 /* ---------------------------------------------------------------------------------------
  *  Response by contrast.
  *
@@ -202,7 +154,7 @@ function paperBlock(g, man) {
   const verdict = p.tau == null
     ? el('span', {}, 'No tissue group reaches a mean of 5 TPM, so no τ or peak tissue is computed.')
     : el('span', {}, 'τ = ', el('strong', { 'data-paper-tau': '' }, p.tau.toFixed(3)),
-        ', peak tissue ', el('strong', { 'data-paper-top': '' }, p.top.replace(/_/g, ' ')), '. ',
+        ', peak tissue ', el('strong', { 'data-paper-top': '' }, p.top), '. ',
         p.tau >= TAU_SPECIFIC && p.ok
           ? el('strong', {}, 'Counted as tissue-specific')
           : el('span', {}, 'Not counted as tissue-specific'),
@@ -213,7 +165,7 @@ function paperBlock(g, man) {
       el('thead', {}, el('tr', {}, el('th', {}, 'Tissue group'), el('th', { class: 'num' }, 'Mean TPM'),
         el('th', {}, ''), el('th', {}, ''))),
       el('tbody', {}, ...PAPER_TISSUES.map((t) => el('tr', {},
-        el('td', {}, t === p.top ? el('strong', {}, t.replace(/_/g, ' ')) : t.replace(/_/g, ' ')),
+        el('td', {}, t === p.top ? el('strong', {}, t) : t),
         el('td', { class: 'num' }, fmt(p.t[t])),
         el('td', { class: 'muted', style: 'font-size:11px' }, n[t] != null ? `n=${n[t]}` : ''),
         el('td', { style: 'width:46%' }, el('div', { class: 'bar',
@@ -234,25 +186,6 @@ function geneCard(g, man) {
   },
     el('h2', {}, 'Expression', el('span', { class: 'tag' }, 'kallisto k21')),
     paperBlock(g, man),
-    el('h3', { style: 'font-size:13px;margin:16px 0 4px' }, 'A second view: wild-type control samples only'),
-    el('p', { class: 'sub', style: 'margin:0 0 10px', 'data-atlas-tau': '' },
-      'This is a different statistic from the one above and is not the dissertation’s: median TPM '
-      + 'over the wild-type control samples of each of 10 tissue groups (213 samples), with its own τ. '
-      + 'It can name a different peak tissue. ',
-      isLow(x)
-        ? el('span', {}, `Below ${LOW_TPM} TPM in every tissue: no peak tissue or τ is interpreted. `)
-        : el('span', {}, peakNote(x), '. '),
-      `WT-control τ = ${x.tau ?? '–'}, ${tauNote(x)}.`),
-    baselineChart(x),
-    el('p', { class: 'muted', style: 'font-size:11px;margin:6px 0 0' },
-      `WT-control τ (Yanai) computed on median TPM over ${orderTissues(Object.keys(x.t).filter((t) => t !== 'callus')).join(' / ')}; `,
-      'callus (1 sample) is excluded from τ but still shown above and can still be the highest tissue. ',
-      `The ${TAU_MID} and ${TAU_NARROW} bins are display cutoffs, not calibrated thresholds. `,
-      'Each tissue draws on different studies (stem, callus and catkin on one study each; ',
-      'leaf_young and leaf_old on study 1 only, unsplit leaf on the others), so a difference ',
-      'between tissues here is partly a difference between studies. ',
-      'With 2 or 4 samples the value shown is the upper of the middle two, so for stem (n=2) it ',
-      'is the larger of its two samples.'),
     el('p', { class: 'muted', style: 'font-size:11px;margin:4px 0 0' },
       'These are TPM for this haplotype’s gene model. Reads were quantified against both '
       + 'haplotypes together, so reads that fit this gene and its allele equally well are divided '
@@ -507,7 +440,7 @@ async function overview(man) {
     el('div', { class: 'card' },
       el('h2', {}, 'WT-control samples per tissue', el('span', { class: 'tag' }, 'baseline denominator')),
       el('p', { class: 'muted', style: 'font-size:12px;margin:0 0 10px' },
-        `Every gene's tissue-baseline bars are the median TPM across these WT-control samples. `
+        `The per-tissue tables on the tandem-array and allele-pair pages show the median TPM across these WT-control samples; τ and peak tissue do not use them (see the card above). `
         + `stem, bud, catkin and callus are thin (≤5), read differences with that in mind.`),
       tissuePanelMatrix(man)),
     el('div', { class: 'card' },
@@ -531,7 +464,7 @@ export default {
   filters: [
     { id: 'expr_top_tissue', label: 'Peak tissue', options: TISSUE_ORDER,
       test: (g, v) => g.x && g.x.top === v },
-    { id: 'expr_tau', label: 'τ (Yanai index; high = narrow expression)',
+    { id: 'expr_tau', label: 'τ (222-sample reference panel; high = narrow expression)',
       test: (g, v) => g.x && g.x.tau != null && g.x.tau >= parseFloat(v) },
   ],
 };

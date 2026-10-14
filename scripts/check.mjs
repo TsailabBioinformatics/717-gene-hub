@@ -158,7 +158,55 @@ await check('study-10-notes', '#/study/10',
 // This gene is the manually-verified leaf_young/leaf_old case (13.74 vs 4.52 TPM, was
 // pooled to a single 8.12 before the 2026-09-05 fix) -- assert the split is visible.
 await check('gene-expr-ps18-to-ps17', '#/gene/PtXaTreH.05G120200',
-  { expect: ['Expression', 'Median TPM', 'catkin', 'Show all 652 samples', 'leaf_young', 'leaf_old'], wait: 900 });
+  { expect: ['Expression', 'Mean TPM', 'catkin', 'Show all 652 samples', 'leaf_young', 'leaf_old',
+             '222-sample reference panel'],
+    // one tissue-specificity statistic: the wild-type-control view is gone (Chen, 2026-10-13)
+    // (the neighborhood card further down still shows per-tissue medians, labelled as such)
+    forbid: ['A second view', 'WT-control τ', 'display cutoff'], wait: 900 });
+
+// The header's tandem-array chip is a link to the array page, in the allele chip's form, for every
+// gene of a counted array on either haplotype, genes of hemizygous TD arrays included. Followed,
+// it must land on an array page that lists the gene. (check_dissertation.py holds that the array
+// route exists for every one of the 13,048 tandem genes.)
+{
+  const cp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const cerrs = [];
+  cp.on('pageerror', (e) => cerrs.push(e.message));
+  const out = [];
+  for (const gid of ['PtXaTreH.01G354100', 'PtXaAlbH.04G053400', 'PtXaTreH.17G058300', 'PtXaTreH.10G125100']) {
+    await cp.goto(base + '/#/gene/' + gid, { waitUntil: 'networkidle' });
+    await cp.waitForTimeout(1500);
+    const chip = await cp.evaluate(() => {
+      const c = document.querySelector('.gh-fact[data-array-chip]');
+      const al = document.querySelector('.gh-fact a[href^="#/gene/"]');
+      const a = c && c.querySelector('a');
+      return c ? { aid: c.dataset.arrayChip, text: c.innerText.trim(), href: a && a.getAttribute('href'),
+        cls: a && a.className, sameLook: !al || (getComputedStyle(a).color === getComputedStyle(al).color
+          && getComputedStyle(a).fontFamily === getComputedStyle(al).fontFamily) } : null;
+    });
+    let lands = false;
+    if (chip && chip.href) {
+      await cp.click('.gh-fact[data-array-chip] a');
+      await cp.waitForTimeout(2500);
+      lands = await cp.evaluate(([aid, g]) => location.hash === '#/array/' + aid
+        && !!document.querySelector(`[data-arr-page="${aid}"]`)
+        && !!document.querySelector(`a[href="#/gene/${g}"]`), [chip.aid, gid]);
+    }
+    out.push({ gid, chip, lands });
+  }
+  // a gene outside any tandem array must carry no such chip
+  await cp.goto(base + '/#/gene/PtXaTreH.01G000200', { waitUntil: 'networkidle' });
+  await cp.waitForTimeout(1000);
+  const none = await cp.evaluate(() => !document.querySelector('.gh-fact[data-array-chip]'));
+  const ok = !cerrs.length && none && out.every((o) => o.chip && o.lands && o.chip.sameLook
+    && o.chip.href === '#/array/' + o.chip.aid && /^tandem array \S+ · \d+ genes$/.test(o.chip.text));
+  if (!ok) failures++;
+  console.log(`\n### header:array-chip-links-to-the-array  ${ok ? 'OK' : 'FAIL'}`);
+  out.forEach((o) => console.log(`   ${o.gid}: "${o.chip ? o.chip.text : 'no chip'}" -> lands ${o.lands}`));
+  console.log(`   non-tandem gene has no chip: ${none}`);
+  cerrs.forEach((e) => console.log('   !! ' + e));
+  await cp.close();
+}
 await check('gene-annotated', '#/gene/PtXaTreH.01G000300',
   { expect: ['Function', 'Allele', 'Panel presence', 'AT1G55570'], wait: 1000 });
 // A gene with a reciprocal 1:1 P. trichocarpa syntenic ortholog (11,490 genes have none).
@@ -402,7 +450,9 @@ await check('module-about-numbers', '#/module/about',
              'ComBat-seq', 'the strict, protein-level set', '528 HAP1 and 605 HAP2',
              'Hsieh et al., unpublished. Poplar 717 gene atlas, version', 'https://tsailabbioinformatics.github.io/poplar-717-atlas/',
              'Contact and feedback', 'Chen.Hsieh@uga.edu', 'Data are provided for research use',
-             'Two tissue-specificity statistics', 'per-gene table of the dissertation'],
+             'A manuscript describing this resource will be submitted soon', 'once the manuscript is available, please cite the manuscript',
+             'developed with assistance from Claude (Anthropic)',
+             'Tissue specificity is the dissertation’s', 'per-gene table of the dissertation'],
     forbid: ['no rank for 50 genes', '77 leaf', 'is not in the mirror', 'v6 master', 'held on v9', 'for browsing, not quoting',
              'chenhsieh.github.io', 'Not for redistribution'] });
 {
@@ -665,7 +715,7 @@ await check('genemodel-not-testable', '#/gene/PtXaAlbH.17G050200',
 
 await check('module-about', '#/module/about',
   { expect: ['About & provenance', 'Known limitations', 'HAP2 domain annotation is thin',
-             'Two tissue-specificity statistics', 'derived here, not imported', 'Sources'] });
+             'Tissue specificity is the dissertation’s', 'derived here, not imported', 'Sources'] });
 await check('home-dark', '#/', { expect: ['63,960', 'Start here'], theme: 'dark' });
 
 // --- v0.11: duplication layers + the copies-over-all-samples heatmap ---------------------
@@ -1463,7 +1513,7 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
 // scan can see a hit before its silence is trusted. Also retired labels: a tandem array with no
 // syntelog for any member is hemizygous, never PAV (Chen, 2026-10-05).
 {
-  const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\/|TD-associated PAV|PAV \(whole array\)/i;
+  const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\/|TD-associated PAV|PAV \(whole array\)|Chapters? [23]\b|dissertation chapter/i;
   const routes = ['/', '/browse', '/arrays', '/array/HAP1_U00120', '/pair/PtXaTreH.05G120200', '/map/hap1/Chr01',
     '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads',
     '/gene/PtXaTreH.08G070200', '/gene/PtXaAlbH.18G016900', '/gene/PtXaTreH.19G087400',

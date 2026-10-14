@@ -110,5 +110,5 @@ final LSG set,Table 3.1,HAP2,621.0,621.0,True
 "final LSG set, PS19",Table 3.1,HAP2,203.0,203.0,True
 RNA-seq libraries,Table 2.S1,,652.0,652.0,True
 reference-panel libraries,Table 2.S1,,222.0,222.0,True
-control libraries,Chapter 3 Methods,,229.0,229.0,True
-perturbation libraries,Chapter 3 Methods,,423.0,423.0,True
+control libraries,Methods,,229.0,229.0,True
+perturbation libraries,Methods,,423.0,423.0,True

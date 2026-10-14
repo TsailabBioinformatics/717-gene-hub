@@ -9,6 +9,40 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.18.1 - 2026-10-13 - One tau, array links, how to cite; the old address forwards
+
+No count changed. On the gene records, tau and peak tissue now hold one value.
+
+**One tissue-specificity statistic (data).** The second view added in 0.18.0 (tau and peak tissue
+over wild-type-control medians) is removed everywhere: gene page, genome map, gene record, About.
+`x.tau` and `x.top` on each record are the dissertation's values, and the genome-map tiles, index
+and overview were rebuilt from them. The per-tissue median tables on the array and allele-pair
+pages remain and are labelled as medians over wild-type controls.
+
+**Tandem-array chip.** In a gene page's header the array is a link to its page, in the same form
+as the allele chip ("tandem array HAP1_U00280 · 5 genes"), for every gene of a counted array,
+genes of hemizygous TD arrays included. The release gate requires an array page for each of the
+13,048 tandem genes, and the browser suite follows the link on both haplotypes.
+
+**Downloads.** Category names in the per-gene table are the site's and the dissertation's, word
+for word (TD-associated CNV, Non-TD CNV, TD-associated N:N, Non-TD N:N, Strict PAV, Hemizygous TD
+arrays, Non-PAV hemizygous, 1:1). The bundle was rebuilt by its own script, not edited; four files
+changed (per-gene table, dictionary, headline check, README), no supplementary table did. Tables
+are grouped and described by content, and neither the pages nor the README refer to chapters; the
+retired-name scan now refuses that wording.
+
+**How to cite.** About, the footer, the Downloads page, the README and CITATION.cff now say: a
+manuscript describing this resource will be submitted soon; until it is published, cite this
+website with version and access date; once the manuscript is available, cite the manuscript.
+
+**Authors.** CITATION.cff lists the author only. Software assistance is acknowledged in one
+sentence on the About page and in the README instead.
+
+**Old address.** chenhsieh.github.io/poplar-717-atlas now publishes a redirect to the lab address
+that keeps the page asked for (the part after #). The Pages workflow is shared by both
+repositories; a step that runs only in the development repository swaps the validated site for
+`redirect/index.html` just before upload, so the lab address is unaffected.
+
 ## 0.18.0 - 2026-10-13 - One set of calls and numbers: the dissertation's
 
 The atlas is the data supplement of the dissertation, so every summary, label and export now

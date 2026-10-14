@@ -12,7 +12,7 @@
    "pfam_panther": "annotation_info.txt for HAP1; parsed from defline.txt for HAP2 because HAP2's annotation_info domain columns are empty in the release"
   }
  },
- "built": "2026-10-13T19:08:17-0400",
+ "built": "2026-10-13T21:02:02-0400",
  "chromatin": {
   "accessible_region_definition": "genic or within 2 kb of the start, replicates merged -- the source paper's own classification. A 500 bp window fails, because 55% of conserved gene starts have their nearest accessible region more than 2 kb away, which is that paper's headline finding about distal elements in plants.",
   "genes_whose_ortholog_is_ambiguous": 6329,
@@ -199,7 +199,7 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.18.0",
+ "data_version": "0.18.1",
  "dissertation": {
   "analysis_repository_commit": "59eec6bd",
   "arabidopsis_hit_kept_from_older_annotation": 372,
