@@ -88,3 +88,11 @@ tr.pr-differ > * { background: var(--panel-2); }
   .mono-h { font-size: 20px; word-break: break-all; }
   .arr-desc { min-width: 20ch; }
 }
+
+/* Tissue rows on the pair chart are brushing sources for the sample design map. */
+.pr-hit { fill: transparent; }
+.pr-trow { cursor: pointer; }
+.pr-trow:focus { outline: none; }
+.pr-trow:focus-visible .pr-hit { stroke: var(--accent-ink); stroke-width: 2; }
+.pr-trow[data-hot="all"] .pr-hit, .pr-trow[data-hot="part"] .pr-hit { fill: var(--accent-soft); }
+[data-sel] .pr-trow[data-hot=""] { opacity: 0.45; }

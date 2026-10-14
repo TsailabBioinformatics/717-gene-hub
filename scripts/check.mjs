@@ -1508,6 +1508,158 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   await rp.close();
 }
 
+// Sample design map. (1) On the allele pair page, whose bars are medians over wild-type
+// controls, focusing a tissue row selects those samples, and the readout's n and both alleles'
+// medians (computed from the 652-sample vectors) must equal the row's n and bar values (the
+// shards' x.n / x.t). Positive control: a row read against ANOTHER row's readout must disagree.
+// (2) On the gene page, pinning a grid cell lights exactly that cell's samples in the profile.
+{
+  const dp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const derrs = [];
+  dp.on('pageerror', (e) => derrs.push(e.message));
+  const bad = [];
+  let nrows = 0, controlDisagrees = false, profileOk = false;
+  for (const gid of ['PtXaTreH.05G194600', 'PtXaTreH.05G120200']) {
+    await dp.goto(`${base}/#/pair/${gid}`, { waitUntil: 'networkidle' });
+    await dp.waitForSelector('[data-dmap]', { timeout: 15000 });
+    await dp.mouse.move(0, 0);
+    const got = await dp.evaluate(() => [...document.querySelectorAll('g.pr-trow[data-ids]')].map((g) => {
+      g.dispatchEvent(new FocusEvent('focus'));
+      const row = { t: g.dataset.tissue, n: g.querySelectorAll('.pr-tn')[0].textContent,
+        bars: [...g.querySelectorAll('.pr-tv')].map((x) => +x.textContent),
+        read: document.querySelector('.dmap-readout').textContent };
+      g.dispatchEvent(new FocusEvent('blur'));
+      return row;
+    }));
+    const parse = (read) => {
+      const n = +(/: (\d+) wild-type control sample/.exec(read) || [])[1];
+      const meds = [...read.matchAll(/: (?:median ([\d,.]+) TPM|values? ([\d,.]+(?:, [\d,.]+)*) TPM)/g)].map((m) => {
+        if (m[1]) return +m[1].replace(/,/g, '');
+        const v = m[2].split(', ').map((x) => +x.replace(/,/g, '')).sort((a, b) => a - b);
+        return v[Math.floor(v.length / 2)];
+      });
+      return { n, meds };
+    };
+    const agree = (r, o) => o.n === +r.n.replace('n ', '') && r.bars.length === 2 && o.meds.length === 2
+      && r.bars.every((b, j) => Math.abs(o.meds[j] - b) <= Math.max(0.06, b * 0.006));
+    got.forEach((r, i) => {
+      nrows++;
+      if (!agree(r, parse(r.read))) bad.push(`${gid} ${r.t}: n ${r.n}, bars ${r.bars.join(' / ')}, readout "${r.read.slice(0, 160)}"`);
+      if (!agree(r, parse(got[(i + 1) % got.length].read))) controlDisagrees = true;
+    });
+  }
+  await dp.goto(`${base}/#/gene/PtXaTreH.05G120200`, { waitUntil: 'networkidle' });
+  await dp.waitForSelector('[data-dmap]', { timeout: 15000 });
+  await dp.click('[data-card=expression] button:has-text("Show all 652 samples")');
+  await dp.waitForSelector('#expr-profile tbody tr[data-ids]');
+  await dp.click('#expr-profile button:has-text("By sample")');
+  const lit = await dp.evaluate(() => {
+    const c = [...document.querySelectorAll('[data-card=expression] .dmap-cell')].find((x) => +x.textContent > 3);
+    c.click();
+    return { want: +c.textContent, ticks: document.querySelectorAll('#expr-profile .dmap-tick[data-hot="all"]').length };
+  });
+  profileOk = lit.want > 0 && lit.ticks === lit.want;
+  if (!profileOk) bad.push(`gene page: a ${lit.want}-sample cell lit ${lit.ticks} profile samples`);
+  const ok = !bad.length && controlDisagrees && profileOk && !derrs.length;
+  if (!ok) failures++;
+  console.log(`\n### expression:design-map-agrees  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${nrows} pair-page tissue rows matched against the grid readout; positive control disagrees: ${controlDisagrees}; `
+    + `gene-page cell lights its samples in the profile: ${profileOk}`);
+  [...bad, ...derrs].forEach((e) => console.log('   !! ' + e));
+  await dp.close();
+}
+
+// Study design drawings. (1) Every study draws each of its samples exactly once; a planted
+// duplicate dot must be caught. (2) Every comparison lights exactly its own groups, whole.
+// (3) With a gene, each group's values agree with the gene page's own per-condition table.
+{
+  const sp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const serrs = [];
+  sp.on('pageerror', (e) => serrs.push(e.message));
+  const bad = [];
+  await sp.goto(`${base}/#/`, { waitUntil: 'networkidle' });
+  const studies = await sp.evaluate(async () => Object.keys(await (await fetch('data/expr/studies.json')).json()));
+  const drawnOnce = () => {
+    const ids = [...document.querySelectorAll('[data-study-design] [data-i]')].map((n) => +n.dataset.i);
+    const n = +((document.querySelector('[data-card=study-design] .sd-lede') || {}).textContent || '').match(/^([\d,]+) samples/)[1].replace(/,/g, '');
+    const rows = document.querySelectorAll('tbody tr[data-i]').length;
+    return { ok: ids.length === n && new Set(ids).size === n && rows === n, ids: ids.length, n, rows };
+  };
+  let nContrasts = 0;
+  for (const sid of studies) {
+    await sp.goto(`${base}/#/study/${sid}`, { waitUntil: 'networkidle' });
+    await sp.waitForSelector('[data-study-design]', { timeout: 15000 });
+    const r = await sp.evaluate(drawnOnce);
+    if (!r.ok) bad.push(`study ${sid}: ${r.ids} dots, ${r.rows} sample rows, ${r.n} samples`);
+    const cbad = await sp.evaluate(() => {
+      const out = [];
+      document.querySelectorAll('.sd-contrasts tbody tr').forEach((tr, j) => {
+        tr.focus();
+        const want = new Set(tr.dataset.ids.split(',').map(Number));
+        const got = [...document.querySelectorAll('.sd-cell[data-hot="all"]')].flatMap((c) => c.dataset.ids.split(',').map(Number));
+        const part = document.querySelectorAll('.sd-cell[data-hot="part"]').length;
+        const ctrl = document.querySelectorAll('.sd-cell[data-role="ctrl"]').length;
+        if (part || got.length !== want.size || !got.every((i) => want.has(i)) || !ctrl) out.push(`row ${j + 1}`);
+        tr.blur();
+      });
+      return { out, n: document.querySelectorAll('.sd-contrasts tbody tr').length };
+    });
+    nContrasts += cbad.n;
+    if (cbad.out.length) bad.push(`study ${sid} comparisons not drawn as two whole groups: ${cbad.out.join(', ')}`);
+  }
+  // Positive control for (1): duplicate one dot and the same test must fail.
+  const control = await sp.evaluate((fn) => {
+    const dot = document.querySelector('[data-study-design] [data-i]');
+    dot.parentNode.append(dot.cloneNode());
+    return (0, eval)(`(${fn})`)().ok;
+  }, drawnOnce.toString());
+  // (3) gene values: study 12 against the gene page's By condition rows for study 12.
+  const gid = 'PtXaTreH.05G194600';
+  await sp.goto(`${base}/#/study/12?gene=${gid}`, { waitUntil: 'networkidle' });
+  await sp.waitForSelector('.sd-gene');
+  const onStudy = await sp.evaluate(() => [...document.querySelectorAll('.sd-cell')].map((c) => {
+    const v = [...c.querySelectorAll('circle title')].map((t) => +t.textContent.split(': ')[1].replace(' TPM', ''));
+    return `${v.length}:${(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2)}`;
+  }).sort());
+  await sp.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
+  await sp.click('[data-card=expression] button:has-text("Show all 652 samples")');
+  await sp.waitForSelector('#expr-profile tbody tr');
+  const onGene = await sp.evaluate(() => [...document.querySelectorAll('#expr-profile tbody tr')]
+    .filter((tr) => tr.cells[0].textContent.trim() === '12')
+    .map((tr) => `${tr.cells[4].textContent.trim()}:${tr.cells[5].textContent.trim()}`).sort());
+  const valuesAgree = onStudy.length > 0 && JSON.stringify(onStudy) === JSON.stringify(onGene);
+  if (!valuesAgree) bad.push(`study 12 with ${gid}: study page ${onStudy.join(' ')} | gene page ${onGene.join(' ')}`);
+  const ok = !bad.length && control === false && !serrs.length;
+  if (!ok) failures++;
+  console.log(`\n### study:design-drawings  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${studies.length} studies drawn, ${nContrasts} comparisons checked; planted duplicate caught: ${control === false}; `
+    + `gene values agree with the gene page: ${valuesAgree} (${onStudy.length} groups)`);
+  [...bad, ...serrs].forEach((e) => console.log('   !! ' + e));
+  await sp.close();
+}
+
+// A null handed to the browser's own append() is printed as the word "null". These two genes
+// reach their allele through a tandem array, the path that did it. Planted control as below.
+{
+  const np = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const LEAK = /null\b|undefined\b|\bNaN\b|\[object Object\]/;   // no leading \b: "3 morenull"
+  const hits = [];
+  for (const gid of ['PtXaTreH.01G009600', 'PtXaTreH.10G046700', 'PtXaTreH.08G070200']) {
+    await np.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
+    await np.waitForTimeout(1500);
+    const t = await np.evaluate(() => document.querySelector('#view').innerText);
+    const m = LEAK.exec(t);
+    if (m) hits.push(`${gid}: "${t.slice(Math.max(0, m.index - 50), m.index + 20).replace(/\n/g, ' ')}"`);
+  }
+  const sees = LEAK.test(await np.evaluate(() => { const s = document.createElement('span'); s.append('3 more', null); return s.textContent; }));
+  const ok = !hits.length && sees;
+  if (!ok) failures++;
+  console.log(`\n### genepage:no-leaked-null  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   3 gene pages scanned; positive control detected: ${sees}`);
+  hits.forEach((h) => console.log('   !! ' + h));
+  await np.close();
+}
+
 // No internal version or project names in page text (Chen, 2026-10-03): provenance belongs in
 // the changelog, the citation file and build metadata. A planted positive control proves the
 // scan can see a hit before its silence is trusted. Also retired labels: a tandem array with no

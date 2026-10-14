@@ -14,8 +14,9 @@
 // (27,004 genes, see the annotation module), not a biological absence, and a blank cell in a
 // two-column layout reads as "nothing there" instead of "not measured".
 import { el, fmt } from '../core/dom.js';
-import { getGene, hapLabel, loadExprVector } from '../core/data.js';
+import { getGene, hapLabel, loadExprVector, loadExprSamples, loadExprStudies } from '../core/data.js';
 import { paperTau, paperTop, ageBinName } from '../core/paper.js';
+import { linkHub, brush, baselineSel, designGrid } from '../core/designmap.js';
 import { svgEl, genesIn, tileRecord, matchingRegion, tissueList, tissueN } from '../core/locusfig.js';
 import { chromosomeBrowser } from '../core/locusbrowser.js';
 
@@ -118,19 +119,26 @@ function tissueCompare(a, b) {
   const rowH = 30;
   const H = 18 + tissues.length * rowH + 30;
   const X = (v) => L + (v / max) * (W - L - R);
-  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, class: 'pr-expr', role: 'img', 'data-pair-expr': '' });
+  // role=group, not img: each tissue row becomes a focusable brushing source for the design
+  // map below, and children of an img are hidden from assistive technology.
+  const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, class: 'pr-expr', role: 'group',
+    'aria-label': `Median TPM per tissue for both alleles, ${tissues.length} tissues`, 'data-pair-expr': '' });
   tissues.forEach((t, i) => {
     const y = 14 + i * rowH;
-    svg.append(svgEl('text', { x: L - 8, y: y + 11, class: 'pr-tl', 'text-anchor': 'end' }, t.replace(/_/g, ' ')));
-    svg.append(svgEl('text', { x: L - 8, y: y + 23, class: 'pr-tn', 'text-anchor': 'end' }, n[t] == null ? 'n –' : `n ${n[t]}`));
+    const g = svgEl('g', { class: 'pr-trow', 'data-tissue': t,
+      'aria-label': `${t}: ${hapLabel('hap1')} ${ta[t] ?? 'no value'}, ${hapLabel('hap2')} ${tb[t] ?? 'no value'} TPM` });
+    g.append(svgEl('rect', { x: 0, y: y - 2, width: W, height: rowH - 2, class: 'pr-hit' }));
+    svg.append(g);
+    g.append(svgEl('text', { x: L - 8, y: y + 11, class: 'pr-tl', 'text-anchor': 'end' }, t.replace(/_/g, ' ')));
+    g.append(svgEl('text', { x: L - 8, y: y + 23, class: 'pr-tn', 'text-anchor': 'end' }, n[t] == null ? 'n –' : `n ${n[t]}`));
     [[ta[t], 'hap1', 0], [tb[t], 'hap2', 13]].forEach(([v, h, dy]) => {
       if (v == null) {
-        svg.append(svgEl('text', { x: L + 4, y: y + dy + 10, class: 'pr-tn' }, 'no value'));
+        g.append(svgEl('text', { x: L + 4, y: y + dy + 10, class: 'pr-tn' }, 'no value'));
         return;
       }
-      svg.append(svgEl('rect', { x: L, y: y + dy + 1, width: Math.max(v > 0 ? 1.5 : 0, X(v) - L), height: 10, class: `pr-bar ${h}` },
+      g.append(svgEl('rect', { x: L, y: y + dy + 1, width: Math.max(v > 0 ? 1.5 : 0, X(v) - L), height: 10, class: `pr-bar ${h}` },
         svgEl('title', {}, `${h === 'hap1' ? a.id : b.id} ${t}: ${v} TPM`)));
-      svg.append(svgEl('text', { x: X(v) + 4, y: y + dy + 10, class: 'pr-tv' }, v.toFixed(1)));
+      g.append(svgEl('text', { x: X(v) + 4, y: y + dy + 10, class: 'pr-tv' }, v.toFixed(1)));
     });
   });
   const yA = 14 + tissues.length * rowH + 4;
@@ -298,6 +306,32 @@ export async function pairView(id) {
   alleleCorrelation(a, b, corr);
 
   const tc = tissueCompare(a, b);
+  // The same sample design map as the gene page, with both alleles' values in its readout.
+  const dmapHolder = el('div', { 'data-dmap-holder': '' });
+  if (tc) {
+    Promise.all([loadExprSamples(), loadExprStudies(), loadExprVector(a), loadExprVector(b)])
+      .then(([samples, studies, va, vb]) => {
+        if (!samples) return;
+        const hub = linkHub();
+        const svg = tc.querySelector('svg[data-pair-expr]');
+        svg.querySelectorAll('g.pr-trow').forEach((g) => {
+          const sel = baselineSel(samples, g.dataset.tissue);
+          g.dataset.ids = [...sel.ids].join(',');
+          g.setAttribute('tabindex', '0');
+          brush(g, hub, sel);
+        });
+        hub.on((sel) => {
+          svg.toggleAttribute('data-sel', !!sel);
+          svg.querySelectorAll('g.pr-trow').forEach((g) => {
+            const ids = g.dataset.ids ? g.dataset.ids.split(',').map(Number) : [];
+            const hot = sel ? ids.filter((i) => sel.ids.has(i)).length : 0;
+            g.dataset.hot = !sel ? '' : hot && hot === ids.length ? 'all' : hot ? 'part' : '';
+          });
+        });
+        dmapHolder.append(designGrid(samples, studies, hub,
+          [{ name: `${hapLabel('hap1')} ${a.id}`, vec: va }, { name: `${hapLabel('hap2')} ${b.id}`, vec: vb }], a.id));
+      }).catch(() => {});
+  }
   const models = el('div', {}, el('p', { class: 'muted' }, 'Drawing both gene models…'));
   modelsFigure(a, b, models);
   const locus = el('div', { 'data-pair-locus': '' }, el('p', { class: 'muted' }, 'Drawing the locus…'));
@@ -347,6 +381,7 @@ export async function pairView(id) {
     tc ? el('div', { class: 'card' },
       el('h2', {}, 'Expression, allele against allele', el('span', { class: 'tag' }, 'median TPM, WT controls')),
       tc,
+      dmapHolder,
       el('div', { style: 'margin-top:10px' }, corr)) : null,
 
     el('div', { class: 'card' },

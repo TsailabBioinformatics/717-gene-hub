@@ -92,7 +92,7 @@ def relabel_pairs():
 
 
 def symbols(v):
-    """Gene names from the lab annotation's genes-of-interest column ('NAME', 'NAME, NAME7').
+    """Gene names from the lab annotation's genes-of-interest column (format examples: 'NAME1', 'NAME1, NAME2'; real names are held, never written here).
     The family prefix letter is dropped; every name and family code is kept as a search alias."""
     if not isinstance(v, str):
         return []

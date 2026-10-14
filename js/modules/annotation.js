@@ -164,7 +164,7 @@ function alleleCard(g, man) {
             + 'so the whole array has no called counterpart: an array-level case.'));
           return;
         }
-        viaArray.append(
+        viaArray.append(...[
           el('p', { style: 'margin:10px 0 6px;font-size:13.5px' },
             el('strong', {}, 'Through its tandem array. '),
             `This gene has no syntelog of its own, but ${withAllele.length} of the other `
@@ -179,7 +179,7 @@ function alleleCard(g, man) {
             ...r.pairedArrays.flatMap((id, i) => [i ? ', ' : '', aLink(id)])) : null,
           el('p', { class: 'muted', style: 'margin:6px 0 0;font-size:12px' },
             'An array-level link, not a 1:1 call for this gene: which copy corresponds to which is '
-            + 'not resolved inside a tandem array.'));
+            + 'not resolved inside a tandem array.')].filter(Boolean));
       }).catch(() => {});
     }
     return el('div', { class: 'card', 'data-card': 'allele' },

@@ -543,3 +543,98 @@ h2.sect:first-child { margin-top: 2px; }
   border-top: 1px solid var(--line); line-height: 1.5;
 }
 .cp-foot li { margin: 3px 0; }
+
+/* Sample design map (js/core/designmap.js): a tissue-by-study grid linked to the expression
+   bars and the 652-sample profile. A selection outlines its cells and samples and dims the
+   rest; the readout line says the same thing in words, so nothing depends on colour or hover. */
+.dmap { margin: 14px 0 4px; --dmap-cell: 26px; }
+.dmap-title { font-size: 14px; margin: 0 0 4px; }
+.dmap-sub { font-size: 12.5px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; max-width: 68ch; }
+.dmap-key { display: inline-block; width: 14px; height: 12px; vertical-align: -1px; border-radius: 2px;
+  border: 1.5px dashed var(--line-2); background: transparent; }
+.dmap-key.base { border: 1.5px solid var(--accent); background: var(--accent-soft); }
+.dmap-scroll { overflow-x: auto; padding: 2px 2px 6px; }
+.dmap-grid { display: grid; gap: 2px; align-items: center; width: max-content; }
+.dmap-corner { font-size: 11px; color: var(--ink-3); padding-right: 6px; }
+.dmap-grid button { font: inherit; font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+  height: var(--dmap-cell); padding: 0; cursor: pointer; border-radius: 3px; background: transparent; }
+.dmap-col { width: var(--dmap-cell); border: 0; color: var(--ink-2) !important; }
+.dmap-row { font-family: var(--sans) !important; font-size: 12.5px !important; text-align: right; width: 100%;
+  padding: 0 8px 0 0 !important; border: 0; white-space: nowrap; position: sticky; left: 0;
+  background: var(--panel) !important; z-index: 1; box-shadow: 6px 0 6px -4px var(--panel); }
+.dmap-cell { width: var(--dmap-cell); border: 1.5px dashed var(--line-2); }
+.dmap-cell.base { border: 1.5px solid var(--accent); background: var(--accent-soft); }
+.dmap-empty { width: var(--dmap-cell); height: var(--dmap-cell); }
+.dmap-grid button:focus-visible, .dmap-linked tr:focus-visible, [data-ids]:focus-visible {
+  outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+.dmap-foot { display: flex; gap: 10px; align-items: flex-start; margin-top: 6px; }
+.dmap-readout { font-size: 12.5px; margin: 0; color: var(--ink); line-height: 1.5; min-height: 2.9em; flex: 0 1 68ch; }
+.dmap-clear { font-size: 12px; padding: 3px 10px; min-height: 30px; border: 1px solid var(--line-2);
+  border-radius: 5px; background: var(--panel-2); color: var(--ink); cursor: pointer; }
+/* Linked painting: outline what is selected, dim what is not. */
+.dmap[data-sel] .dmap-cell[data-hot=""] { opacity: 0.35; }
+/* Labels dim by colour, not opacity: the tissue column is sticky and must stay opaque. */
+.dmap[data-sel] .dmap-row[data-hot=""], .dmap[data-sel] .dmap-col[data-hot=""] { color: var(--ink-3) !important; }
+.dmap .dmap-cell[data-hot="all"], .dmap .dmap-cell[data-hot="part"] { outline: 2px solid var(--ink); outline-offset: 1px; }
+.dmap .dmap-cell[data-hot="part"] { outline-style: dashed; }
+.dmap .dmap-row[data-hot="all"], .dmap .dmap-row[data-hot="part"],
+.dmap .dmap-col[data-hot="all"], .dmap .dmap-col[data-hot="part"] { font-weight: 600; color: var(--ink) !important; }
+.dmap-linked tbody tr[data-ids] { cursor: pointer; }
+[data-sel] tr[data-hot="all"], [data-sel] tr[data-hot="part"] { background: var(--accent-soft); }
+[data-sel] tr[data-ids][data-hot=""] { opacity: 0.55; }
+[data-sel] .dmap-tick[data-hot=""] { opacity: 0.25; }
+[data-sel] .dmap-tick[data-hot="all"] { outline: 1.5px solid var(--ink); }
+@media (max-width: 640px) { .dmap { --dmap-cell: 22px; } .dmap-grid button { font-size: 11px; } }
+@media (forced-colors: active) { .dmap-cell.base { border-color: CanvasText; } .dmap-key.base { border-color: CanvasText; } }
+
+/* Study design drawing (js/core/studydesign.js). Same key as the sample design map: a filled
+   group is wild-type controls. With a gene, every dot is one sample on one shared axis. */
+.sd { --sd-cell: 64px; --sd-gcell: 92px; margin: 6px 0 0; }
+.sd-lede { font-size: 13.5px; color: var(--ink-2); margin: 0 0 10px; max-width: 68ch; line-height: 1.5; }
+.sd-genebox { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; margin: 0 0 12px; }
+.sd-genebox input { font-family: var(--mono); font-size: 13px; padding: 5px 8px; min-height: 34px; width: 15em;
+  border: 1px solid var(--line-2); border-radius: 5px; background: var(--panel); color: var(--ink); }
+.sd-panel + .sd-panel { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+.sd-ptitle { font-size: 13px; margin: 0 0 6px; color: var(--ink-2); font-weight: 600; }
+.sd-scroll { overflow-x: auto; padding: 2px 2px 6px; }
+.sd-grid { display: grid; gap: 4px; align-items: stretch; width: max-content; }
+.sd-corner { font-size: 11px; color: var(--ink-3); align-self: end; padding: 0 8px 2px 0; }
+.sd-col { font-size: 12px; color: var(--ink-2); align-self: end; text-align: center; line-height: 1.25;
+  padding: 0 2px 3px; overflow-wrap: anywhere; }
+.sd-row { font-size: 12.5px; color: var(--ink); text-align: right; align-self: center; padding: 0 8px 0 0;
+  white-space: nowrap; position: sticky; left: 0; background: var(--panel); z-index: 1; }
+.sd-cell { font: inherit; cursor: pointer; border: 1.5px dashed var(--line-2); border-radius: 4px;
+  background: transparent; color: var(--ink); padding: 6px 4px; min-height: 52px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.sd-cell.base { border: 1.5px solid var(--accent); background: var(--accent-soft); }
+.sd-empty { min-height: 52px; }
+.sd-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; max-width: 56px; }
+.sd-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-2); display: block; }
+.sd-n { font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+.sd-gene .sd-cell { padding: 0; min-height: 0; height: 96px; }
+.sd-gene .sd-cell svg { width: 100%; height: 100%; display: block; }
+.sd-axis { width: 34px; height: 96px; align-self: start; }
+.sd-axis text { font-family: var(--mono); font-size: 9.5px; fill: var(--ink-3); }
+.sd-grid-line { stroke: var(--line); stroke-width: 0.6; vector-effect: non-scaling-stroke; }
+.sd-med { stroke: var(--ink); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.sd-dot { fill: var(--ink-2); }
+.sd-cell.base .sd-dot { fill: var(--accent); }
+.sd-h3 { font-size: 14px; margin: 18px 0 6px; }
+.sd-contrasts td { font-size: 12.5px; }
+.sd-contrasts tr[data-ids] { cursor: pointer; }
+.sd-cell:focus-visible, .sd-contrasts tr:focus-visible, tr[data-i]:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 1px; }
+/* Selection: outline what is selected, dim the rest; in a comparison the control group is
+   dashed and the compared group solid, and the readout names both. */
+.sd[data-sel] .sd-cell[data-hot=""] { opacity: 0.35; }
+.sd .sd-cell[data-hot="all"], .sd .sd-cell[data-hot="part"] { outline: 2px solid var(--ink); outline-offset: 1px; }
+.sd .sd-cell[data-hot="part"] { outline-style: dotted; }
+.sd .sd-cell[data-role="ctrl"] { outline-style: dashed; }
+.sd[data-sel] .sd-dot[data-hot=""] { opacity: 0.3; }
+.sd[data-sel] .sd-dots i[data-hot=""] { opacity: 0.3; }
+[data-sel] tr[data-i][data-hot=""] { opacity: 0.55; }
+[data-sel] tr[data-i][data-hot="all"] { background: var(--accent-soft); }
+@media (max-width: 640px) { .sd { --sd-cell: 54px; --sd-gcell: 76px; } }
+.sd-cscroll { max-height: 440px; overflow-y: auto; }
+.dmap-study { font-size: 12.5px; white-space: nowrap; align-self: center; }
+@media (max-width: 640px) { .sd-contrasts td, .sd-contrasts th { white-space: nowrap; } }
+@media (max-width: 640px) { .dmap-foot { flex-wrap: wrap; } .dmap-readout { flex: 1 1 100%; } }

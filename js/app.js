@@ -2,15 +2,18 @@ import { el, clear, fmt } from './core/dom.js';
 import { studyMeta, cleanCitation } from './core/cite.js';
 import { getGene, loadManifest, hapLabel, loadExprStudies,
          loadExprSamples, searchGenesRanked, loadFacets, facetRow, arrayAlleles, loadStructure, dataVersion,
-         normalizeQuery } from './core/data.js';
+         normalizeQuery, loadContrasts, loadExprVector } from './core/data.js';
 import { paperExpr, paperHighest, lsgStatus, qcBanner, isQcFlagged, releaseLine, CONTACT, REPO_URL } from './core/paper.js';
 import { glossaryView } from './modules/glossary.js';
 import { downloadsView } from './modules/downloads.js';
+import { linkHub, brush } from './core/designmap.js';
+import { designOf, designDrawing, contrastList, studyContrasts } from './core/studydesign.js';
+import { FACTOR_LABEL } from './core/studydesigns.js';
 import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE,
          EVIDENCE_TIERS } from './core/registry.js';
 import { dupTypeLabel } from './modules/duplication.js';
 import { classBadge } from './modules/synteny.js';
-import { route, start, navigate } from './core/router.js';
+import { route, start, navigate, query } from './core/router.js';
 import { disposeTree, onDispose } from './core/lifecycle.js';
 import { browseView, browseHref, FILTERS } from './core/browse.js';
 import { QUESTIONS, countQuestion } from './core/questions.js';
@@ -216,7 +219,7 @@ route(/^\/$/, async (navigation) => {
   }, heroInput, el('button', { type: 'submit', class: 'btn primary' }, 'Search'));
   const EXAMPLES = [['PtXaTreH.05G120200', '#/gene/PtXaTreH.05G120200'],
     ['CCoAOMT1', '#/search/CCoAOMT1'], ['Potri.010G150700', '#/search/Potri.010G150700'],
-    ['arabinogalactan', '#/search/arabinogalactan'], ['AT1G06515', '#/search/AT1G06515'],
+    ['arabinogalactan', '#/search/arabinogalactan'], ['AT1G20440', '#/search/AT1G20440'],
     ['PF00249', '#/search/PF00249']];
 
   // Where to go next, as places rather than as the module list: each tile is a page.
@@ -424,12 +427,13 @@ function glanceCard(g, man) {
       holder.textContent = '';
       holder.className = '';
       if (!w.length) { holder.append(el('span', { class: 'muted' }, 'none of its own, and none in its tandem array')); return; }
-      holder.append('none of its own; array-level link via ',
+      // Native append prints a null as the word 'null', so drop the absent parts first.
+      holder.append(...['none of its own; array-level link via ',
         el('a', { href: `#/array/${r.arrayId}`, class: 'mono' }, r.arrayId), ': ',
         el('a', { href: `#/gene/${w[0].allele}`, class: 'mono' }, w[0].allele),
         el('span', { class: 'muted' }, ' (not a 1:1 call)'),
         w.length > 1 ? el('span', { class: 'muted' }, ` and ${w.length - 1} more`) : null,
-        r.counted === false ? el('span', { class: 'muted' }, ' (array removed by the pseudogene screen)') : null);
+        r.counted === false ? el('span', { class: 'muted' }, ' (array removed by the pseudogene screen)') : null].filter(Boolean));
     }).catch(() => { holder.textContent = 'none of its own'; });
   }
   // A gene in a copy-search panel: the route to the other haplotype's copies, which the allele
@@ -1014,7 +1018,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
         el('th', {}, 'Layout'), el('th', { class: 'num' }, 'Reads'),
         el('th', { class: 'num' }, 'Aligned %'),
         anyNotes ? el('th', {}, 'Notes') : null)),
-      el('tbody', {}, ...mine.map((x) => el('tr', {},
+      el('tbody', {}, ...mine.map((x) => el('tr', { 'data-i': all.indexOf(x) },
         el('td', { class: 'mono', style: 'font-size:11.5px' }, x.label),
         el('td', {}, cell(x.tissue_analysis || x.tissue_full || x.tissue)),
         el('td', {}, cell(x.treatment)),
@@ -1033,6 +1037,38 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
       + `${mine.filter((x) => x.ctrl === 'perturbation').length} perturbation. `
       + 'Only WT controls contribute to the per-tissue medians shown on the array and allele-pair pages.'));
 
+  // The design, drawn. With ?gene=<id> the same drawing carries that gene's values.
+  const hub = linkHub();
+  const d = designOf(id, all);
+  const geneId = (query().gene || '').trim();
+  let gene = null, vec = null, geneNote = null;
+  if (geneId) {
+    try { gene = await getGene(geneId); } catch { gene = null; }
+    vec = gene ? await loadExprVector(gene).catch(() => null) : null;
+    if (!vec) geneNote = el('p', { class: 'warn' }, `No expression profile for “${geneId}”.`);
+  }
+  const cs = studyContrasts(await loadContrasts(), d);
+  const geneBox = el('form', { class: 'sd-genebox', onsubmit: (e) => {
+    e.preventDefault();
+    const v = e.target.elements.g.value.trim();
+    navigate(`/study/${id}${v ? '?gene=' + encodeURIComponent(v) : ''}`);
+  } },
+    el('label', { for: 'sd-g' }, vec ? 'Showing ' : 'Show one gene on this design '),
+    el('input', { id: 'sd-g', name: 'g', value: vec ? gene.id : '', placeholder: 'PtXaTreH.05G120200',
+      autocomplete: 'off', spellcheck: 'false' }),
+    el('button', { type: 'submit', class: 'btn' }, vec ? 'Change' : 'Show'),
+    vec ? el('a', { href: `#/gene/${gene.id}` }, 'gene page') : null,
+    vec ? el('a', { href: `#/study/${id}` }, 'design only') : null);
+  const designCard = el('div', { class: 'card', 'data-card': 'study-design' },
+    el('h2', {}, vec ? `${gene.id} across this study` : 'Design'),
+    el('p', { class: 'sd-lede' }, `${fmt(d.ids.length)} samples in ${d.groups.length} group${d.groups.length === 1 ? '' : 's'}`
+      + (d.varying.length ? ` that differ by ${[...d.panels, d.rows, ...d.cols].filter(Boolean).map((f) => FACTOR_LABEL[f]).join(', ')}` : '')
+      + '. A filled group is wild-type control samples.'),
+    geneBox, geneNote,
+    designDrawing(d, all, studies, hub, vec, vec ? gene.id : ''),
+    cs.length ? el('h3', { class: 'sd-h3' }, `Comparisons in this study (${cs.length})`) : null,
+    contrastList(cs, all, hub, vec, d));
+
   // Lead with the paper, not the serial number; the number stays in the subtitle.
   const meta = studyMeta(s.citation);
   setView(el('div', {},
@@ -1047,8 +1083,9 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     s.flags.includes('prefer_counts_over_tpm') && el('div', { class: 'warn' },
       'This study\'s single-end fragment length was not individually calibrated. Effective-length ',
       'inflation is measurable here, prefer est_counts over TPM/FPKM for this study.'),
+    designCard,
     el('div', { class: 'card' },
-      el('h2', {}, 'Design'),
+      el('h2', {}, 'Factors and source'),
       el('p', {}, factorRow('Tissue', s.tissues), factorRow('Panel', s.panel_type),
         factorRow('Genotype', s.genotypes), factorRow('Treatment', s.treatments),
         factorRow('Growth', s.growth_conditions), factorRow('Additional', s.additional_conditions)),
@@ -1056,6 +1093,18 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
       s.doi.length ? el('p', {}, ...s.doi.map((d) => el('a', { href: d, target: '_blank', rel: 'noopener' }, d))) : null),
     sampleCard,
   ));
+  // Sample rows join the same selection as the drawing.
+  sampleCard.querySelectorAll('tbody tr[data-i]').forEach((tr) => {
+    const i = +tr.dataset.i;
+    tr.tabIndex = 0;
+    brush(tr, hub, { key: `s:${i}`, label: all[i].label, ids: new Set([i]) });
+  });
+  hub.on((sel) => {
+    sampleCard.toggleAttribute('data-sel', !!sel);
+    sampleCard.querySelectorAll('tbody tr[data-i]').forEach((tr) => {
+      tr.dataset.hot = sel && sel.ids.has(+tr.dataset.i) ? 'all' : '';
+    });
+  });
   markNav();
 });
 
