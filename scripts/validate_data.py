@@ -10,7 +10,7 @@ pointer would 404 only for the unlucky gene; an allele link to a nonexistent gen
 dead end a reader hits before a maintainer does.
 """
 import argparse
-import gzip, json, os, re, struct, subprocess, sys
+import glob, gzip, json, os, re, struct, subprocess, sys
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -926,6 +926,36 @@ def main():
         # zip() truncates to the shorter list, so a column added to build_facets.py without
         # being added here would be compared against nothing and pass silently. Assert the
         # widths agree first -- the check below is only meaningful if they do.
+        # Sequences: every gene points into its haplotype's sequence file, the ranges tile the
+        # file exactly (no gap, no overlap), and a sample of records decodes to a protein that
+        # its own CDS translates to (an independent check of build_sequences.py's gate).
+        import zlib as _z
+        seq_bad = []
+        for hap in ("hap1", "hap2"):
+            path = os.path.join(ROOT, "data", "seq", f"seq_{hap}.gzb")
+            if not os.path.exists(path):
+                seq_bad.append(f"{path} missing"); continue
+            blob = open(path, "rb").read()
+            spans = sorted((rec.get("sq") or [None, None])[0:2] + [gid] for gid, (h, _, rec) in genes.items() if h == hap)
+            if any(s[0] is None for s in spans):
+                seq_bad.append(f"{hap}: {sum(s[0] is None for s in spans)} genes without sq"); continue
+            pos = 0
+            for off, n, gid in spans:
+                if off != pos:
+                    seq_bad.append(f"{hap}: gap or overlap at {gid}"); break
+                pos = off + n
+            if pos != len(blob):
+                seq_bad.append(f"{hap}: ranges end at {pos}, file is {len(blob)} bytes")
+            codon = {a + b + c: "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG"[16 * i + 4 * j + k]
+                     for i, a in enumerate("TCAG") for j, b in enumerate("TCAG") for k, c in enumerate("TCAG")}
+            for off, n, gid in spans[::max(1, len(spans) // 200)]:
+                r = json.loads(_z.decompress(blob[off:off + n], 31))
+                tr = "".join(codon.get(r["c"][i:i + 3].upper(), "X") for i in range(0, len(r["c"]) - 2, 3)).rstrip("*")
+                if tr != r["p"]:
+                    seq_bad.append(f"{gid}: CDS does not translate to the protein")
+        check("every gene has its sequences, the ranges tile each file, and sampled CDS translate to their proteins",
+              not seq_bad, "; ".join(seq_bad[:4]))
+
         # Gene-age cross-checks: only on candidates, every candidate has one, found is within
         # ran, and the HAP1-only checks never appear as run on a HAP2 gene.
         xc_bad = []
@@ -1028,13 +1058,40 @@ def main():
               sha is not None and sha == cman.get("source_sha256"),
               "source missing" if sha is None else f"{sha[:12]} vs manifest {str(cman.get('source_sha256'))[:12]}")
 
+    # Search shards: {token: {"ids": [...], "f": [field bits]}} (older builds: a bare id list).
     sdir = f"{DATA}/index/search"
-    oob = 0
+    oob = shape = 0
+    at_tok = re.compile(r"^at[1-5cm]g\d{5}$")
+    at_of = {}
     for fn in sorted(os.listdir(sdir)):
-        for tok, ids in json.load(open(os.path.join(sdir, fn))).items():
-            if ids and (ids[0] < 0 or ids[-1] >= len(idx)):
+        for tok, v in json.load(open(os.path.join(sdir, fn))).items():
+            ids = v if isinstance(v, list) else v.get("ids", [])
+            if not isinstance(v, list) and len(v.get("f", [])) != len(ids):
+                shape += 1
+            if ids and (min(ids) < 0 or max(ids) >= len(idx)):
                 oob += 1
+            if at_tok.match(tok):
+                # field bit 4 = Arabidopsis locus. A description that names a locus ("At2g23090-like"
+                # domain) is a description match and is labelled as one, so it is not counted here.
+                marks = [4] * len(ids) if isinstance(v, list) else v["f"]
+                for i, b in zip(ids, marks):
+                    if b & 4:
+                        at_of.setdefault(i, set()).add(tok)
     check("search postings are in range", oob == 0, f"{oob} tokens out of range")
+    check("search postings carry one field mark per gene", shape == 0, f"{shape} tokens with mismatched marks")
+    # 0.19.0 invariant: a gene whose page names an Arabidopsis locus is found under exactly that locus.
+    pos = {g: i for i, g in enumerate(idx)}
+    page_at = {}
+    for f in glob.glob(f"{DATA}/genes/hap*/**/*.json", recursive=True):
+        for g, r in json.load(open(f)).items():
+            a = (r.get("ann") or {}).get("at") if isinstance(r, dict) else None
+            if a:
+                page_at[g] = a.lower()
+    miss = [g for g, a in page_at.items() if a not in at_of.get(pos[g], set())]
+    stale = [g for g, a in page_at.items() if at_of.get(pos[g], set()) - {a}]
+    check("search finds every gene under the Arabidopsis locus its page names, and no other locus",
+          page_at and not miss and not stale,
+          f"{len(page_at)} genes; {len(miss)} not findable, {len(stale)} under another locus")
 
     # Publish the verdicts. Written even when a gate fails -- a build that shipped with a
     # known failure should say so on the site, not hide it.

@@ -6,7 +6,8 @@
 // not be a filter anyone waits for.
 import { CATEGORY, CATEGORY_ORDER } from './relationship.js';
 import { el, clear, fmt } from './dom.js';
-import { loadFacets, facetRow, loadGeneIndex, loadDescIndex, loadStructure, dataVersion } from './data.js';
+import { loadFacets, facetRow, loadGeneIndex, loadDescIndex, getGene, loadSequences, dataVersion } from './data.js';
+import { KINDS, fastaRecord } from './fasta.js';
 import { query, setQuery } from './router.js';
 import { onDispose } from './lifecycle.js';
 import {
@@ -698,43 +699,44 @@ export async function browseView(navigation) {
   });
   onDispose(root, unsubscribeSets);
 
-  // Protein FASTA for the current selection, from the structure buckets (ESMFold input
-  // sequences, 40,685 genes). Capped: each bucket is a separate fetch, and a whole-genome click
-  // should not pull most of 94 MB. Genes without a model are listed in the file's last line.
+  // FASTA for the current selection: protein, CDS, transcript or genomic span, from the annotation
+  // release's own sequences (data/seq). One small range read per gene, so the cap is generous.
   const actStatus = el('p', { class: 'muted bz-actstatus', role: 'status', 'aria-live': 'polite', 'data-browse-action-status': '' });
-  const FASTA_MAX = 300;
-  const faBtn = el('button', { type: 'button', class: 'btn', 'data-browse-fasta': '' }, 'Protein FASTA');
+  const FASTA_MAX = 2000;
+  const kindSel = el('select', { 'aria-label': 'Which sequence', 'data-browse-fasta-kind': '' },
+    ...KINDS.map(([k, name]) => el('option', { value: k }, name)));
+  const faBtn = el('button', { type: 'button', class: 'btn', 'data-browse-fasta': '' }, 'FASTA');
   faBtn.addEventListener('click', async () => {
     const ids = state.matches.map((i) => state.ids[i]);
+    const kind = kindSel.value;
+    const name = KINDS.find((x) => x[0] === kind)[1];
     if (ids.length > FASTA_MAX) {
-      actStatus.textContent = (`Protein FASTA is limited to ${FASTA_MAX} genes; this selection has ${fmt(ids.length)}. Narrow the filters or paste a gene list.`);
+      actStatus.textContent = (`FASTA is limited to ${fmt(FASTA_MAX)} genes; this selection has ${fmt(ids.length)}. Narrow the filters or paste a gene list.`);
       return;
     }
     faBtn.disabled = true;
-    const out = []; const missing = [];
+    const out = new Map(); const missing = [];
     let done = 0;
     const queue = [...ids];
     const worker = async () => {
       while (queue.length) {
         const id = queue.shift();
         try {
-          const s = await loadStructure(id);
-          if (s && s.seq) out.push([id, s.seq]); else missing.push(id);
+          const g = await getGene(id);
+          const sq = g ? await loadSequences(g) : null;
+          if (sq) out.set(id, fastaRecord(g, kind, sq[kind])); else missing.push(id);
         } catch { missing.push(id); }
         done += 1;
         faBtn.textContent = `Fetching ${done}/${ids.length}…`;
       }
     };
-    await Promise.all(Array.from({ length: 6 }, worker));
-    const order = new Map(ids.map((id, i) => [id, i]));
-    out.sort((a, b) => order.get(a[0]) - order.get(b[0]));
-    const text = out.map(([id, seq]) => `>${id} len=${seq.length} source=ESMFold input sequence, 717 atlas v${dataVersion()}\n`
-      + seq.replace(/(.{60})/g, '$1\n').replace(/\n$/, '')).join('\n') + '\n'
-      + (missing.length ? `; no protein model for ${missing.length} gene(s): ${missing.join(' ')}\n` : '');
-    download(`717atlas_selection_${out.length}proteins.faa`, text, 'text/plain;charset=utf-8');
-    actStatus.textContent = (`Downloaded ${fmt(out.length)} protein sequences`
-      + (missing.length ? `; ${fmt(missing.length)} gene(s) have no model and are listed at the end of the file.` : '.'));
-    faBtn.textContent = 'Protein FASTA';
+    await Promise.all(Array.from({ length: 8 }, worker));
+    const text = ids.filter((id) => out.has(id)).map((id) => out.get(id)).join('')
+      + (missing.length ? `; no sequence for ${missing.length} gene(s): ${missing.join(' ')}\n` : '');
+    download(`717atlas_selection_${out.size}_${name.toLowerCase()}.${kind === 'p' ? 'faa' : 'fna'}`, text, 'text/plain;charset=utf-8');
+    actStatus.textContent = (`Downloaded ${fmt(out.size)} ${kind === 'c' ? 'CDS' : name.toLowerCase()} sequences`
+      + (missing.length ? `; ${fmt(missing.length)} could not be fetched and are listed at the end of the file.` : '.'));
+    faBtn.textContent = 'FASTA';
     faBtn.disabled = false;
   });
 
@@ -755,14 +757,19 @@ export async function browseView(navigation) {
           });
           renderSets();
           const persistence = storageStatus();
-          setSavedSetStatus(`Saved “${set.name}” (${fmt(set.ids.length)} genes). ${persistence.message}`);
+          const msg = `Saved “${set.name}” (${fmt(set.ids.length)} genes). ${persistence.message}`;
+          setSavedSetStatus(msg);
+          // The saved-sets list sits below the table, folded; say so beside the button too.
+          actStatus.textContent = `${msg} It is listed under Saved sets, below the table.`;
+          setsFold.open = true;
         } catch (error) {
           setSavedSetStatus(error?.message || 'Could not save this gene set.');
+          actStatus.textContent = error?.message || 'Could not save this gene set.';
         }
       },
       class: 'btn',
     }, 'Save as set'),
-    faBtn,
+    el('span', { class: 'bz-fasta' }, kindSel, faBtn),
     el('button', {
       type: 'button',
       onclick: () => {
@@ -841,6 +848,11 @@ export async function browseView(navigation) {
   syncSide();
   mq.addEventListener?.('change', syncSide);
   onDispose(root, () => mq.removeEventListener?.('change', syncSide));
+  const setsFold = el('details', { class: 'card-fold bz-sets' },
+    el('summary', {}, el('span', { class: 'fold-title' }, 'Saved sets'),
+      el('span', { class: 'fold-why' }, 'gene IDs, filters and data version, kept in this browser')),
+    el('div', { class: 'card' },
+      savedSetActions, savedSetStatus, setsHolder));
   root.append(el('div', { class: 'bz-layout' },
     side,
     el('div', { class: 'bz-main' },
@@ -849,11 +861,7 @@ export async function browseView(navigation) {
       actStatus,
       el('div', { class: 'card bz-results' }, tableHolder, pager),
       notes,
-      el('details', { class: 'card-fold bz-sets' },
-        el('summary', {}, el('span', { class: 'fold-title' }, 'Saved sets'),
-          el('span', { class: 'fold-why' }, 'gene IDs, filters and data version, kept in this browser')),
-        el('div', { class: 'card' },
-          savedSetActions, savedSetStatus, setsHolder)))));
+      setsFold)));
 
   const [facets, ids] = await Promise.all([loadFacets(), loadGeneIndex()]);
   if (navigation && !navigation.isCurrent()) return root;

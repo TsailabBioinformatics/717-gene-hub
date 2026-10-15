@@ -24,8 +24,9 @@ import mirror from '../modules/mirror.js';
 import scrubber from '../modules/scrubber.js';
 import promoter from '../modules/promoter.js';
 import about from '../modules/about.js';
+import sequence from '../modules/sequence.js';
 
-export const MODULES = [annotation, locus, mirror, scrubber, promoter, synteny, phylostrat,
+export const MODULES = [annotation, sequence, locus, mirror, scrubber, promoter, synteny, phylostrat,
   duplayers, duplication, copies, dupheatmap, protein, expression, about];
 export const byId = (id) => MODULES.find((m) => m.id === id);
 
@@ -45,7 +46,7 @@ export const byId = (id) => MODULES.find((m) => m.id === id);
 // partway should have stopped before the weakest evidence, not in the middle of it.
 export const GENE_SECTIONS = [
   { id: 'identity', label: 'Identity',
-    modules: ['annotation'],
+    modules: ['annotation', 'sequence'],
     blurb: 'What this gene is, its allele on the other haplotype, and selection on both comparisons.' },
   { id: 'duplication', label: 'Duplication',
     modules: ['duplayers', 'duplication', 'copies', 'dupheatmap'],
@@ -92,6 +93,7 @@ export const EVIDENCE_TIERS = {
 };
 export const CARD_EVIDENCE = {
   location: [1, 'from the genome'],
+  sequence: [1, 'from the genome'],             // the annotation release's own sequences
   annotation: [3, 'by homology'],               // Function: Phytozome descriptions, GO, Pfam
   allele: [1, 'from the genome'],               // the syntelog map between the two haplotypes
   relationship: [1, 'from the genome'],         // syntenic groups across the two haplotypes

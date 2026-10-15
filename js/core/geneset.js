@@ -161,6 +161,9 @@ function normaliseDocument(value) {
   if (value.kind != null && value.kind !== DOCUMENT_KIND) {
     throw geneSetError('The selected JSON belongs to a different kind of document.');
   }
+  if (value.schema_version == null) {
+    throw geneSetError('The selected file is not a saved-sets export from this atlas (use “Export sets JSON” to make one).');
+  }
   if (value.schema_version !== SCHEMA_VERSION) {
     throw geneSetError(`This file uses saved-set schema ${String(value.schema_version)}; version ${SCHEMA_VERSION} is required.`);
   }

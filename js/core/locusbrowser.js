@@ -41,7 +41,7 @@ export function tokens() {
  *  `refresh()` re-measures (resize, DPR); `redraw()` repaints at the current size. */
 export function makeStage(height, extraClass = '') {
   const stage = el('div', { class: `locus-stage map-stage ${extraClass}`, style: `height:${height}px` });
-  const canvas = el('canvas', { class: 'locus-canvas map-canvas' });
+  const canvas = el('canvas', { class: 'locus-canvas map-canvas', role: 'img', 'aria-label': 'Genome map drawing' });
   stage.append(canvas);
   const ctx = canvas.getContext('2d', { alpha: false });
   let view = { w: 0, h: 0, dpr: 0 };

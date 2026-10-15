@@ -9,7 +9,7 @@
      own data_version at boot: if they differ, the reader is holding a cached build and is told
      so, because a stale script against fresh data returns confidently wrong counts rather than
      an error. Held equal to VERSION by scripts/check_version.py. -->
-<meta name="atlas-build-version" content="0.20.0">
+<meta name="atlas-build-version" content="0.21.0">
 <title>Poplar 717 gene atlas</title>
 <meta name="description" content="Gene atlas for hybrid poplar 717 (Populus tremula × alba), haplotype-resolved v5.1. Synteny, phylostratigraphy, tandem duplication, and a 652-sample expression atlas, one gene page at a time. A static site with no application server.">
 <meta property="og:type" content="website">
@@ -35,6 +35,7 @@
 <link rel="modulepreload" href="js/core/data.js">
 <link rel="modulepreload" href="js/core/designmap.js">
 <link rel="modulepreload" href="js/core/dom.js">
+<link rel="modulepreload" href="js/core/fasta.js">
 <link rel="modulepreload" href="js/core/geneset.js">
 <link rel="modulepreload" href="js/core/lifecycle.js">
 <link rel="modulepreload" href="js/core/locusbrowser.js">
@@ -51,6 +52,7 @@
 <link rel="modulepreload" href="js/modules/about.js">
 <link rel="modulepreload" href="js/modules/annotation.js">
 <link rel="modulepreload" href="js/modules/arrays.js">
+<link rel="modulepreload" href="js/modules/changes.js">
 <link rel="modulepreload" href="js/modules/copies.js">
 <link rel="modulepreload" href="js/modules/downloads.js">
 <link rel="modulepreload" href="js/modules/dupheatmap.js">
@@ -68,23 +70,28 @@
 <link rel="modulepreload" href="js/modules/promoter.js">
 <link rel="modulepreload" href="js/modules/protein.js">
 <link rel="modulepreload" href="js/modules/scrubber.js">
+<link rel="modulepreload" href="js/modules/sequence.js">
 <link rel="modulepreload" href="js/modules/status.js">
 <link rel="modulepreload" href="js/modules/synteny.js">
 <!-- modulepreload:end -->
 </head>
 <body>
+<a class="skip" href="#/">Skip to content</a>
 <header class="top">
   <div class="brand"><a href="#/" aria-label="717 gene atlas, home"><svg class="leaf" viewBox="0 0 100 116" aria-hidden="true"><path class="blade" d="M50.0,3.9 L51.3,4.1 L52.6,4.9 L53.8,6.2 L54.9,7.7 L56.0,9.4 L56.9,10.9 L57.9,12.2 L58.8,13.2 L59.7,13.9 L60.7,14.5 L61.7,15.0 L62.6,15.5 L63.6,16.0 L64.5,16.6 L65.4,17.1 L66.3,17.6 L67.2,18.0 L68.3,18.3 L69.3,18.5 L70.4,18.8 L71.5,19.1 L72.4,19.6 L73.2,20.2 L73.9,21.0 L74.6,21.9 L75.3,22.7 L76.0,23.4 L76.8,24.0 L77.7,24.6 L78.7,25.0 L79.6,25.6 L80.5,26.2 L81.3,26.9 L81.8,27.8 L82.3,28.7 L82.7,29.7 L83.1,30.6 L83.5,31.5 L84.2,32.3 L84.9,33.1 L85.7,33.8 L86.4,34.6 L87.1,35.4 L87.6,36.3 L87.8,37.3 L88.0,38.3 L88.0,39.3 L88.1,40.3 L88.4,41.3 L88.7,42.3 L89.2,43.2 L89.7,44.1 L90.2,45.0 L90.6,46.0 L90.7,47.0 L90.7,48.0 L90.5,49.0 L90.3,50.0 L90.1,51.0 L90.0,52.0 L90.1,53.0 L90.3,54.0 L90.5,55.0 L90.7,56.0 L90.7,57.0 L90.5,58.0 L90.1,59.0 L89.6,59.9 L89.0,60.8 L88.5,61.7 L88.0,62.6 L87.8,63.5 L87.6,64.5 L87.5,65.5 L87.3,66.5 L86.9,67.5 L86.4,68.3 L85.7,69.1 L84.9,69.8 L84.0,70.5 L83.2,71.1 L82.6,71.9 L82.0,72.7 L81.5,73.5 L81.1,74.4 L80.6,75.3 L79.9,76.0 L79.2,76.7 L78.2,77.2 L77.2,77.6 L76.3,78.0 L75.3,78.4 L74.5,78.9 L73.7,79.6 L73.1,80.2 L72.4,80.9 L71.6,81.6 L70.8,82.1 L69.9,82.5 L68.9,82.8 L67.8,82.9 L66.8,83.0 L65.8,83.2 L64.9,83.5 L64.1,83.9 L63.2,84.3 L62.3,84.8 L61.4,85.1 L60.5,85.3 L59.5,85.4 L58.5,85.5 L57.6,85.5 L56.6,85.5 L55.6,85.5 L54.7,85.6 L53.8,85.7 L52.8,85.8 L51.9,85.9 L50.9,85.9 L50.0,85.8 L49.1,85.9 L48.1,85.9 L47.2,85.8 L46.2,85.7 L45.3,85.6 L44.4,85.5 L43.4,85.5 L42.4,85.5 L41.5,85.5 L40.5,85.4 L39.5,85.3 L38.6,85.1 L37.7,84.8 L36.8,84.3 L35.9,83.9 L35.1,83.5 L34.2,83.2 L33.2,83.0 L32.2,82.9 L31.1,82.8 L30.1,82.5 L29.2,82.1 L28.4,81.6 L27.6,80.9 L26.9,80.2 L26.3,79.6 L25.5,78.9 L24.7,78.4 L23.7,78.0 L22.8,77.6 L21.8,77.2 L20.8,76.7 L20.1,76.0 L19.4,75.3 L18.9,74.4 L18.5,73.5 L18.0,72.7 L17.4,71.9 L16.8,71.1 L16.0,70.5 L15.1,69.8 L14.3,69.1 L13.6,68.3 L13.1,67.5 L12.7,66.5 L12.5,65.5 L12.4,64.5 L12.2,63.5 L12.0,62.6 L11.5,61.7 L11.0,60.8 L10.4,59.9 L9.9,59.0 L9.5,58.0 L9.3,57.0 L9.3,56.0 L9.5,55.0 L9.7,54.0 L9.9,53.0 L10.0,52.0 L9.9,51.0 L9.7,50.0 L9.5,49.0 L9.3,48.0 L9.3,47.0 L9.4,46.0 L9.8,45.0 L10.3,44.1 L10.8,43.2 L11.3,42.3 L11.6,41.3 L11.9,40.3 L12.0,39.3 L12.0,38.3 L12.2,37.3 L12.4,36.3 L12.9,35.4 L13.6,34.6 L14.3,33.8 L15.1,33.1 L15.8,32.3 L16.5,31.5 L16.9,30.6 L17.3,29.7 L17.7,28.7 L18.2,27.8 L18.7,26.9 L19.5,26.2 L20.4,25.6 L21.3,25.0 L22.3,24.6 L23.2,24.0 L24.0,23.4 L24.7,22.7 L25.4,21.9 L26.1,21.0 L26.8,20.2 L27.6,19.6 L28.5,19.1 L29.6,18.8 L30.7,18.5 L31.7,18.3 L32.8,18.0 L33.7,17.6 L34.6,17.1 L35.5,16.6 L36.4,16.0 L37.4,15.5 L38.3,15.0 L39.3,14.5 L40.3,13.9 L41.2,13.2 L42.1,12.2 L43.1,10.9 L44.0,9.4 L45.1,7.7 L46.2,6.2 L47.4,4.9 L48.7,4.1Z"/><path class="vein" d="M50,112 L50,18 M50,74 Q38,64 26,60 M50,74 Q62,64 74,60 M50,56 Q40,46 32,40 M50,56 Q60,46 68,40 M50,40 Q45,33 41,29 M50,40 Q55,33 59,29"/></svg><span class="wm">717 <i>gene atlas</i></span></a></div>
   <nav><a href="#/">Home</a><a href="#/browse">Browse</a><a href="#/map">Map</a></nav>
   <div class="grow"></div>
   <div class="search">
-    <input id="q" type="search" placeholder="Gene ID or name, Potri ID, AT locus, Pfam…" autocomplete="off" spellcheck="false">
-    <div id="hits" class="hits" style="display:none"></div>
+    <label for="q" class="vh">Search genes</label>
+    <input id="q" type="search" placeholder="Gene ID, gene name or keyword" autocomplete="off" spellcheck="false"
+      role="combobox" aria-expanded="false" aria-controls="hits" aria-autocomplete="list">
+    <div id="hits" class="hits" role="listbox" aria-label="Search suggestions" style="display:none"></div>
+    <p id="hits-status" class="vh" role="status" aria-live="polite"></p>
   </div>
 </header>
-<main id="view"><div class="empty">Loading…</div></main>
+<main id="view" tabindex="-1"><div class="empty">Loading…</div></main>
 <footer class="bot">
-  Poplar 717 gene atlas, Tsai lab, University of Georgia. Data are provided for research use; a manuscript will be submitted soon, and until it is published please cite this website (version and access date): <a href="#/module/about">how to cite</a>.
+  Poplar 717 gene atlas, Tsai lab, University of Georgia. Data are provided for research use; a manuscript will be submitted soon, and until it is published please cite this website (version and access date): <a href="#/module/about">how to cite</a>. <a href="#/changes">What changed</a>.
 </footer>
 <script type="module" src="js/app.js"></script>
 </body>

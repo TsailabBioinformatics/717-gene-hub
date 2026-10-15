@@ -199,7 +199,7 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.20.0",
+ "data_version": "0.21.0",
  "dissertation": {
   "analysis_repository_commit": "59eec6bd",
   "arabidopsis_hit_kept_from_older_annotation": 372,
@@ -1346,6 +1346,183 @@
    "HAP1": 318,
    "HAP2": 235
   }
+ },
+ "search": {
+  "dropped_common_words": 5,
+  "fields": {
+   "1": "description",
+   "128": "gene name",
+   "16": "Pfam/PANTHER name",
+   "2": "Arabidopsis hit description",
+   "32": "Arabidopsis symbol (by homology)",
+   "4": "Arabidopsis locus",
+   "64": "P. trichocarpa ortholog",
+   "8": "Pfam/PANTHER accession"
+  },
+  "genes_with_symbol": 31032,
+  "shards": [
+   "0",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "a0",
+   "a1",
+   "a2",
+   "a3",
+   "a4",
+   "a5",
+   "a6",
+   "a7",
+   "a8",
+   "a9",
+   "aa",
+   "ab",
+   "ac",
+   "ad",
+   "ae",
+   "af",
+   "ag",
+   "ah",
+   "ai",
+   "aj",
+   "ak",
+   "al",
+   "am",
+   "an",
+   "ao",
+   "ap",
+   "aq",
+   "ar",
+   "as",
+   "at",
+   "au",
+   "av",
+   "aw",
+   "ax",
+   "az",
+   "b",
+   "c",
+   "d",
+   "e",
+   "f",
+   "g",
+   "h",
+   "i",
+   "j",
+   "k",
+   "l",
+   "m",
+   "n",
+   "o",
+   "p1",
+   "p2",
+   "p3",
+   "p4",
+   "p5",
+   "p6",
+   "p7",
+   "p8",
+   "p9",
+   "pa",
+   "pb",
+   "pc",
+   "pd",
+   "pe",
+   "pf",
+   "pg",
+   "ph",
+   "pi",
+   "pk",
+   "pl",
+   "pm",
+   "pn",
+   "po",
+   "pp",
+   "pq",
+   "pr",
+   "ps",
+   "pt",
+   "pu",
+   "pv",
+   "pw",
+   "px",
+   "py",
+   "q",
+   "r",
+   "s",
+   "t",
+   "u",
+   "v",
+   "w",
+   "x",
+   "y",
+   "z"
+  ],
+  "split": [
+   "a",
+   "p"
+  ],
+  "stated_arabidopsis_hits_findable": 59534,
+  "tokens": 70142
+ },
+ "sequences": {
+  "fields": {
+   "c": "CDS",
+   "g": "genomic span on the gene's strand",
+   "p": "protein (no terminal stop)",
+   "t": "transcript with UTRs"
+  },
+  "haplotypes": {
+   "hap1": {
+    "bytes": 54966597,
+    "genes": 32137
+   },
+   "hap2": {
+    "bytes": 54562759,
+    "genes": 31823
+   }
+  },
+  "sources": {
+   "hap1_cds": {
+    "file": "PtremulaxPopulusalbaHAP1_717_v5.1.cds_primaryTranscriptOnly.fa",
+    "sha256": "b9fe92eeb204aea83133a4f7b40840c99f54bb30295a466fdc188bc20a1fa52f"
+   },
+   "hap1_genome": {
+    "file": "PtremulaxPopulusalbaHAP1_717_v5.0.fa",
+    "sha256": "c5bbb970e9ca35d303e03f501a504ff264419666f44dab8e2dde5ef37107fde3"
+   },
+   "hap1_protein": {
+    "file": "PtremulaxPopulusalbaHAP1_717_v5.1.protein_primaryTranscriptOnly.fa",
+    "sha256": "6222b4642419257374924b352fb07a18a302454839b3c0c38d801b41b0f2e895"
+   },
+   "hap1_transcript": {
+    "file": "PtremulaxPopulusalbaHAP1_717_v5.1.transcript_primaryTranscriptOnly.fa",
+    "sha256": "d874a8102e204cf6f4b0aa89a14f4fb13e1d3201636dee74fabab4c8112cf24d"
+   },
+   "hap2_cds": {
+    "file": "PtremulaxPopulusalbaHAP2_716_v5.1.cds_primaryTranscriptOnly.fa",
+    "sha256": "3d4764720952870fa71d93d7ebe5ffbd2eeab5452653d76935fa379535b71ce9"
+   },
+   "hap2_genome": {
+    "file": "PtremulaxPopulusalbaHAP2_716_v5.0.fa",
+    "sha256": "cb63144c11d4d4e5dcbbac1e6a499c68f8f482afc5bdbae96f4ab69e4fa56fa2"
+   },
+   "hap2_protein": {
+    "file": "PtremulaxPopulusalbaHAP2_716_v5.1.protein_primaryTranscriptOnly.fa",
+    "sha256": "765f921dc538c20d1723f6bb7136602ccd629423e4cd987534e08507ee5e1f2f"
+   },
+   "hap2_transcript": {
+    "file": "PtremulaxPopulusalbaHAP2_716_v5.1.transcript_primaryTranscriptOnly.fa",
+    "sha256": "3fc61859a6403940d2d54e2e58b90ca39e9230d7d9acda70e16afad2b3ffb059"
+   }
+  },
+  "what": "protein, CDS, transcript and genomic gene span for every gene, from the Phytozome v5.1 primary transcripts on the v5.0 assembly"
  },
  "shards": {
   "hap1/Chr01/0": 249,

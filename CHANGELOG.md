@@ -9,6 +9,47 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.21.0 - 2026-10-14 - Sequences for every gene, a ranked search, keyboard access, a page of changes
+
+**Sequences for every gene (data).** `data/seq/seq_hap{1,2}.gzb` hold protein, CDS, transcript and
+genomic span for all 63,960 genes from the Phytozome v5.1 primary-transcript FASTA (keyed by the
+header's `locus=`) and the v5.0 genome; each shard record gains `sq:[off,len]`. Before this the site
+offered only the 40,686 ESMFold proteins. `build_sequences.py` refuses unless every CDS translates to
+its protein, every CDS sits inside its transcript, every transcript is rebuilt exactly from its exons
+in `gene_exons.gff3`, and every exon lies inside the gene span; a mutated CDS and flipped exon strands
+are planted and must fail. All 63,960 pass. A Sequences card (Copy, FASTA, the protein) joins the
+Identity band; the header's Protein FASTA reads this file; Browse exports any of the four kinds for up
+to 2,000 genes.
+
+**Search index rebuilt from the finished records (data).** `build_search.py` runs after the annotation
+and dissertation patches and writes `{token: {ids, f}}`, where `f` marks the field each posting came
+from (description, Arabidopsis hit description, Arabidopsis locus, Pfam/PANTHER accession or name,
+Arabidopsis symbol, P. trichocarpa ortholog, gene name). Arabidopsis symbols and one-word aliases come
+from Araport11, through each gene's stated Arabidopsis hit: 31,032 genes are findable by one. Words in
+more than 6,000 descriptions are dropped; shards over 400 KB are split by two characters (70,142
+tokens, 102 shards). The 0.19.0 invariant (every one of 59,534 genes found under exactly the locus its
+page names) is enforced by the stage and by a new validator gate, which counts the locus field only:
+seven genes whose description names a domain "At2g23090-like" are found under that word as a
+description match, labelled as one.
+
+**Search ranking (site).** Fields are weighted (gene name, ID, locus and accession above description
+words), exact tokens outrank prefixes, every word must match with a fallback that names the word that
+matched nothing, and a word that matches only by spelling is corrected to its nearest token (edit
+distance) with a note. The dropdown is an ARIA combobox: arrow keys, Enter, Escape, a live result
+count, and the reason each gene matched.
+
+**Keyboard and screen reader (site).** A tab title per page; focus moves to the page heading after
+navigation (not on first load, and not away from a control the reader is using); a skip link; section
+links move focus; the duplication drawing is a group (it holds links); canvases carry labels; smooth
+scrolling respects reduced motion.
+
+**Saved sets (site).** Saving says so beside the button and opens the saved-sets panel; a file that is
+not a saved-sets export is refused in plain words. New browser test for the save, reload, import and
+remove cycle.
+
+**`#/changes` (site).** Reader-facing notes per release, linked from the footer and included in the
+internal-names scan.
+
 ## 0.20.0 - 2026-10-14 - Do other methods agree? Cross-check lines for gene age and tandem duplication
 
 **New per-gene field `dup.xt` on 13,186 genes (data).** The Duplication card says whether three

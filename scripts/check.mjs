@@ -1900,7 +1900,7 @@ for (const [name, gid, want] of [
 {
   const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\/|TD-associated PAV|PAV \(whole array\)|Chapters? [23]\b|dissertation chapter/i;
   const routes = ['/', '/browse', '/arrays', '/array/HAP1_U00120', '/pair/PtXaTreH.05G120200', '/map/hap1/Chr01',
-    '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads',
+    '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads', '/changes',
     '/gene/PtXaTreH.08G070200', '/gene/PtXaAlbH.18G016900', '/gene/PtXaTreH.19G087400',
     '/gene/PtXaAlbH.05G122300', '/gene/PtXaTreH.10G046700', '/gene/PtXaTreH.01G006100', '/family/PtXaTreH.08G070200',
     // (study pages are not scanned: their sample tables print the studies' own sample labels,
@@ -2218,7 +2218,7 @@ await check('gene-promoter-tata-false', '#/gene/PtXaTreH.05G120200',
   await sp.waitForTimeout(1000);
   const stext = await viewText(sp);
   const rows = await sp.$$eval('table.compare tbody tr', (trs) => trs.length);
-  const ok = /compare them all/.test(seeAllText) && stext.includes('matches')
+  const ok = /compared side by side/.test(seeAllText) && stext.includes('matches')
     && rows > 20 && stext.includes('page 1 of') && !serrs.length;
   if (!ok) failures++;
   console.log(`
@@ -3072,8 +3072,8 @@ for (const scheme of ['light', 'dark']) {
 }
 
 // Protein FASTA from the gene header: the downloaded sequence must have the residue count the
-// gene record states (prot.ss.n, from the same ESMFold model), and a gene with no model must
-// say so rather than download an empty file.
+// gene record states (prot.ss.n, from the ESMFold model of the same protein), and since 0.21 a
+// gene with no 3D model downloads its annotated protein too, at the length its button states.
 {
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 900 }, acceptDownloads: true });
   const p = await ctx.newPage();
@@ -3089,11 +3089,14 @@ for (const scheme of ['light', 'dark']) {
     return r['PtXaTreH.05G120200'].prot.ss.n;
   });
   await p.goto(base + '/#/gene/PtXaTreH.01G000200', { waitUntil: 'networkidle' });
-  await p.click('[data-protein-fasta]');
-  await p.waitForTimeout(1500);
+  await p.waitForSelector('[data-protein-fasta]');
+  const [dl2] = await Promise.all([p.waitForEvent('download', { timeout: 20000 }), p.click('[data-protein-fasta]')]);
+  const seq2 = (await (await import('fs')).promises.readFile(await dl2.path(), 'utf8')).split('\n').slice(1).join('').trim();
+  // the button states the length once it has read the sequence
   const none = await p.$eval('[data-protein-fasta]', (b) => b.textContent);
+  const stated = Number((none.match(/\((\d+) aa\)/) || [])[1]);
   const ok = !errs.length && text.startsWith('>PtXaTreH.05G120200 ') && /^[A-Z*]+$/.test(seq)
-    && seq.length === want && /No protein model/.test(none);
+    && seq.length === want && /^[A-Z*]+$/.test(seq2) && seq2.length === stated && stated > 0;
   if (!ok) failures++;
   console.log(`\n### gene:protein-fasta  ${ok ? 'OK' : 'FAIL'}  ${seq.length} aa vs record ${want}; no-model button: "${none}"`);
   errs.forEach((e) => console.log('   !! ' + e));
@@ -3101,7 +3104,7 @@ for (const scheme of ['light', 'dark']) {
 }
 
 // Browse protein FASTA: refuses a whole-genome selection, and for a pasted list writes one
-// record per modelled gene in selection order with the unmodelled ones named at the end.
+// record per gene (every gene has an annotated protein since 0.21).
 {
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 900 }, acceptDownloads: true });
   const p = await ctx.newPage();
@@ -3118,9 +3121,8 @@ for (const scheme of ['light', 'dark']) {
   const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 30000 }), p.click('[data-browse-fasta]')]);
   const text = await (await import('fs')).promises.readFile(await dl.path(), 'utf8');
   const heads = text.split('\n').filter((l) => l.startsWith('>')).map((l) => l.split(' ')[0].slice(1));
-  const ok = !errs.length && /limited to 300/.test(refused) && heads.length === 2
-    && heads.includes('PtXaTreH.05G120200') && heads.includes('PtXaAlbH.05G122300')
-    && /no protein model for 1 gene\(s\): PtXaTreH\.01G000200/.test(text);
+  const ok = !errs.length && /limited to 2,000/.test(refused) && heads.length === 3
+    && ['PtXaTreH.05G120200', 'PtXaTreH.01G000200', 'PtXaAlbH.05G122300'].every((g) => heads.includes(g));
   if (!ok) failures++;
   console.log(`\n### browse:protein-fasta  ${ok ? 'OK' : 'FAIL'}  records=${heads.join(',')}  refused="${refused.slice(0, 60)}"`);
   errs.forEach((e) => console.log('   !! ' + e));
@@ -3188,6 +3190,146 @@ for (const scheme of ['light', 'dark']) {
   console.log(`\n### browse:gene-list  ${ok ? 'OK' : 'FAIL'}  listed=${listed} +hap2=${withHap}  note="${note}"`);
   errs.forEach((e) => console.log('   !! ' + e));
   await p.close();
+}
+
+// Saved sets: saving says so beside the button, the set survives a reload, a wrong file is
+// refused in words, and removing it works -- all without a console error.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1180, height: 900 } });
+  const p = await ctx.newPage();
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+  await p.goto(base + '/#/browse', { waitUntil: 'networkidle' });
+  await p.waitForSelector('#view .stat .n');
+  await p.selectOption('label[data-filter="hap"] select', 'hap2');
+  await p.waitForTimeout(300);
+  await p.click('button:has-text("Save as set")');
+  const said = await p.$eval('[data-browse-action-status]', (x) => x.textContent);
+  await p.reload({ waitUntil: 'networkidle' });
+  await p.waitForSelector('#view .stat .n');
+  await p.evaluate(() => { document.querySelector('.bz-sets').open = true; });
+  const kept = await p.$eval('.bz-sets', (x) => x.innerText.includes('hap=hap2'));
+  await p.setInputFiles('#saved-sets-import', { name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"nope":1}') });
+  await p.waitForTimeout(300);
+  const refused = await p.$eval('.bz-sets .card > p', (x) => x.textContent);
+  await p.click('.bz-sets button:has-text("Remove")');
+  await p.waitForTimeout(300);
+  const gone = await p.$eval('.bz-sets', (x) => ![...x.querySelectorAll('tbody tr')].some((r) => r.innerText.includes('hap=hap2')));
+  const ok = !errs.length && /^Saved “hap=hap2” \(31,823 genes\)/.test(said) && kept && gone
+    && /not a saved-sets export/.test(refused);
+  if (!ok) failures++;
+  console.log(`\n### browse:saved-sets  ${ok ? 'OK' : 'FAIL'}  said="${said}" kept=${kept} refused="${refused}" gone=${gone}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await ctx.close();
+}
+
+// Keyboard and screen reader basics (0.21): each page names itself in the tab title, following
+// a link moves focus to the new page's heading, the skip link is the first Tab stop and lands in
+// the page, and a section link on a gene page moves focus to the section. #/changes renders.
+{
+  const p = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto(base + '/#/', { waitUntil: 'networkidle' });
+  await p.waitForTimeout(500);
+  const homeTitle = await p.title();
+  const firstFocus = await p.evaluate(() => document.activeElement === document.body);
+  await p.keyboard.press('Tab');
+  const firstTab = await p.evaluate(() => document.activeElement.className);
+  await p.keyboard.press('Enter');
+  await p.waitForTimeout(200);
+  const afterSkip = await p.evaluate(() => !!document.activeElement.closest('#view'));
+  await p.click('header nav a[href="#/glossary"]');
+  await p.waitForSelector('#view h1');
+  await p.waitForTimeout(300);
+  const g = await p.evaluate(() => ({ t: document.title, f: document.activeElement.tagName + ':' + document.activeElement.textContent }));
+  await p.goto(base + '/#/gene/PtXaTreH.05G120200', { waitUntil: 'networkidle' });
+  await p.waitForSelector('.secnav a');
+  await p.waitForTimeout(500);
+  const geneTitle = await p.title();
+  await p.click('.secnav a >> nth=1');
+  await p.waitForTimeout(300);
+  const secFocus = await p.evaluate(() => document.activeElement.id || document.activeElement.tagName);
+  await p.goto(base + '/#/changes', { waitUntil: 'networkidle' });
+  await p.waitForSelector('[data-changes] .change');
+  const ch = await p.evaluate(() => ({ t: document.title, n: document.querySelectorAll('.change').length,
+    first: document.querySelector('.change .mono').textContent }));
+  await p.setViewportSize({ width: 390, height: 844 });
+  await p.waitForTimeout(200);
+  const overflow = await p.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+  await p.screenshot({ path: `${outdir}/changes-phone.png` });
+  const parts = {
+    homeTitle: homeTitle === '717 gene atlas' || / · 717 gene atlas$/.test(homeTitle),
+    noFocusStealOnLoad: firstFocus, skipFirst: /\bskip\b/.test(firstTab), skipLands: afterSkip,
+    glossaryTitle: g.t === 'Glossary · 717 gene atlas', glossaryFocus: g.f === 'H1:Glossary',
+    geneTitle: geneTitle.startsWith('PtXaTreH.05G120200'), sectionFocus: /^sec-/.test(secFocus),
+    changes: ch.t === 'What changed · 717 gene atlas' && ch.n >= 8 && /^0\.\d+/.test(ch.first), phoneFits: !overflow,
+  };
+  const ok = !errs.length && Object.values(parts).every(Boolean);
+  if (!ok) failures++;
+  console.log(`\n### a11y:titles-focus-skip  ${ok ? 'OK' : 'FAIL'}  ${Object.entries(parts).filter(([, v]) => !v).map(([k]) => k).join(' ') || 'all parts'}`);
+  if (!ok) console.log(`   home="${homeTitle}" tab="${firstTab}" glossary=${JSON.stringify(g)} gene="${geneTitle}" sec=${secFocus} changes=${JSON.stringify(ch)}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await p.close();
+}
+
+// Search engine (0.21): each kind of query lands on the gene a reader means, the dropdown is a
+// working combobox from the keyboard, and no query reads a gene file. The positive control drops
+// the "cesa8" token from its shard; the same assertion must then fail, or it proves nothing.
+{
+  async function ask(p, q) {
+    await p.fill('#q', '');
+    await p.fill('#q', q);
+    await p.waitForSelector(`#hits[data-query="${q}"]`, { timeout: 20000 }).catch(() => {});
+    return p.evaluate(() => ({
+      opts: [...document.querySelectorAll('#hits [role=option]')].map((a) => a.textContent.trim()),
+      notes: [...document.querySelectorAll('#hits .hits-note')].map((n) => n.textContent).join(' / '),
+      status: document.getElementById('hits-status').textContent }));
+  }
+  const cesa = (r) => r.opts.length > 0 && /CESA8: Arabidopsis gene name/.test(r.opts[0]);
+  const p = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  let geneFiles = 0;
+  p.on('request', (r) => { if (/\/data\/genes\//.test(r.url())) geneFiles++; });
+  await p.goto(base + '/#/', { waitUntil: 'networkidle' });
+  const res = {};
+  for (const q of ['CESA8', 'irx1', 'AT1G20440', 'Potri.001G000400', 'cellulose synthase', 'dehydrogenaze', 'qwertyzz'])
+    res[q] = await ask(p, q);
+  const filesAfterQueries = geneFiles;
+  const okCesa = cesa(res.CESA8);
+  const okIrx = /IRX1: /.test(res.irx1.opts[0] || '');
+  const okAt = res.AT1G20440.opts.some((o) => o.startsWith('PtXaTreH.')) && res.AT1G20440.opts.some((o) => o.startsWith('PtXaAlbH.'));
+  const okPotri = res['Potri.001G000400'].opts.some((o) => /P\. trichocarpa ortholog: potri\.001g000400/i.test(o));
+  const okWords = res['cellulose synthase'].opts.length >= 10 && !res['cellulose synthase'].notes;
+  const okTypo = /dehydrogenaze → dehydrogenase/.test(res.dehydrogenaze.notes) && res.dehydrogenaze.opts.length > 0;
+  const okNone = res.qwertyzz.opts.length === 0 && /Nothing matches/.test(res.qwertyzz.notes) && res.qwertyzz.status === 'no results';
+  // keyboard: ArrowDown marks the first option active, Enter opens it
+  await ask(p, 'CESA8');
+  await p.press('#q', 'ArrowDown');
+  const kb = await p.evaluate(() => ({ exp: document.getElementById('q').getAttribute('aria-expanded'),
+    act: document.getElementById('q').getAttribute('aria-activedescendant'),
+    sel: document.querySelector('#hits [aria-selected=true]')?.id || null }));
+  await p.press('#q', 'Enter');
+  await p.waitForTimeout(500);
+  const okKb = kb.exp === 'true' && kb.act === 'hit-0' && kb.sel === 'hit-0' && /^#\/gene\/PtXa/.test(await p.evaluate(() => location.hash));
+  await p.close();
+  // positive control
+  const pc = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await pc.route('**/data/index/search/c.json*', async (route) => {
+    const r = await route.fetch(); const j = await r.json(); delete j.cesa8;
+    await route.fulfill({ response: r, body: JSON.stringify(j) });
+  });
+  await pc.goto(base + '/#/', { waitUntil: 'networkidle' });
+  const ctrl = cesa(await ask(pc, 'CESA8'));
+  await pc.close();
+  const parts = { okCesa, okIrx, okAt, okPotri, okWords, okTypo, okNone, okKb, noGeneFiles: filesAfterQueries === 0, controlFails: !ctrl };
+  const ok = !errs.length && Object.values(parts).every(Boolean);
+  if (!ok) failures++;
+  console.log(`\n### search:engine  ${ok ? 'OK' : 'FAIL'}  ${Object.entries(parts).filter(([, v]) => !v).map(([k]) => k).join(' ') || 'all parts'}`);
+  if (!ok) for (const [q, r] of Object.entries(res)) console.log(`   ${q}: ${r.status} | ${r.notes} | ${r.opts.slice(0, 2).join(' || ').slice(0, 220)}`);
+  errs.forEach((e) => console.log('   !! ' + e));
 }
 
 await browser.close();

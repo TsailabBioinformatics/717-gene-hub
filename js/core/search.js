@@ -17,13 +17,26 @@ import { loadFacets, facetRow, loadGeneIndex, getGene, searchGenesRanked } from 
 
 const PAGE = 40;
 
-function rowsTable(page, byId, ann) {
+/** What a dropdown or results row says about why a gene matched. */
+export function whyLabel(w) {
+  if (!w) return null;
+  const fuzzy = w.kind === 'fuzzy' ? ' (closest spelling)' : '';
+  if (w.field === 'Arabidopsis gene name, by homology') return `${w.token.toUpperCase()}: Arabidopsis gene name, by homology${fuzzy}`;
+  if (['Arabidopsis locus', 'P. trichocarpa ortholog', 'gene name', 'domain accession', 'gene ID'].includes(w.field)) {
+    return `${w.field}: ${w.token}${fuzzy}`;
+  }
+  return null;     // a description word: the description itself is shown
+}
+
+
+function rowsTable(page, byId, ann, whyOf) {
   const body = page.map((id) => {
     const r = byId.get(id);
     const a = ann.get(id) || {};
     return el('tr', {},
       el('td', {}, el('a', { href: `#/gene/${id}`, class: 'mono' }, id)),
       el('td', { style: 'font-size:12px;max-width:260px;overflow:hidden;text-overflow:ellipsis' },
+        whyLabel(whyOf.get(id)) ? el('strong', {}, whyLabel(whyOf.get(id)) + '. ') : null,
         a.sym && a.sym.length ? el('strong', {}, a.sym.join(', ') + ' ') : null,
         (a.d || a.atd || '') || el('span', { class: 'muted' }, '–')),
       el('td', {}, r ? r.hap.toUpperCase() : '–'),
@@ -54,7 +67,7 @@ export async function searchResultsView(query) {
   const card = el('div', { class: 'card' }, tableHolder, pager);
   root.append(statRow, card);
 
-  const [{ ids: matches, total }, facets, geneIndex] = await Promise.all([
+  const [{ ids: matches, total, why: whyOf, partial, missing, corrected }, facets, geneIndex] = await Promise.all([
     searchGenesRanked(query), loadFacets(), loadGeneIndex(),
   ]);
 
@@ -65,7 +78,11 @@ export async function searchResultsView(query) {
     if (i != null) rowOf.set(id, facetRow(facets, i));
   }
 
-  sub.replaceChildren(`Comparing matches for `, el('span', { class: 'mono' }, `"${query}"`), '.');
+  sub.replaceChildren(`Comparing matches for `, el('span', { class: 'mono' }, `"${query}"`), '.',
+    corrected.length ? el('span', { class: 'muted' }, ` Close spellings used: ${corrected.map(([w, x]) => `${w} → ${x}`).join(', ')}.`) : null,
+    partial ? el('span', { class: 'muted' }, missing.length
+      ? ` No gene matches every word (not found anywhere: ${missing.join(', ')}); genes matching the others are listed.`
+      : ' No single gene matches every word; genes are listed by how many of the words they match.') : null);
   clear(statRow).append(
     el('div', { class: 'stat' }, el('div', { class: 'n' }, fmt(total)),
       el('div', { class: 'l' }, total === 1 ? 'match' : 'matches')));
@@ -82,9 +99,11 @@ export async function searchResultsView(query) {
       if (g) ann.set(id, { d: g.ann && g.ann.d, atd: g.ann && g.ann.atd, dup: g.dup && g.dup.t, sym: g.ann && g.ann.sym });
     }));
     clear(tableHolder).append(matches.length
-      ? rowsTable(slice, rowOf, ann)
+      ? rowsTable(slice, rowOf, ann, whyOf)
       : el('p', { class: 'muted', style: 'padding:14px 0' },
-          `No gene matches "${query}". Search takes a gene ID (a transcript suffix such as .1 is ignored), a P. trichocarpa ID, a gene name, an Arabidopsis locus, a Pfam accession or a word from the description.`));
+          `No gene matches "${query}". Search takes a 717 gene ID (a transcript suffix such as .1 is ignored), a P. trichocarpa ID, `
+          + `an Arabidopsis locus or gene name (matched through each gene's best Arabidopsis hit), a Pfam or PANTHER accession or name, `
+          + `or words from a description; every word must match, and close spellings are tried.`));
 
     clear(pager);
     if (pages > 1) {

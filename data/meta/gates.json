@@ -1,6 +1,6 @@
 {
- "data_version": "0.20.0",
- "n_checks": 99,
+ "data_version": "0.21.0",
+ "n_checks": 102,
  "n_failed": 0,
  "checks": [
   {
@@ -281,7 +281,7 @@
   {
    "name": "no embargoed LSG candidate label in any published file",
    "ok": true,
-   "detail": "1408 text files"
+   "detail": "1488 text files"
   },
   {
    "name": "ancestral karyotype counts match the placement coverage, per haplotype",
@@ -424,6 +424,11 @@
    "detail": "60,372 described"
   },
   {
+   "name": "every gene has its sequences, the ranges tile each file, and sampled CDS translate to their proteins",
+   "ok": true,
+   "detail": ""
+  },
+  {
    "name": "gene-age cross-checks sit on exactly the candidates, with consistent bits",
    "ok": true,
    "detail": ""
@@ -497,6 +502,16 @@
    "name": "search postings are in range",
    "ok": true,
    "detail": "0 tokens out of range"
+  },
+  {
+   "name": "search postings carry one field mark per gene",
+   "ok": true,
+   "detail": "0 tokens with mismatched marks"
+  },
+  {
+   "name": "search finds every gene under the Arabidopsis locus its page names, and no other locus",
+   "ok": true,
+   "detail": "59534 genes; 0 not findable, 0 under another locus"
   }
  ],
  "what_this_is": "Every integrity gate this build ran over the committed data, with its verdict. These are not a summary written afterwards: check() records each line as it executes."

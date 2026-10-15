@@ -1,7 +1,7 @@
 // Module: functional annotation + the HAP1<->HAP2 allele link + panel presence.
 // Answers a visitor's first three questions on the gene page: what is this gene, where is
 // its other allele, and which genomes have it.
-import { el, fmt } from '../core/dom.js';
+import { el, fmt, jumpTo } from '../core/dom.js';
 import { loadTerms, arrayAlleles, getGene } from '../core/data.js';
 import { CATEGORY, detailText } from '../core/relationship.js';
 
@@ -142,7 +142,7 @@ function copiesLink(g, man) {
     + 'are drawn in the ',
     el('a', { href: `#/copies/${cp}`, onclick: (ev) => {
       const c = document.querySelector('[data-card="copies"]');
-      if (c) { ev.preventDefault(); c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (c) { ev.preventDefault(); jumpTo(c); }
     } }, `${loc.name} panel`), ' in the Duplication band.');
 }
 

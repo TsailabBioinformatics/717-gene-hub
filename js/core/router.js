@@ -11,6 +11,31 @@ export function route(pattern, handler) { routes.push({ pattern, handler }); }
 let renderGeneration = 0;
 let activeScope = null;
 
+// Each page names itself in the tab title, and after a navigation keyboard focus moves to the
+// page heading, so a screen reader announces the new page instead of staying silent. Pages
+// build their heading after data arrives, so the heading is picked up when it appears.
+const SITE = '717 gene atlas';
+let headingWanted = null;     // { generation, focus } until this render's heading shows up
+let firstRender = true;
+
+function settleHeading() {
+  if (!headingWanted || headingWanted.generation !== renderGeneration) return;
+  const view = document.getElementById('view');
+  const h = view && view.querySelector('h1, .empty > h2');
+  if (!h) return;
+  const text = h.textContent.replace(/\s+/g, ' ').trim();
+  document.title = !text || text.includes(SITE) ? SITE : `${text} · ${SITE}`;
+  if (headingWanted.focus) {
+    const a = document.activeElement;
+    // Leave focus alone if the reader is already working inside the new page.
+    if (!a || a === document.body || !a.isConnected || a.closest('header')) {
+      if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
+      h.focus({ preventScroll: true });
+    }
+  }
+  headingWanted = null;
+}
+
 // Route handlers can build DOM before an awaited fetch settles. Keep those detached roots in
 // the route scope so an error or a newer navigation releases their observers as well.
 function makeScope(generation) {
@@ -102,6 +127,8 @@ export function setQuery(params) {
 
 export function render() {
   const generation = ++renderGeneration;
+  headingWanted = { generation, focus: !firstRender };
+  firstRender = false;
   activeScope?.dispose();
   const scope = makeScope(generation);
   activeScope = scope;
@@ -136,5 +163,10 @@ export function render() {
 
 export function start() {
   addEventListener('hashchange', render);
+  const view = document.getElementById('view');
+  if (view && typeof MutationObserver === 'function') {
+    new MutationObserver(settleHeading).observe(view, { childList: true, subtree: true });
+  }
   render();
+  settleHeading();
 }

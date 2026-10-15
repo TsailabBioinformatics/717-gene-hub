@@ -314,7 +314,7 @@ function drawDiagram(g, built, width) {
   const inner = Math.max(120, width - PAD_X * 2);
   const svg = svgEl('svg', {
     viewBox: `0 0 ${width} ${height}`, width: '100%', height,
-    role: 'img', 'aria-label': `Duplication layers for ${g.id}`,
+    role: 'group', 'aria-label': `Duplication layers for ${g.id}; each partner gene is a link`,
     style: 'display:block;overflow:visible',
   });
 

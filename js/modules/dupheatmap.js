@@ -247,7 +247,8 @@ function geneCard(g) {
 
       const state = { rows: p.rows, vecs, order, samples, vmax: 1 };
       const stage = el('div', { style: 'position:relative;margin-top:10px' });
-      const canvas = el('canvas', { style: 'display:block;width:100%' });
+      const canvas = el('canvas', { style: 'display:block;width:100%', role: 'img',
+        'aria-label': 'Heatmap of each copy\u2019s expression across all samples' });
       stage.append(canvas);
       const ctx = canvas.getContext('2d', { alpha: false });
       let view = { w: 0, h: 0, dpr: 0 };

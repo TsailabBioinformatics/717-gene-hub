@@ -129,7 +129,8 @@ function geneCard(g) {
   const tissueRow = el('div', { style: 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px' });
   const contrastRow = el('div', { style: 'display:none;margin-bottom:8px' });
   const stage = el('div', { class: 'locus-stage', style: `height:${H}px` });
-  const canvas = el('canvas', { class: 'locus-canvas' });
+  const canvas = el('canvas', { class: 'locus-canvas', role: 'img',
+    'aria-label': 'Drawing of this locus; the line below it gives the values under the pointer' });
   stage.append(canvas);
   const readout = el('div', { class: 'locus-readout muted' }, ' ');
   const legend = el('div', { style: 'margin-top:6px;font-size:11.5px' });

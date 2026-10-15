@@ -223,7 +223,7 @@ export const loadExprStudies = () => fetchJSON('data/expr/studies.json');
  *  container change, not a quantisation, so nothing downstream needs to know.
  *
  *  ~1.1 KB per gene instead of the 786 KB bucket that carried 250 genes to draw one card. */
-async function fetchRangeJSON(path, off, len) {
+async function fetchRangeJSON(path, off, len, validate = isSampleVector) {
   if (DATA_VERSION === null) await loadManifest();
   const key = `${dataCacheKey(path)}#${off}+${len}`;
   if (cache.has(key)) return cache.get(key);
@@ -250,12 +250,26 @@ async function fetchRangeJSON(path, off, len) {
     ? await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text()
     : new TextDecoder().decode(buf);
   const j = JSON.parse(text);
-  if (!Array.isArray(j) || (SAMPLE_COUNT != null && j.length !== SAMPLE_COUNT)
-      || j.some((v) => typeof v !== 'number' || !Number.isFinite(v))) {
-    throw new Error(`range payload for ${path} is not a ${SAMPLE_COUNT || 'valid'}-sample numeric vector`);
-  }
+  const why = validate(j);
+  if (why) throw new Error(`range payload for ${path} ${why}`);
   cache.set(key, j);
   return j;
+}
+
+/** null when `j` is a valid expression vector, else what is wrong with it. */
+function isSampleVector(j) {
+  return (!Array.isArray(j) || (SAMPLE_COUNT != null && j.length !== SAMPLE_COUNT)
+      || j.some((v) => typeof v !== 'number' || !Number.isFinite(v)))
+    ? `is not a ${SAMPLE_COUNT || 'valid'}-sample numeric vector` : null;
+}
+
+/** Protein, CDS, transcript and genomic span for one gene (data/seq, one range read). */
+export async function loadSequences(gene) {
+  if (!gene || !gene.sq) return null;
+  const hap = gene.id.startsWith('PtXaTreH') ? 'hap1' : 'hap2';
+  return fetchRangeJSON(`data/seq/seq_${hap}.gzb`, gene.sq[0], gene.sq[1], (j) =>
+    (j && ['p', 'c', 't', 'g'].every((k) => typeof j[k] === 'string' && j[k].length) ? null
+      : 'is not a sequence record'));
 }
 
 export const loadExprBucket = (bucketKey) => fetchJSON(`data/expr/buckets/${bucketKey}.json`);
@@ -369,41 +383,153 @@ export function loadAlias() {
   return _alias;
 }
 
+/* ---------- search ----------
+ *  The index (build_search.py) maps each token to the genes it occurs in and, per gene, which
+ *  field it came from. A query is split into words; each word is matched as a whole token,
+ *  then as a prefix, then within one or two edits (a typo), and each match scores by its
+ *  field and by how rare the token is (inverse document frequency). Every word must match
+ *  (AND); if no gene matches them all, genes matching some are returned, flagged as partial.
+ *  Exact identifiers (a 717 gene ID, a P. trichocarpa ID, an Arabidopsis locus, a gene name)
+ *  always rank first. Returns { ids, total, why, partial, missing, corrected }; `why` says,
+ *  per gene, what matched, so the dropdown never has to fetch a gene record to explain a row.
+ */
+export const SEARCH_FIELDS = {
+  1: ['description', 1.5], 2: ['Arabidopsis hit description', 1.0], 4: ['Arabidopsis locus', 6],
+  8: ['domain accession', 4], 16: ['domain name', 1.0], 32: ['Arabidopsis gene name, by homology', 4],
+  64: ['P. trichocarpa ortholog', 6], 128: ['gene name', 6],
+};
+// An exact token outranks any prefix or close-spelling match of the same field (irx1 before irx10).
+const QUALITY = { exact: 1, prefix: 0.35, fuzzy: 0.3 };
+const SEARCH_STOP = new Set(['of', 'and', 'the', 'in', 'to', 'a', 'an', 'for', 'with', 'by', 'on', 'or', 'from',
+  'like', 'related', 'family', 'protein', 'domain', 'containing', 'putative', 'probable', 'uncharacterized', 'similar']);
+
+let _searchMeta = null;
+const searchMeta = () => (_searchMeta ||= loadManifest().then((m) => m.search || { shards: [], split: [] }));
+
+function shardKey(tok, meta) {
+  const c = /[a-z0-9]/.test(tok[0]) ? tok[0] : '_';
+  const key = (meta.split || []).includes(c) ? tok.slice(0, 2) : c;
+  return (meta.shards || []).includes(key) ? key : null;
+}
+
+/** Levenshtein distance, giving up (returning k + 1) as soon as it must exceed k. */
+function within(a, b, k) {
+  if (Math.abs(a.length - b.length) > k) return k + 1;
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    let best = i;
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (cur[j] < best) best = cur[j];
+    }
+    if (best > k) return k + 1;
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+const posting = (v) => (Array.isArray(v) ? { ids: v, f: v.map(() => 1) } : v);   // pre-0.21 shards held bare arrays
+
+export function searchWords(q) {
+  return [...new Set(q.toLowerCase().split(/[\s,;/()]+/)
+    .map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, ''))
+    .filter((w) => w.length > 1 && !SEARCH_STOP.has(w)))];
+}
+
+/** Candidate tokens for one word: exact, then prefix, then fuzzy if nothing exact. */
+function candidates(word, shard) {
+  const out = [];
+  if (shard[word]) out.push([word, 'exact']);
+  if (word.length >= 3) {
+    for (const tok in shard) if (tok !== word && tok.startsWith(word)) out.push([tok, 'prefix']);
+  }
+  if (!shard[word] && word.length >= 4) {
+    const k = word.length >= 8 ? 2 : 1;
+    for (const tok in shard) if (!tok.startsWith(word) && within(word, tok, k) <= k) out.push([tok, 'fuzzy']);
+  }
+  return out;
+}
+
 export async function searchGenesRanked(query) {
   const q = normalizeQuery(query);
+  const empty = { ids: [], total: 0, why: new Map(), partial: false, missing: [], corrected: [] };
+  if (q.length < 2) return empty;
+  const [ids, alias, meta] = await Promise.all([loadGeneIndex(), loadAlias(), searchMeta()]);
+  const N = ids.length;
   const ql = q.toLowerCase();
-  if (ql.length < 3) return { ids: [], total: 0 };
 
-  const byIdIdx = [];               // gene-ID prefix match, e.g. "PtXaTreH.05G12"
-  const isId = /^PtXa/i.test(q);
-
-  const c = /[a-z0-9]/.test(ql[0]) ? ql[0] : '_';
-  const [shard, ids, alias] = await Promise.all([
-    // the description index has no shard for digits; asking for one would be a 404 in the console
-    (/[a-z_]/.test(c) ? loadSearchShard(c).catch(() => ({})) : Promise.resolve({})),
-    loadGeneIndex(), loadAlias()]);
-  if (isId) {
+  // 1. identifiers: a 717 gene ID or its prefix, then exact names and orthologs
+  const boost = new Map();
+  const why = new Map();
+  if (/^PtXa/i.test(q)) {
     const up = q.toUpperCase();
-    for (let i = 0; i < ids.length; i++) if (ids[i].toUpperCase().startsWith(up)) byIdIdx.push(i);
-  }
-
-  // Exact token first, then prefix matches, so "kinase" beats "kinase-like".
-  const rank = new Map();
-  const add = (idxs, r) => idxs.forEach((i) => { if (!rank.has(i)) rank.set(i, r); });
-  add(byIdIdx, -3);                 // an ID match always outranks a text match
-  // exact gene name, P. trichocarpa ID (with or without a version suffix) or Arabidopsis locus
-  const potriKey = ql.replace(/\.v\d+(\.\d+)?$/, '').replace(/^(potri\.\d{3}g\d{6})\.\d+$/, '$1');
-  const atKey = ql.replace(/^(at[1-5cm]g\d{5})\.\d+$/, '$1');
-  for (const hit of [alias.name[ql], alias.potri[potriKey], alias.at[atKey]]) if (hit) add(hit, -2);
-  {
-    for (const k in alias.name) if (k !== ql && k.startsWith(ql)) add(alias.name[k], -1);
-    if (shard[ql]) add(shard[ql], 0);
-    for (const tok in shard) {
-      if (tok !== ql && tok.startsWith(ql)) add(shard[tok], 1);
+    for (let i = 0; i < N; i++) {
+      if (ids[i].toUpperCase().startsWith(up)) {
+        boost.set(i, ids[i].toUpperCase() === up ? 1e6 : 1e5);
+        why.set(i, { field: 'gene ID', token: ids[i], kind: ids[i].toUpperCase() === up ? 'exact' : 'prefix' });
+      }
     }
   }
-  const ranked = [...rank.entries()].sort((a, b) => a[1] - b[1] || a[0] - b[0]).map(([i]) => ids[i]);
-  return { ids: ranked, total: ranked.length };
+  const potriKey = ql.replace(/\.v\d+(\.\d+)?$/, '').replace(/^(potri\.\d{3}g\d{6})\.\d+$/, '$1');
+  const atKey = ql.replace(/^(at[1-5cm]g\d{5})\.\d+$/, '$1');
+  for (const [hits, field] of [[alias.name[ql], 'gene name'], [alias.potri[potriKey], 'P. trichocarpa ortholog'],
+    [alias.at[atKey], 'Arabidopsis locus']]) {
+    for (const i of hits || []) {
+      if (!boost.has(i)) { boost.set(i, 5e4); why.set(i, { field, token: q, kind: 'exact' }); }
+    }
+  }
+
+  // 2. words
+  const words = /^PtXa/i.test(q) ? [] : searchWords(q);
+  const keys = [...new Set(words.map((w) => shardKey(w, meta)).filter(Boolean))];
+  const shards = Object.fromEntries(await Promise.all(keys.map(async (k) => [k, await loadSearchShard(k).catch(() => ({}))])));
+  const perWord = [];
+  const corrected = [];
+  for (const w of words) {
+    const key = shardKey(w, meta);
+    const shard = key ? shards[key] : {};
+    const scores = new Map();
+    for (const [tok, kind] of candidates(w, shard)) {
+      const p = posting(shard[tok]);
+      const idf = Math.log(1 + N / p.ids.length);
+      if (kind === 'fuzzy') corrected.push([w, tok]);
+      for (let j = 0; j < p.ids.length; j++) {
+        const bits = p.f[j];
+        let fw = 0; let field = null;
+        for (const b in SEARCH_FIELDS) if (bits & b && SEARCH_FIELDS[b][1] > fw) { fw = SEARCH_FIELDS[b][1]; field = SEARCH_FIELDS[b][0]; }
+        const s = QUALITY[kind] * fw * idf;
+        const prev = scores.get(p.ids[j]);
+        if (!prev || s > prev.s) scores.set(p.ids[j], { s, field, token: tok, kind });
+      }
+    }
+    perWord.push(scores);
+  }
+  const total = new Map();
+  let partial = false;
+  const missing = words.filter((_, k) => perWord[k].size === 0);
+  if (perWord.length) {
+    const all = perWord.reduce((acc, m) => (acc ? new Set([...acc].filter((i) => m.has(i))) : new Set(m.keys())), null);
+    let pool = all;
+    if (!all.size && perWord.length > 1) { partial = true; pool = new Set(perWord.flatMap((m) => [...m.keys()])); }
+    for (const i of pool) {
+      let s = 0; let n = 0; let best = null;
+      perWord.forEach((m) => { const h = m.get(i); if (h) { s += h.s; n++; if (!best || h.s > best.s) best = h; } });
+      total.set(i, (partial ? n * 1e3 : 0) + s);
+      if (!why.has(i)) why.set(i, best);
+    }
+  }
+  for (const [i, b] of boost) total.set(i, (total.get(i) || 0) + b);
+  const order = [...total.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0]).map(([i]) => i);
+  const outWhy = new Map(order.map((i) => [ids[i], why.get(i)]));
+  return { ids: order.map((i) => ids[i]), total: order.length, why: outWhy, partial, missing,
+    // one correction per word, and only for words that matched nothing except by close spelling
+    corrected: words.map((w, k) => {
+      const hs = [...perWord[k].values()];
+      if (!hs.length || hs.some((h) => h.kind !== 'fuzzy')) return null;
+      const t = corrected.find(([x]) => x === w);
+      return t || null;
+    }).filter(Boolean) };
 }
 
 /** Back-compat wrapper: the capped, dropdown-shaped call most callers still want. */

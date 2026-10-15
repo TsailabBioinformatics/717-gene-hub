@@ -221,7 +221,8 @@ async function openCurves(geneId, holder) {
     return;
   }
   const hyd = hydropathy(m.seq);
-  const canvas = el('canvas', { style: 'width:100%;display:block' });
+  const canvas = el('canvas', { style: 'width:100%;display:block', role: 'img',
+    'aria-label': 'Per-residue tracks along the protein; the line below gives the values at a position' });
   const readout = el('div', { class: 'mono struct-readout' },
     'Hover a residue to read all three tracks at that position.');
   holder.append(canvas, readout);
