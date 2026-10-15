@@ -3286,6 +3286,35 @@ for (const scheme of ['light', 'dark']) {
   await p.close();
 }
 
+// Studies 2 and 3 sample developing and mature xylem; the tissue fields say only "xylem", so the
+// design once drew two sites as one group (n=8). ArrayExpress (E-MTAB-7288, E-MTAB-7587): 8 and 6
+// groups of 4. The drawing must show exactly those groups, label each sample's site, and say that
+// the shipped comparisons pool the two sites.
+{
+  const p = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  const got = {};
+  for (const [id, groups] of [[2, 8], [3, 6]]) {
+    await p.goto(`${base}/#/study/${id}`, { waitUntil: 'networkidle' });
+    await p.waitForSelector('.sd-cell');
+    got[id] = await p.evaluate(() => {
+      const keys = new Map();
+      document.querySelectorAll('.sd-cell').forEach((c) => keys.set(c.dataset.ids, c.dataset.ids.split(',').length));
+      return { groups: keys.size, sizes: [...new Set(keys.values())],
+        pooled: [...document.querySelectorAll('.sd-contrasts tbody tr')].every((t) => /developing xylem \+ mature xylem, pooled/.test(t.innerText)),
+        sites: [...new Set([...document.querySelectorAll('tr[data-i] td:nth-child(2)')].map((t) => t.textContent))].sort().join('|') };
+    });
+    got[id].ok = got[id].groups === groups && got[id].sizes.join() === '4' && got[id].pooled
+      && got[id].sites === 'developing xylem|mature xylem';
+  }
+  const ok = !errs.length && got[2].ok && got[3].ok;
+  if (!ok) failures++;
+  console.log(`\n### study:xylem-sites  ${ok ? 'OK' : 'FAIL'}  ${JSON.stringify(got)}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await p.close();
+}
+
 // Search engine (0.21): each kind of query lands on the gene a reader means, the dropdown is a
 // working combobox from the keyboard, and no query reads a gene file. The positive control drops
 // the "cesa8" token from its shard; the same assertion must then fail, or it proves nothing.

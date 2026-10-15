@@ -10,7 +10,7 @@ import { changesView } from './modules/changes.js';
 import { downloadsView } from './modules/downloads.js';
 import { linkHub, brush } from './core/designmap.js';
 import { designOf, designDrawing, contrastList, studyContrasts, sampleSelection } from './core/studydesign.js';
-import { FACTOR_LABEL } from './core/studydesigns.js';
+import { FACTOR_LABEL, sampleTissue } from './core/studydesigns.js';
 import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE,
          EVIDENCE_TIERS } from './core/registry.js';
 import { dupTypeLabel } from './modules/duplication.js';
@@ -1016,7 +1016,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
         anyNotes ? el('th', {}, 'Notes') : null)),
       el('tbody', {}, ...mine.map((x) => el('tr', { 'data-i': all.indexOf(x) },
         el('td', { class: 'mono', style: 'font-size:11.5px' }, x.label),
-        el('td', {}, cell(x.tissue_analysis || x.tissue_full || x.tissue)),
+        el('td', {}, cell(sampleTissue(x))),
         el('td', {}, cell(x.treatment)),
         el('td', {}, cell(x.genotype)),
         el('td', {}, cell(x.growth)),

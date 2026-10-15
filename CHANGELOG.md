@@ -9,6 +9,22 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Studies 2 and 3: developing and mature xylem are separate groups
+
+Both studies sampled developing and mature xylem, but every tissue field in `samples.json` says
+"xylem": ArrayExpress files all samples under organism part "xylem" and keeps the site in a
+separate "sampling site" factor. Checked against the deposits on 2026-10-15: E-MTAB-7288 is 8
+groups of 4 (site x day length x drought), E-MTAB-7587 is 6 groups of 4 (site x abscisic acid),
+and all 32 study-2 samples match their ArrayExpress record by ENA read count. The study pages drew
+4 and 3 groups of 8. `studydesigns.js` now reads the site from the sample label (the one field
+that kept it) for these two studies (`siteFromLabel`, `sampleTissue`), so the design, the sample
+table and the readouts show the site. No data changed. The six comparisons the atlas ships for
+these studies (`data/expr/contrasts.json`, from the older v4 191-contrast panel) put 4 developing
+and 4 mature samples in each arm; the comparisons table now says "developing xylem + mature
+xylem, pooled". The dissertation's curated contrast set (ms1-dup data/60), which the 149-contrast
+stress responsiveness is computed on, already splits them by site (4 vs 4), so no gene's
+responsiveness pooled the sites. New check `study:xylem-sites`, which fails on the previous build.
+
 ## The 3D model draws helices and strands
 
 The viewer drew a tube through the C-alpha atoms (3Dmol's `trace` style), because its cartoon

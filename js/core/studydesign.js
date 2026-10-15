@@ -6,11 +6,11 @@
 // Linked to the contrasts list and the sample table through a designmap hub, so pointing at a
 // contrast lights up the two groups it compares, and pointing at a cell lights up its rows.
 import { el, fmt } from './dom.js';
-import { DESIGNS, FACTORS, FACTOR_LABEL } from './studydesigns.js';
+import { DESIGNS, FACTORS, FACTOR_LABEL, sampleTissue } from './studydesigns.js';
 import { brush, describe, isBaseline, paintLinked } from './designmap.js';
 import { contrastRows } from './contrastscore.js';
 
-const lev = (s, f) => (s[f] == null ? 'None' : String(s[f]));
+const levOf = (s, f) => (s[f] == null ? 'None' : String(s[f]));
 const tidy = (v) => v.replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
 const SVG = 'http://www.w3.org/2000/svg';
 const svgEl = (tag, attrs = {}, ...kids) => {
@@ -80,6 +80,8 @@ function timeAxis(t, cols, colKeys, ids, samples, problems) {
  */
 export function designOf(studyId, samples) {
   const spec = DESIGNS[studyId] || {};
+  // the tissue factor reads the sampling site where the metadata lost it (studydesigns.js)
+  const lev = (s, f) => (f === 'tissue_analysis' && spec.siteFromLabel ? sampleTissue(s) : levOf(s, f));
   const ids = samples.map((s, i) => (s.study === studyId ? i : -1)).filter((i) => i >= 0);
   const levels = Object.fromEntries(FACTORS.map((f) => [f, new Set(ids.map((i) => lev(samples[i], f)))]));
   const varying = FACTORS.filter((f) => levels[f].size > 1);
@@ -145,7 +147,7 @@ export function sampleSelection(samples, i, vec = null, geneLabel = '') {
   const al = s.pct_aligned != null ? `${s.pct_aligned.toFixed(1)}% aligned` : null;
   const v = vec && vec[i] != null ? ` ${geneLabel}: ${vec[i]} TPM.` : '';
   return { key: `s:${i}`, ids: new Set([i]), label: s.label,
-    text: `${s.label}: ${s.tissue_analysis || s.tissue}${conds.length ? ', ' + conds.join(', ') : ''}, `
+    text: `${s.label}: ${sampleTissue(s)}${conds.length ? ', ' + conds.join(', ') : ''}, `
       + `${s.genotype || 'genotype not given'}${isBaseline(s) ? ' (wild-type control)' : ''}. `
       + [reads, al].filter(Boolean).join(', ') + (reads || al ? '.' : '') + v };
 }
@@ -350,17 +352,26 @@ export function contrastList(cs, samples, hub, vec = null, d = null) {
     }).filter(Boolean).join(', ');
   };
   const showWithin = cs.some((c) => within(c));
+  // A comparison whose arms span more than one tissue of the drawing pools them; say so, with
+  // the per-tissue counts, rather than print one tissue and a combined n.
+  const tissueOf = (c, long = false) => {
+    const n = new Map();
+    for (const i of c.ctrl) { const t = sampleTissue(samples[i]); n.set(t, (n.get(t) || 0) + 1); }
+    if (n.size < 2) return c.tissue;
+    return long ? `${[...n.keys()].join(' and ')} pooled (${[...n.values()].join(' + ')} samples per group)`
+      : `${[...n.keys()].join(' + ')}, pooled`;
+  };
   const rows = cs.map((c) => {
     const r = scored.get(c.id);
     const sel = { key: `con:${c.id}`, ids: new Set([...c.ctrl, ...c.pert]), ctrl: new Set(c.ctrl), pert: new Set(c.pert),
-      text: `${levelName(c.pert_label)} compared with ${levelName(c.control_label)} in ${c.tissue}`
+      text: `${levelName(c.pert_label)} compared with ${levelName(c.control_label)} in ${tissueOf(c, true)}`
         + `${within(c) ? ', ' + within(c) : ''}: ${c.pert.length} against ${c.ctrl.length} samples. `
         + 'The dashed group is the one it is compared with.'
         + (r ? ` This gene: log2 fold change ${r.lfc >= 0 ? '+' : '−'}${Math.abs(r.lfc).toFixed(2)}.` : '') };
     const weak = c.ctrl.length < 2 || c.pert.length < 2;
     return brush(el('tr', { tabindex: '0', 'data-ids': [...c.ctrl, ...c.pert].join(',') },
       el('td', {}, levelName(c.pert_label)), el('td', {}, levelName(c.control_label)),
-      el('td', {}, c.tissue), showWithin ? el('td', {}, within(c) || el('span', { class: 'muted' }, '–')) : null,
+      el('td', {}, tissueOf(c)), showWithin ? el('td', {}, within(c) || el('span', { class: 'muted' }, '–')) : null,
       el('td', { class: 'num' + (weak ? ' warn-n' : '') }, `${c.pert.length} vs ${c.ctrl.length}`),
       vec ? el('td', { class: 'num mono' }, r ? (r.lfc >= 0 ? '+' : '−') + Math.abs(r.lfc).toFixed(2) : '–') : null), hub, sel);
   });

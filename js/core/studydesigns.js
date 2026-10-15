@@ -7,6 +7,12 @@
 //
 // Factor keys are the sample metadata fields: tissue_analysis, treatment, growth, additional,
 // genotype. Level names are written from the metadata values themselves, not from the papers.
+//
+// `siteFromLabel`: the tissue fields say only "xylem" for studies 2 and 3, because ArrayExpress
+// files every sample under organism part "xylem" and keeps developing versus mature xylem in a
+// separate "sampling site" factor (E-MTAB-7288, E-MTAB-7587, checked 2026-10-15: 8 groups of 4
+// and 6 groups of 4). The sample label is the one field that kept the site, so the design reads
+// the tissue from it there; without this each drawn group was two sites pooled (n=8, n=8).
 const T = 'tissue_analysis', TR = 'treatment', G = 'growth', A = 'additional', GE = 'genotype';
 
 const LPI = (v) => v.replace(/^LPI\s*/, 'leaf position ');
@@ -21,8 +27,10 @@ export const DESIGNS = {
     order: { [TR]: ['control', 'periodic drought', 'chronic drought'], [A]: ['None', 'recovered'] },
     names: { [G]: { '380CO2': '380 ppm CO2', '500CO2': '500 ppm CO2' },
       [A]: { None: 'no recovery phase', recovered: 'after recovery' } } },
-  2: { rows: G, cols: [TR] },
-  3: { cols: [TR], order: { [TR]: ['control', 'continuous abscisic acid', 'discontinuous abscisic acid'] } },
+  2: { rows: G, cols: [TR], panels: [T], siteFromLabel: true,
+    order: { [T]: ['developing xylem', 'mature xylem'], [G]: ['long day', 'short day'] } },
+  3: { rows: T, cols: [TR], siteFromLabel: true,
+    order: { [T]: ['developing xylem', 'mature xylem'], [TR]: ['control', 'continuous abscisic acid', 'discontinuous abscisic acid'] } },
   4: { rows: T, cols: [TR] },
   8: { rows: T, cols: [TR] },
   10: { rows: TR, cols: [A],
@@ -70,3 +78,13 @@ export const DESIGNS = {
 
 export const FACTOR_LABEL = { [T]: 'tissue', [TR]: 'treatment', [G]: 'growth', [A]: 'condition', [GE]: 'genotype' };
 export const FACTORS = [T, TR, G, A, GE];
+
+/** A sample's tissue as its study page should show it: the sampling site from the label where the
+ *  tissue fields lost it (see `siteFromLabel`), otherwise the analysis tissue. */
+export function sampleTissue(s) {
+  if ((DESIGNS[s.study] || {}).siteFromLabel) {
+    const site = String(s.label || '').split('_')[1];
+    if (site) return site;
+  }
+  return s.tissue_analysis || s.tissue_full || s.tissue;
+}
