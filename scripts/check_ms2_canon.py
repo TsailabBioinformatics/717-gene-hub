@@ -25,6 +25,7 @@ all exit 1 with the reason. "Could not run" is not "passed".
 
 Needs a clone of ChenHsieh/ms2-lsg (private), so it runs on a maintainer's machine, not in CI.
 """
+import roots
 import collections
 import glob
 import gzip
@@ -39,11 +40,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 PIN = os.path.join(ROOT, "sources", "ms2_canon.pin.json")
 
-MS2_CANDIDATES = [os.environ.get("MS2_LSG_ROOT", ""),
-                  os.path.expanduser("~/dev/ms2-lsg"),
-                  os.path.expanduser("~/dev/ms2-scratch/ms2-lsg"),
-                  f"/scratch/{os.environ.get('USER', '')}/ms2lsg_wt_proteomics",
-                  f"/scratch/{os.environ.get('USER', '')}/ms2-lsg"]
+MS2_CANDIDATES = [roots.root("ms2_lsg")]
 
 fails = []
 
@@ -64,7 +61,7 @@ def load_tables():
         refuse(f"{os.path.relpath(PIN, ROOT)} is missing")
     pin = json.load(open(PIN))
     commit = pin["ms2_lsg_commit"]
-    roots = [r for r in MS2_CANDIDATES if r and os.path.isdir(os.path.join(r, ".git"))]
+    roots = [r for r in MS2_CANDIDATES if r and os.path.exists(os.path.join(r, ".git"))]  # worktree: .git is a file
     if not roots:
         refuse("no ms2-lsg clone found (set MS2_LSG_ROOT). This check does not skip.")
     for root in roots:

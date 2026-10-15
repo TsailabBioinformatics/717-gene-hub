@@ -31,6 +31,49 @@ function orderLevels(levels, given) {
   return (given || []).filter((v) => levels.has(v)).concat(rest);
 }
 
+const MON = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+/** "Nov 7-15, 2014", "Jan 27-Feb 10, 2015", "Dec 19, 2014 - Jan 3, 2015" -> [start, end] in ms. */
+export function parseDateRange(v) {
+  const m = /^([A-Z][a-z]{2}) (\d{1,2})(?:, (\d{4}))?\s*-\s*(?:([A-Z][a-z]{2})\s*)?(\d{1,2}), (\d{4})$/.exec(v.trim());
+  if (!m || !(m[1] in MON) || (m[4] && !(m[4] in MON))) return null;
+  const y2 = +m[6], m2 = m[4] ? MON[m[4]] : MON[m[1]], m1 = MON[m[1]];
+  const y1 = m[3] ? +m[3] : (m1 > m2 ? y2 - 1 : y2);
+  return [Date.UTC(y1, m1, +m[2]), Date.UTC(y2, m2, +m[5])];
+}
+
+/** A validated time axis for a one-factor column layout, or null (with the reason in problems). */
+function timeAxis(t, cols, colKeys, ids, samples, problems) {
+  if (!t) return null;
+  if (cols.length !== 1) { problems.push('time axis needs exactly one column factor'); return null; }
+  const pos = new Map(), span = new Map();
+  for (const k of colKeys) {
+    if (t.dates) {
+      const r = parseDateRange(k);
+      if (!r) { problems.push(`date not parsed: ${k}`); return null; }
+      const day = 86400000;
+      pos.set(k, (r[0] + r[1]) / 2 / day); span.set(k, [r[0] / day, r[1] / day]);
+    } else {
+      if (!(k in t.at)) { problems.push(`no time for level ${k}`); return null; }
+      pos.set(k, t.at[k]);
+    }
+  }
+  const bands = [];
+  if (t.bands) {
+    const by = new Map();
+    for (const i of ids) {
+      const b = String(samples[i][t.bands] || '').replace(/_[a-z]$/, '');
+      const k = String(samples[i][cols[0]]);
+      if (!b || !span.has(k)) continue;
+      const [s0, s1] = span.get(k);
+      const cur = by.get(b) || [Infinity, -Infinity];
+      by.set(b, [Math.min(cur[0], s0), Math.max(cur[1], s1)]);
+    }
+    for (const [name, [a, b]] of by) bands.push({ name, a, b });
+    bands.sort((x, y) => x.a - y.a);
+  }
+  return { ...t, pos, span, bands };
+}
+
 /**
  * Groups and layout for one study. `samples` is the full 652-sample table; indices stay global.
  * Returns { groups, rows, cols, panels, factors, name(f, v), problems }.
@@ -89,8 +132,22 @@ export function designOf(studyId, samples) {
   const panelKeys = combos(panels);
   const rowKeys = rows ? order(rows) : [''];
   for (const g of groups.values()) g.base = g.ids.every((i) => isBaseline(samples[i]));
-  return { ids, varying, rows, cols, panels, colKeys, panelKeys, rowKeys, groups: [...groups.values()],
+  const time = timeAxis(spec.time, cols, colKeys, ids, samples, problems);
+  return { ids, varying, rows, cols, panels, colKeys, panelKeys, rowKeys, groups: [...groups.values()], time,
     name, problems, label: (fs, key) => key.split('\u0001').map((v, j) => name(fs[j], v)).filter(Boolean).join(', ') };
+}
+
+/** One sample, described in full: what a pointed-at dot or sample row says. */
+export function sampleSelection(samples, i, vec = null, geneLabel = '') {
+  const s = samples[i];
+  const conds = [s.treatment, s.growth, s.additional].filter((v) => v && v !== 'None').map(tidy);
+  const reads = s.reads ? `${(s.reads / 1e6).toFixed(1)} M reads` : null;
+  const al = s.pct_aligned != null ? `${s.pct_aligned.toFixed(1)}% aligned` : null;
+  const v = vec && vec[i] != null ? ` ${geneLabel}: ${vec[i]} TPM.` : '';
+  return { key: `s:${i}`, ids: new Set([i]), label: s.label,
+    text: `${s.label}: ${s.tissue_analysis || s.tissue}${conds.length ? ', ' + conds.join(', ') : ''}, `
+      + `${s.genotype || 'genotype not given'}${isBaseline(s) ? ' (wild-type control)' : ''}. `
+      + [reads, al].filter(Boolean).join(', ') + (reads || al ? '.' : '') + v };
 }
 
 /** Contrasts whose samples belong to this study. */
@@ -118,11 +175,56 @@ export function designDrawing(d, samples, studies, hub, vec = null, geneLabel = 
   const cellSel = (g) => ({ key: `grp:${g.key}`, ids: new Set(g.ids),
     label: d.varying.map((f) => d.name(f, g.levels[f])).filter(Boolean).join(', ') || 'all samples' });
 
-  const wrap = el('div', { class: 'sd' + (vec ? ' sd-gene' : ''), 'data-study-design': '' });
+  const wrap = el('div', { class: 'sd' + (vec ? ' sd-gene' : '') + (d.time ? ' sd-time' : ''), 'data-study-design': '' });
+
+  const sampleSel = (i) => sampleSelection(samples, i, vec, geneLabel);
+
+  /** One group: a button holding its replicate dots, or with a gene, a small dot chart. */
+  function buildCell(g) {
+    const n = g.ids.length;
+    const cell = el('button', { type: 'button', class: 'sd-cell' + (g.base ? ' base' : ''), 'data-ids': g.ids.join(','),
+      'aria-label': `${cellSel(g).label}: ${n} sample${n === 1 ? '' : 's'}` });
+    const dotsOf = [];
+    if (vec) {
+      const svg = svgEl('svg', { viewBox: `0 0 80 ${H}`, 'aria-hidden': 'true' });
+      ticks.forEach((t) => svg.append(svgEl('line', { x1: 0, x2: 80, y1: Y(t), y2: Y(t), class: 'sd-grid-line' })));
+      const sorted = g.ids.map((i) => vec[i]).sort((a, b) => a - b);
+      const med = sorted[Math.floor(sorted.length / 2)];
+      svg.append(svgEl('line', { x1: 14, x2: 66, y1: Y(med), y2: Y(med), class: 'sd-med' }));
+      g.ids.forEach((i, j) => {
+        const x = n === 1 ? 40 : 18 + (44 * j) / (n - 1);
+        const c = svgEl('circle', { cx: x, cy: Y(vec[i]), r: 3.6, class: 'sd-dot', 'data-i': i, 'data-v': vec[i] });
+        svg.append(c); dotsOf.push([c, i]);
+      });
+      cell.append(svg);
+    } else {
+      const dots = el('span', { class: 'sd-dots' });
+      g.ids.forEach((i) => { const d0 = el('i', { 'data-i': i }); dots.append(d0); dotsOf.push([d0, i]); });
+      cell.append(dots, el('span', { class: 'sd-n' }, `n=${n}`));
+    }
+    brush(cell, hub, () => cellSel(g));
+    // A dot names its own sample under a mouse; leaving it hands back to its group.
+    for (const [node, i] of dotsOf) {
+      node.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hub.preview(sampleSel(i)); });
+      node.addEventListener('pointerleave', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        if (cell.contains(e.relatedTarget)) hub.preview(cellSel(g)); else hub.end(sampleSel(i));
+      });
+    }
+    return cell;
+  }
+  const axisSvg = () => {
+    const ax = svgEl('svg', { class: 'sd-axis', viewBox: `0 0 34 ${H}`, 'aria-hidden': 'true' });
+    ticks.forEach((t) => ax.append(svgEl('text', { x: 30, y: Y(t) + 3.5, 'text-anchor': 'end' }, fmt(t))));
+    return ax;
+  };
+
   for (const pk of d.panelKeys) {
     const panel = el('div', { class: 'sd-panel' });
     const plabel = d.panels.length ? d.label(d.panels, pk) : '';
     if (plabel) panel.append(el('h3', { class: 'sd-ptitle' }, plabel));
+    const rowsHere = d.rowKeys.filter((rk) => d.colKeys.some((ck) => byKey.has(`${pk}|${rk}|${ck}`)));
+    if (d.time) { panel.append(timelinePanel(pk, rowsHere)); wrap.append(panel); continue; }
     const grid = el('div', { class: 'sd-grid', role: 'group',
       'aria-label': `${plabel ? plabel + ': ' : ''}${d.colKeys.length} columns by ${d.rowKeys.length} rows`,
       style: vec ? `grid-template-columns:auto 34px repeat(${d.colKeys.length}, var(--sd-gcell))`
@@ -130,45 +232,81 @@ export function designDrawing(d, samples, studies, hub, vec = null, geneLabel = 
     grid.append(el('span', { class: 'sd-corner' }, d.rows ? FACTOR_LABEL[d.rows] : ''));
     if (vec) grid.append(el('span', {}));
     for (const ck of d.colKeys) grid.append(el('span', { class: 'sd-col' }, d.label(d.cols, ck) || 'all'));
-    for (const rk of d.rowKeys) {
-      if (!d.colKeys.some((ck) => byKey.has(`${pk}|${rk}|${ck}`))) continue;
+    for (const rk of rowsHere) {
       grid.append(el('span', { class: 'sd-row' }, d.rows ? d.name(d.rows, rk) : ''));
-      if (vec) {
-        const ax = svgEl('svg', { class: 'sd-axis', viewBox: `0 0 34 ${H}`, 'aria-hidden': 'true' });
-        ticks.forEach((t) => ax.append(svgEl('text', { x: 30, y: Y(t) + 3.5, 'text-anchor': 'end' }, fmt(t))));
-        grid.append(ax);
-      }
+      if (vec) grid.append(axisSvg());
       for (const ck of d.colKeys) {
         const g = byKey.get(`${pk}|${rk}|${ck}`);
-        if (!g) { grid.append(el('span', { class: 'sd-empty', 'aria-hidden': 'true' })); continue; }
-        const n = g.ids.length;
-        const cell = el('button', { type: 'button', class: 'sd-cell' + (g.base ? ' base' : ''), 'data-ids': g.ids.join(','),
-          'aria-label': `${cellSel(g).label}: ${n} sample${n === 1 ? '' : 's'}` });
-        if (vec) {
-          const svg = svgEl('svg', { viewBox: `0 0 80 ${H}`, 'aria-hidden': 'true' });
-          ticks.forEach((t) => svg.append(svgEl('line', { x1: 0, x2: 80, y1: Y(t), y2: Y(t), class: 'sd-grid-line' })));
-          const xs = g.ids.map((i) => vec[i]);
-          const sorted = [...xs].sort((a, b) => a - b);
-          const med = sorted[Math.floor(sorted.length / 2)];
-          svg.append(svgEl('line', { x1: 14, x2: 66, y1: Y(med), y2: Y(med), class: 'sd-med' }));
-          g.ids.forEach((i, j) => {
-            const x = n === 1 ? 40 : 18 + (44 * j) / (n - 1);
-            svg.append(svgEl('circle', { cx: x, cy: Y(vec[i]), r: 3.2, class: 'sd-dot', 'data-i': i },
-              svgEl('title', {}, `${samples[i].label}: ${vec[i]} TPM`)));
-          });
-          cell.append(svg);
-        } else {
-          const dots = el('span', { class: 'sd-dots' });
-          g.ids.forEach((i) => dots.append(el('i', { 'data-i': i, title: samples[i].label })));
-          cell.append(dots, el('span', { class: 'sd-n' }, `n=${n}`));
-        }
-        brush(cell, hub, () => cellSel(g));
-        grid.append(cell);
+        grid.append(g ? buildCell(g) : el('span', { class: 'sd-empty', 'aria-hidden': 'true' }));
       }
     }
     panel.append(el('div', { class: 'sd-scroll' }, grid));
     wrap.append(panel);
   }
+
+  /** Columns placed on a time axis: one lane per row level, each group at its time point. */
+  function timelinePanel(pk, rowsHere) {
+    const t = d.time;
+    const cellW = vec ? 76 : 64, gap = 8;
+    const xs = d.colKeys.map((k) => t.pos.get(k));
+    // Log of time in units of the earliest nonzero time point, so 0, 15 min and 30 min stay
+    // apart while 24 h still fits.
+    const res = Math.min(...xs.filter((v) => v > 0));
+    const f = t.scale === 'log' ? (v) => Math.log2(v / res + 1) : (v) => v;
+    const lo = Math.min(...xs.map(f)), hi = Math.max(...xs.map(f));
+    // Width: enough that the two closest groups in any lane do not touch.
+    let minGap = Infinity;
+    for (const rk of rowsHere) {
+      const here = d.colKeys.filter((ck) => byKey.has(`${pk}|${rk}|${ck}`)).map((k) => f(t.pos.get(k))).sort((a, b) => a - b);
+      for (let j = 1; j < here.length; j++) minGap = Math.min(minGap, here[j] - here[j - 1]);
+    }
+    const span = hi - lo || 1;
+    const W = Math.max(560, minGap < Infinity ? Math.ceil((span / minGap) * (cellW + gap)) + cellW : cellW + 40);
+    const X = (v) => cellW / 2 + ((f(v) - lo) / span) * (W - cellW);
+    const box = el('div', { class: 'sd-tl', role: 'group', style: `--sd-tlw:${W}px`,
+      'aria-label': `Time course, ${t.axis}: ${d.colKeys.length} time points, ${rowsHere.length} lane${rowsHere.length === 1 ? '' : 's'}` });
+    const grid = el('div', { class: 'sd-tlgrid', style: `grid-template-columns:auto${vec ? ' 34px' : ''} ${W}px` });
+    // Season bands (study 17) span every lane; drawn once behind the lanes.
+    const bandRow = (cls) => {
+      const strip = el('div', { class: cls });
+      for (const b of t.bands) {
+        strip.append(el('span', { class: 'sd-band', style: `left:${X(b.a) - cellW / 2 + cellW / 2}px;width:${Math.max(4, X(b.b) - X(b.a))}px` },
+          el('b', {}, b.name)));
+      }
+      return strip;
+    };
+    grid.append(el('span', { class: 'sd-corner' }, d.rows ? FACTOR_LABEL[d.rows] : ''));
+    if (vec) grid.append(el('span', {}));
+    grid.append(t.bands.length ? bandRow('sd-bandlabels') : el('span', {}));
+    for (const rk of rowsHere) {
+      grid.append(el('span', { class: 'sd-row' }, d.rows ? d.name(d.rows, rk) : ''));
+      if (vec) grid.append(axisSvg());
+      const lane = el('div', { class: 'sd-lane' });
+      if (t.bands.length) lane.append(bandRow('sd-bands'));
+      for (const ck of d.colKeys) {
+        const g = byKey.get(`${pk}|${rk}|${ck}`);
+        if (!g) continue;
+        const c = buildCell(g);
+        c.style.left = `${X(t.pos.get(ck)) - cellW / 2}px`;
+        c.style.width = `${cellW}px`;
+        lane.append(c);
+        // A sampling window (study 17) is drawn as a bar under its group, and every group carries
+        // its own time label: lanes can interleave dates a few days apart, so one shared axis
+        // would print labels on top of each other, while groups in one lane never overlap.
+        if (t.span.size) {
+          const [a, b] = t.span.get(ck);
+          lane.append(el('i', { class: 'sd-window', style: `left:${X(a)}px;width:${Math.max(2, X(b) - X(a))}px` }));
+        }
+        const lab = t.dates ? ck.replace(/, \d{4}/g, '').replace(/\s*-\s*/, '-') : (d.label(d.cols, ck) || ck);
+        lane.append(el('span', { class: 'sd-tlab', style: `left:${X(t.pos.get(ck)) - cellW / 2}px;width:${cellW}px` }, lab));
+      }
+      grid.append(lane);
+    }
+    box.append(el('div', { class: 'sd-scroll' }, grid), el('p', { class: 'sd-taxlabel' },
+      t.axis + (t.scale === 'log' ? ', spaced on a log scale' : ', spaced by calendar date')));
+    return box;
+  }
+
   const readout = el('p', { class: 'dmap-readout sd-readout', 'aria-live': 'polite' });
   const clearBtn = el('button', { type: 'button', class: 'dmap-clear', hidden: '', onclick: () => hub.clear() }, 'Clear');
   const idle = vec

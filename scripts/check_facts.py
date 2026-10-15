@@ -30,6 +30,7 @@ Instead DECLARED_BASIS names v9 and every duplication fact is checked against it
 v9 fails just as loudly as a drift off v10. A divergence is only acceptable when it is DECLARED
 here with a reason; anything else fails.
 """
+import roots
 import glob
 import hashlib
 import json
@@ -43,9 +44,7 @@ PIN = os.path.join(ROOT, "sources", "facts_v10.pin.json")
 
 # Where ms1-dup lives on this machine. Same order as ms1-dup's own atlas_contract roots:
 # an explicit env var, then the two conventional layouts.
-MS1_CANDIDATES = [os.environ.get("MS1_DUP_ROOT", ""),
-                  os.path.expanduser("~/dev/ms1-dup"),
-                  f"/scratch/{os.environ.get('USER', '')}/ms1-dup"]
+MS1_CANDIDATES = [roots.root("ms1_dup")]
 
 HAPS = {"hap1": "HAP1", "hap2": "HAP2"}
 HEMI = {"hemizygous_HAP1", "hemizygous_HAP2"}

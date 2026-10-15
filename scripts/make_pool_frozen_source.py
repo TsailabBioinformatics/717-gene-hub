@@ -24,6 +24,7 @@ GATES, all of which must pass or nothing is written:
 NOT A BUILD STAGE. Like the other make_*_source.py scripts it regenerates a committed source by
 hand; the stage that applies it is patch_lsg_pool.py. Needs a clone of ms2-lsg (private).
 """
+import roots
 import csv
 import gzip
 import hashlib
@@ -42,8 +43,7 @@ SRC = "pipeline/out/lsg_pool.tsv"
 RERUN = "pipeline/out/lsg_pool_idesia.tsv.gz"
 KEEP = ["gene_id", "hap", "phylostratum", "rank", "tax_rep", "is_lsg"]
 DROP = {"canonical_label", "group"}
-CANDIDATES = [os.environ.get("MS2_LSG_ROOT", ""), os.path.expanduser("~/dev/ms2-lsg"),
-              os.path.expanduser("~/dev/ms2-scratch/ms2-lsg")]
+CANDIDATES = [roots.root("ms2_lsg")]
 
 
 def git_blob(root, commit, path, want_blob):

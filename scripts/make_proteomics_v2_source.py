@@ -12,12 +12,13 @@ against that analysis's own published `aspen_detection_by_class.tsv`. If a singl
 disagrees, the roll-up is wrong and nothing is written. That is what makes a locally derived
 table honest: it is not "trust me", it is "it reproduces the number the owner published".
 """
+import roots
 import csv, gzip, io, json, os, sys
 from collections import defaultdict, Counter
 
-WORK = "<scratch>/proteomics_aspen"
-POOL = "<scratch>/ms2lsg_wt_proteomics/pipeline/out/lsg_pool_idesia.tsv.gz"
-PUB  = "<scratch>/ms2lsg_wt_proteomics/analyses/proteomics_translation_evidence/results/aspen_detection_by_class.tsv"
+WORK = roots.path('scratch', 'proteomics_aspen')
+POOL = roots.path('scratch', 'ms2lsg_wt_proteomics/pipeline/out/lsg_pool_idesia.tsv.gz')
+PUB  = roots.path('scratch', 'ms2lsg_wt_proteomics/analyses/proteomics_translation_evidence/results/aspen_detection_by_class.tsv')
 DET  = f"{WORK}/out/detectability.tsv"
 FDR  = 0.01
 OUT  = "sources/proteomics_ms_v2.tsv.gz"

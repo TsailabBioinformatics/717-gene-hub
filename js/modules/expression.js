@@ -144,7 +144,7 @@ function paperBlock(g, man) {
     el('table', { class: 'data' },
       el('thead', {}, el('tr', {}, el('th', {}, 'Tissue group'), el('th', { class: 'num' }, 'Mean TPM'),
         el('th', {}, ''), el('th', {}, ''))),
-      el('tbody', {}, ...PAPER_TISSUES.map((t) => el('tr', {},
+      el('tbody', {}, ...PAPER_TISSUES.map((t) => el('tr', { 'data-tissue': t },
         el('td', {}, t === p.top ? el('strong', {}, t) : t),
         el('td', { class: 'num' }, fmt(p.t[t])),
         el('td', { class: 'muted', style: 'font-size:11px' }, n[t] != null ? `n=${n[t]}` : ''),
@@ -178,7 +178,7 @@ function geneCard(g, man) {
       el('strong', {}, 'Responsiveness: '),
       'median |log2 fold-change| across perturbation contrasts is ',
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible contrasts of the 117-contrast set (the dissertation’s statistics use its 149 curated perturbation contrasts, a different set)`) : null,
+      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible contrasts among the dissertation’s curated perturbation contrasts`) : null,
       el('span', { class: 'muted' }, '. A descriptive number pooled across studies, not a '
         + 'differential-expression test.')) : null,
     g.nb && g.nb.k5 != null ? el('p', { style: 'font-size:12.5px;margin:9px 0 0' },
@@ -268,11 +268,31 @@ function geneCard(g, man) {
   card.append(btn);
 
   // The design map loads with the card: 15 KB of sample metadata plus the vector the
-  // Contrasts view fetches anyway (the range read is cached). It is not linked to the tissue
-  // table above: that table is the dissertation's 222-sample reference panel, and the sample
-  // metadata does not record which samples are in it.
+  // Contrasts view fetches anyway (the range read is cached). Each row of the tissue table above
+  // is one tissue group of the dissertation's 222-sample reference panel (`ref222` on each
+  // sample), so a row lights up exactly its samples, and the readout gives their mean TPM: the
+  // same statistic as the table, from the same samples.
   Promise.all([loadExprSamples(), loadExprStudies(), loadExprVector(g)]).then(([samples, studies, vec]) => {
     if (!samples) return;
+    const table = card.querySelector('[data-paper-expr] table');
+    if (table && samples.some((s) => s.ref222 != null)) {
+      table.classList.add('dmap-linked');
+      table.querySelectorAll('tbody tr[data-tissue]').forEach((tr) => {
+        const t = tr.dataset.tissue;
+        const ids = samples.map((s, i) => (s.ref222 && s.tissue_analysis === t ? i : -1)).filter((i) => i >= 0);
+        if (!ids.length) return;
+        const vals = vec ? ids.map((i) => vec[i]) : [];
+        const mean = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+        const nst = new Set(ids.map((i) => samples[i].study)).size;
+        tr.dataset.ids = ids.join(',');
+        tr.tabIndex = 0;
+        brush(tr, hub, { key: `ref:${t}`, ids: new Set(ids),
+          text: `${t}, reference panel: ${ids.length} samples from ${nst} stud${nst === 1 ? 'y' : 'ies'}.`
+            + (mean != null ? ` This gene: mean ${fmt(Math.round(mean * 100) / 100)} TPM, range `
+              + `${fmt(Math.min(...vals))} to ${fmt(Math.max(...vals))}.` : '') });
+      });
+      hub.on((sel) => paintLinked(table, sel));
+    }
     dmapHolder.append(designGrid(samples, studies, hub, [{ name: 'This gene', vec }], g.id));
   }).catch(() => {});
 

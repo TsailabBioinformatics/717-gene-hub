@@ -46,12 +46,13 @@ Two known data quirks, both asserted rather than assumed:
 
 PATCHER -- runs after build_data.py, before build_facets.py.
 """
+import roots
 import csv, json, os, re, sys
 from collections import defaultdict
 
-MS1 = "<scratch>/ms1-dup"
-MS2 = "<scratch>/ms2-lsg"
-ATLAS = "<scratch>/poplar-717-atlas"
+MS1 = roots.root('ms1_dup')
+MS2 = roots.root('ms2_lsg')
+ATLAS = roots.root('atlas')
 STRIP = re.compile(r"\.\d+\.p$")
 PXD = ("023826", "025636", "064017")
 
@@ -149,7 +150,7 @@ def main():
     # The previous source lived in data/32_te_proximity_threshold/, which ms1-dup CLAUDE.md
     # files under "structural explorations". Rather than serve an exploratory table, the
     # distance is recomputed here from the v5.1 repeatmasked GFF3 that ships with the genome.
-    ANN = "/work/cjtlab/717Official/annotation"
+    ANN = roots.path('work', '717Official/annotation')
     RM = {"hap1": f"{ANN}/PtremulaxPopulusalbaHAP1_717_v5.1.repeatmasked_assembly_v5.0.gff3",
           "hap2": f"{ANN}/PtremulaxPopulusalbaHAP2_716_v5.1.repeatmasked_assembly_v5.0.gff3"}
     GFF = {"hap1": f"{ANN}/PtremulaxPopulusalbaHAP1_717_v5.1.gene_exons.gff3",
@@ -352,7 +353,9 @@ def main():
         json.dump({k: sorted(v) for k, v in arrays.items()}, fh, separators=(",", ":"))
 
     # ---- perturbation responsiveness ------------------------------------------------------
-    d = read_rows(f"{MS1}/data/54_v8_freeze_20260825/perturbation_per_gene_v8.csv", ",")
+    # 149 curated perturbation contrasts (the dissertation's set, ms1-dup data/139, gated there against the
+    # v8 117-contrast values); until 2026-10-14 this read the 117 recommended v4 contrasts.
+    d = read_rows(f"{MS1}/data/139_perturbation_per_gene_149_20261014/perturbation_per_gene_149.csv", ",")
     n_resp = 0
     for g, r in d.items():
         v = num(r.get("responsiveness_med_absl2fc"))
@@ -360,7 +363,8 @@ def main():
         if v is not None:
             L[g]["resp"] = {"v": round(v, 3), "n": int(nc) if nc is not None else None}
             n_resp += 1
-    cov["perturbation responsiveness"] = f"{len(d)} scanned, {n_resp} with a value"
+    cov["perturbation responsiveness"] = (f"{len(d)} scanned, {n_resp} with a value; median |log2FC| over "
+                                          "the eligible contrasts of the 149 curated perturbation contrasts")
 
     # ---- independent tau: REMOVED after audit (2026-09-05) ------------------------------
     # tau_n202_per_gene_all.csv is computed on the n=202 atlas panel. ms1-dup CLAUDE.md is
@@ -430,6 +434,8 @@ def main():
         "proteomics_note": "Three independent PXD datasets, reported separately. Detection "
                            "rates differ ~4x (3,989 / 18,739 / 21,449 genes), so a gene absent "
                            "from one is not undetected.",
+        "responsiveness": {"contrast_set": "curated perturbation contrasts", "n_contrasts": 149,
+                           "eligibility": "max(arm mean TPM) >= 5", "statistic": "median |log2FC|"},
         "dup_code": {"S": "salicoid WGD", "A": "ancient WGD", "T": "tandem",
                      "D": "dispersed", "C": "none detected"},
     }

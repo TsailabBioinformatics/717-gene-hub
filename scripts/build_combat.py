@@ -22,6 +22,7 @@ Output, sized like the raw buckets: `data/expr/combat_buckets/{hap}/{n}.json`, s
 keys as the existing raw buckets (`x.b`), so a ComBat sub-bucket is a subset of its raw
 counterpart's genes, not a new bucketing scheme to keep in sync.
 """
+import roots
 import csv
 import hashlib
 import json
@@ -30,7 +31,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-MS1 = "<onedrive>/01_work/MS1_2026"
+MS1 = roots.root('onedrive_ms1')
 COMBAT_CSV = f"{MS1}/latest draft from CJ_tmp/expression/combined_tpm_k21_ComBatSeq_v7.csv"
 META_CSV = f"{MS1}/data/04_gene_atlas/expression_2026_0813_rerun/COLUMN_LEVEL_sample_metadata.csv"
 

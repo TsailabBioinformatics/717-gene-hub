@@ -17,11 +17,12 @@ inferring a WGD peak from a phylostratum-selected subset would be invalid.
 
 PATCHER -- runs after build_data.py. See README "Build order".
 """
+import roots
 import csv, json, os, sys
 from collections import defaultdict
 
-DS = "<scratch>/tier2_ds_input/tier2_ds_pairs.tsv"
-ATLAS = "<scratch>/poplar-717-atlas"
+DS = roots.path('scratch', 'tier2_ds_input/tier2_ds_pairs.tsv')
+ATLAS = roots.root('atlas')
 
 def num(x):
     try:

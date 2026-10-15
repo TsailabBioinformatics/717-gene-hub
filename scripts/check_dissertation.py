@@ -18,17 +18,17 @@ case the committed source (sources/dissertation_layer.tsv.gz) stands in where it
 Every "none found" check is paired with a positive control: the scanner is first shown a string
 it must catch, so a pattern that could never match cannot pass silently.
 """
+import roots
 import argparse, csv, gzip, json, os, re, sys
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-MS1_DUP = os.environ.get("MS1_DUP", os.path.expanduser("~/dev/ms1-dup"))
+MS1_DUP = os.environ.get("MS1_DUP", os.path.expanduser(roots.root('ms1_dup')))
 MASTER = os.path.join(MS1_DUP, "data/131_master_v12_20261002/tables/master_per_gene_v12.csv")
 FROZEN = os.path.join(MS1_DUP, "data/79_nn_to_11_and_wgd_freeze_20260919/tables/wgd_pair_classes_FROZEN_1p05.csv")
 CH3_TABLE = os.environ.get("CH3_TABLE", os.path.expanduser(
-    "~/Library/CloudStorage/OneDrive-UniversityofGeorgia/01_work/fin/dissertation_work/"
-    "ch3_strict567_20261005/tables/Table_3.S1_S3_per_gene.tsv"))
+    roots.path('onedrive_work', 'fin/dissertation_work/ch3_strict567_20261005/tables/Table_3.S1_S3_per_gene.tsv')))
 
 # ---- numbers printed in the dissertation (committee copy, 2026-10-08) ----------------------
 TABLE_2_1 = {"HAP1": {"quality_filtered_genes": 31819, "sWGD": 14136, "aWGT": 5408, "tandem": 6663,

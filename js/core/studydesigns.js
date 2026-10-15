@@ -10,6 +10,11 @@
 const T = 'tissue_analysis', TR = 'treatment', G = 'growth', A = 'additional', GE = 'genotype';
 
 const LPI = (v) => v.replace(/^LPI\s*/, 'leaf position ');
+// `time` lays the column factor out on a time axis instead of a grid, for the studies whose
+// metadata states the time of each sample. `at` maps a level to hours; `dates: true` parses the
+// level itself as a calendar date range; `bands` names a factor whose levels shade spans of the
+// axis (study 17's seasons). No treatment window is drawn: the metadata does not say how long
+// a treatment lasted.
 
 export const DESIGNS = {
   1: { rows: T, cols: [G, TR], panels: [A],
@@ -24,15 +29,17 @@ export const DESIGNS = {
     order: { [A]: ['Normal_Wood_side_A', 'Normal_Wood_side_B', 'Tension_Wood', 'Opposite_Wood'] },
     names: { [A]: { Normal_Wood_side_A: 'normal wood, side A', Normal_Wood_side_B: 'normal wood, side B',
       Tension_Wood: 'tension wood', Opposite_Wood: 'opposite wood' } } },
-  12: { rows: TR, cols: [A],
+  12: { rows: TR, cols: [A], time: { scale: 'log', axis: 'hours (sample time point)',
+      at: { '0hr': 0, '2hr': 2, '8hr': 8, '24hr': 24, '48hr': 48, '96hr': 96, '336hr': 336 } },
     order: { [TR]: ['control', 'Tension wood', 'Opposite wood'],
       [A]: ['0hr', '2hr', '8hr', '24hr', '48hr', '96hr', '336hr'] },
     names: { [A]: { '0hr': '0 h', '2hr': '2 h', '8hr': '8 h', '24hr': '24 h', '48hr': '48 h', '96hr': '96 h', '336hr': '336 h' } } },
-  16: { cols: [TR],
+  16: { cols: [TR], time: { scale: 'log', axis: 'hours after LCO treatment (control: untreated)',
+      at: { control: 0, LCO_15min: 0.25, LCO_30min: 0.5, LCO_1hr: 1, LCO_2hr: 2, LCO_4hr: 4, LCO_8hr: 8, LCO_24hr: 24 } },
     order: { [TR]: ['control', 'LCO_15min', 'LCO_30min', 'LCO_1hr', 'LCO_2hr', 'LCO_4hr', 'LCO_8hr', 'LCO_24hr'] },
     names: { [TR]: { LCO_15min: 'LCO 15 min', LCO_30min: 'LCO 30 min', LCO_1hr: 'LCO 1 h', LCO_2hr: 'LCO 2 h',
       LCO_4hr: 'LCO 4 h', LCO_8hr: 'LCO 8 h', LCO_24hr: 'LCO 24 h' } } },
-  17: { rows: T, cols: [A], implied: [G],
+  17: { rows: T, cols: [A], implied: [G], time: { dates: true, axis: 'sampling dates', bands: G },
     order: { [A]: ['Nov 7-15, 2014', 'Nov 21-29, 2014', 'Dec 5-12, 2014', 'Dec 19, 2014 - Jan 3, 2015',
       'Jan 9-17, 2015', 'Jan 13-20, 2015', 'Jan 27-Feb 10, 2015', 'Jan 30- Feb 12, 2015', 'Feb 17-24, 2015',
       'Feb 19-26, 2015', 'Mar 3-10, 2015', 'Mar 5-12, 2015', 'Mar 17-31, 2015', 'Mar 21-26, 2015',

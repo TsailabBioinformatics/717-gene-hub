@@ -28,6 +28,7 @@ FILE FORMAT (gzip, mtime 0 so rebuilds are byte-identical):
                uint8 [n]      sequence, ASCII
                uint8 [n]      DSSP c3, ASCII '-', 'H', 'E'
 """
+import roots
 import csv
 import glob
 import gzip
@@ -44,10 +45,10 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 OUT = os.path.join(DATA, "struct")
-SRC = "<scratch>/atlas_structure_ca"
-PDB_ROOT = "<scratch>/foldseek/results"
+SRC = roots.path('scratch', 'atlas_structure_ca')
+PDB_ROOT = roots.path('scratch', 'foldseek/results')
 # the exact file build_layers.py reads for prot.ss (md5-identical to sequence_features' copy)
-SS_TABLE = "<scratch>/ms2-lsg/analyses/esmfold_secondary_structure/results/secondary_structure_summary.tsv"
+SS_TABLE = roots.path('ms2_lsg', 'analyses/esmfold_secondary_structure/results/secondary_structure_summary.tsv')
 N_SHARDS = 24
 STRUCT_SPAN = 2500
 EXPECTED_SKIPPED = {"PtXaTreH.08G115400"}    # a 0-byte PDB; absent from the SS table too

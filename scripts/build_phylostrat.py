@@ -11,11 +11,12 @@ rank in gene_ages.tsv, so without this flag a reader sees a confident stratum fo
 method itself flagged as uncertain. For a chapter whose thesis rests on PS >= 18, that is
 exactly the wrong place to look confident.
 """
+import roots
 import json, os, re, sys
 from collections import defaultdict
 
-GENERA = "<scratch>/genera/output"
-ATLAS = "<scratch>/poplar-717-atlas"
+GENERA = roots.path('scratch', 'genera/output')
+ATLAS = roots.root('atlas')
 STRIP = re.compile(r"\.\d+\.p$")
 
 def hap_dir(h):

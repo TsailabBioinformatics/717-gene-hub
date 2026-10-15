@@ -37,6 +37,7 @@ committed sources/ files are the artifact. Re-run by hand when route C changes u
 scripts/patch_karyotype.py and scripts/build_facets.py.
 """
 import csv, gzip, hashlib, io, json, os, re, sys
+import roots
 from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -56,10 +57,9 @@ COVERAGE_KEYS = ("n", "aek_block", "route_c_gamma", "route_c_salicoid", "aek_blo
 
 
 def ms1_root():
-    """The OneDrive tree, read from the constant build_all.sh already probes, so the probe and this
-    script cannot drift apart and the repo does not gain another copy of a private path."""
-    src = open(os.path.join(ROOT, "scripts", "patch_dup_v9_and_pav.py")).read()
-    return re.search(r'^MS1\s*=\s*"([^"]+)"', src, re.M).group(1)
+    """The OneDrive tree, from the same roots module build_all.sh asks, so the probe and this script
+    cannot drift apart. (Until 2026-10-14 this regex-parsed patch_dup_v9_and_pav.py for the path.)"""
+    return roots.root("onedrive_ms1")
 
 
 PAINT = os.path.join(ms1_root(), "data", "57_gamma_branch", "painting_v3")

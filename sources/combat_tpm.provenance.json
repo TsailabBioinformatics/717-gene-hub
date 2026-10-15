@@ -2,7 +2,7 @@
  "purpose": "Per-gene batch-corrected TPM (ComBat-seq), an OPT-IN second view for cross-study comparison only. Raw TPM stays the site's primary value everywhere else -- batch is confounded with tissue for ~70% of the 652 samples, so correction would remove real tissue signal if applied as the baseline. Never label this view as more correct than raw TPM; label it as batch-adjusted for cross-study comparison, nothing more.",
  "tier": "public",
  "generated_by": "scripts/build_combat.py",
- "source_file": "<onedrive>/01_work/MS1_2026/latest draft from CJ_tmp/expression/combined_tpm_k21_ComBatSeq_v7.csv",
+ "source_file": "<scratch>/rc_host/machine_roots/onedrive_ms1_full/latest draft from CJ_tmp/expression/combined_tpm_k21_ComBatSeq_v7.csv",
  "source_sha256": "bede81a0d7dc878a6cb50c01b1cdc3420864a7e72daf1c8e61c19b2ebfda48cd",
  "source_gene_rows": 59599,
  "join": {

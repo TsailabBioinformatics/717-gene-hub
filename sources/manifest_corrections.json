@@ -1,0 +1,49 @@
+{
+ "corrections": [
+  {
+   "after_tissue_wt_control_n": {
+    "bark": 38,
+    "bud": 5,
+    "callus": 1,
+    "catkin": 4,
+    "leaf": 55,
+    "leaf_old": 11,
+    "leaf_young": 11,
+    "root": 27,
+    "stem": 2,
+    "xylem": 59
+   },
+   "before_tissue_wt_control_n": {
+    "bark": 38,
+    "bud": 5,
+    "callus": 1,
+    "catkin": 4,
+    "leaf": 77,
+    "root": 27,
+    "stem": 2,
+    "xylem": 59
+   },
+   "date": "2026-09-05",
+   "detail": "docs/DATA_AUDIT.md, CHANGELOG.md",
+   "what": "expression tissue baseline + tau regrouped by tissue_analysis, not tissue",
+   "why": "tissue pooled leaf_young + leaf_old (46 samples, all study 1) into one 'leaf' bucket; the WT-control subset of that pool was 11 + 11 of 77"
+  },
+  {
+   "before": {
+    "age_gradient_pct": {
+     "LSG_pool": 0.12,
+     "PS13_15_rosids": 6.14,
+     "PS16_17_salicaceae": 2.93,
+     "PS1_2_ancient": 42.28,
+     "PS3_12_conserved": 12.78
+    },
+    "method": "raw-spectra re-search against a database CONTAINING the 717 proteins (98,659 targets), Sage 0.14.7, 1% peptide AND spectrum FDR"
+   },
+   "date": "2026-09-21",
+   "detail": "CHANGELOG.md 0.13.2, sources/proteomics_ms_v2.provenance.json corrections_2026_09_21",
+   "what": "proteomics.method and proteomics.age_gradient_pct corrected; no gene record changed",
+   "why": "method named the original Tier 2 database (98,659 targets) but every shipped search used the expanded 135,843-target database; age_gradient_pct was a hand-typed, haplotype-pooled copy of the published Tier 2 figures (LSG pool 0.12%, i.e. 2 of 1,611) that still counted PtXaTreH.14G041300, withdrawn upstream on 2026-09-09. Now computed from the shards per haplotype by patch_proteomics_v2.py:age_gradient() and gated against the owner's union counts."
+  }
+ ],
+ "note": "Data corrections recorded in the manifest. Until 2026-10-14 they existed only in the committed data/meta/manifest.json, which build_data.py rewrites, so a full rebuild dropped them. Extracted verbatim from origin/main data 0.18.1; build_data.py copies them into every new manifest."
+}

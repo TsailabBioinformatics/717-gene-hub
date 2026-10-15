@@ -15,6 +15,7 @@ different naming scheme (`control_500CO2_non-recovered`, underscores) versus the
 191-contrast panel's own scheme (`control,,_WT,_recovered`, commas). Predates the current
 v4 panel by three months (file mtime May vs the panel's own August build). Not used here.
 """
+import roots
 import csv
 import json
 import os
@@ -22,7 +23,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-MS1 = "<onedrive>/01_work/MS1_2026"
+MS1 = roots.root('onedrive_ms1')
 CONTRASTS_CSV = f"{MS1}/data/50_v4_panel_20260814/v4_contrasts_20260814.csv"
 
 

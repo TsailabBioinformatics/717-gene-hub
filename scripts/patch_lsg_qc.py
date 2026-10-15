@@ -113,8 +113,10 @@ def main():
 
     man_path = os.path.join(DATA, "meta", "manifest.json")
     man = json.load(open(man_path))
-    calibration = (man.get("lsg_qc") or {}).get("absense_calibration")
-    assert calibration, "manifest.lsg_qc.absense_calibration is missing; it must travel with the flag"
+    # The calibration is a recorded measurement, committed as a source (it used to live only in the previous
+    # manifest, which a full rebuild rewrites before this stage runs).
+    calibration = json.load(open(os.path.join(ROOT, "sources", "absense_calibration.json")))["absense_calibration"]
+    assert calibration, "sources/absense_calibration.json has no calibration; it must travel with the flag"
     # Its last line named "the Idesia-rerun flag", which C5 removed; the measurement is unchanged.
     calibration["not_retracted"] = (
         "Nothing in the QC layer is withdrawn by this, and the pool does not rest on abSENSE: it "

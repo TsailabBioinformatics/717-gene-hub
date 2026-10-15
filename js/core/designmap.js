@@ -170,7 +170,7 @@ export function designGrid(samples, studies, hub, vecs = [], geneId = '') {
       const hot = sel ? ids.filter((i) => sel.ids.has(i)).length : 0;
       n.dataset.hot = !sel ? '' : hot === ids.length ? 'all' : hot ? 'part' : '';
     }
-    readout.textContent = sel ? describe(sel, samples, studies, vecs) : idle;
+    readout.textContent = sel ? (sel.text || describe(sel, samples, studies, vecs)) : idle;
     clearBtn.hidden = !pinned;
     const sids = sel ? new Set([...sel.ids].map((i) => samples[i].study)) : new Set();
     if (sids.size === 1) {

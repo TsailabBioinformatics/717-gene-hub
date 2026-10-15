@@ -50,6 +50,7 @@ like make_kaks_source.py: it regenerates a committed source, and patch_copies.py
 source into data/. Run it by hand when a locus is added:
     python3 scripts/make_copy_search_source.py        (~5 min on 32 cores)
 """
+import roots
 import glob
 import hashlib
 import json
@@ -60,13 +61,13 @@ from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "sources", "copy_search.json")
-WORK = os.environ.get("ATLAS_COPY_WORK", f"/scratch/{os.environ.get('USER', 'ch29576')}/atlas_copy_search")
+WORK = os.environ.get("ATLAS_COPY_WORK", roots.path("scratch", "atlas_copy_search"))
 
-ANN = "<scratch>/genome_resources/pangenome/input/717Official/annotation"
+ANN = roots.path('scratch', 'genome_resources/pangenome/input/717Official/annotation')
 PROT = {"hap1": f"{ANN}/PtremulaxPopulusalbaHAP1_717_v5.1.protein_primaryTranscriptOnly.fa",
         "hap2": f"{ANN}/PtremulaxPopulusalbaHAP2_716_v5.1.protein_primaryTranscriptOnly.fa"}
-GENOME = {"hap1": "/work/cjtlab/717Official/PtremulaxPopulusalbaHAP1_717_v5.0.fa",
-          "hap2": "/work/cjtlab/717Official/PtremulaxPopulusalbaHAP2_716_v5.0.fa"}
+GENOME = {"hap1": roots.path('work', '717Official/PtremulaxPopulusalbaHAP1_717_v5.0.fa'),
+          "hap2": roots.path('work', '717Official/PtremulaxPopulusalbaHAP2_716_v5.0.fa')}
 BLAST = "module load BLAST+/2.14.1-gompi-2023a >/dev/null 2>&1 && "
 CPUS = os.environ.get("SLURM_CPUS_PER_TASK") or os.environ.get("SLURM_CPUS_ON_NODE") or "8"
 

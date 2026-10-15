@@ -23,12 +23,12 @@ DERIVATION, copied from the figure script that published the numbers
 or gamma if it is an endpoint of ANY pair whose `combined_call` says so; `review` pairs are
 recorded separately rather than counted into either event.
 """
+import roots
 import csv, gzip, io, json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-SRC = ("<scratch>/ms1-dup/.claude/worktrees/talk-td-act/data/57_gamma_branch/"
-       "painting_v3/results/ks_topology_pairs_{hap}.tsv.gz")
+SRC = (roots.path('ms1_dup', '.claude/worktrees/talk-td-act/data/57_gamma_branch/painting_v3/results/ks_topology_pairs_{hap}.tsv.gz'))
 OUT = os.path.join(ROOT, "sources", "wgd_combined_call.tsv.gz")
 PROV = os.path.join(ROOT, "sources", "wgd_combined_call.provenance.json")
 

@@ -15,11 +15,11 @@ name. It writes:
 
 Never placed here: the raw expression matrix and the analysis code.
 """
+import roots
 import argparse, hashlib, json, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT = os.path.expanduser("~/Library/CloudStorage/OneDrive-UniversityofGeorgia/01_work/fin/"
-                             "dissertation_work/atlas_release_20261013")
+DEFAULT = os.path.expanduser(roots.path('onedrive_work', 'fin/dissertation_work/atlas_release_20261013'))
 OUT = os.path.join(ROOT, "downloads")
 LIMIT = 100 * 1000 * 1000
 ALLOWED_EXT = {".csv", ".xlsx", ".md", ".txt"}

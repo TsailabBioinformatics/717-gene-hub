@@ -1548,6 +1548,31 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
       if (!agree(r, parse(got[(i + 1) % got.length].read))) controlDisagrees = true;
     });
   }
+  // (3) The gene page's tissue table (the dissertation's 222-sample reference panel, `ref222`):
+  // each row's n and mean must equal the readout over the samples it lights. Control: a row
+  // read against the NEXT row's readout must disagree.
+  let refRows = 0, refControl = false;
+  for (const gid of ['PtXaTreH.05G120200', 'PtXaAlbH.05G196300']) {
+    await dp.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
+    await dp.waitForSelector('[data-dmap]', { timeout: 15000 });
+    await dp.mouse.move(0, 0);
+    const rows = await dp.evaluate(() => [...document.querySelectorAll('[data-paper-expr] tbody tr[data-ids]')].map((tr) => {
+      tr.dispatchEvent(new FocusEvent('focus'));
+      const o = { t: tr.dataset.tissue, mean: +tr.cells[1].textContent.replace(/,/g, ''), n: tr.cells[2].textContent.trim(),
+        read: document.querySelector('[data-dmap] .dmap-readout').textContent };
+      tr.dispatchEvent(new FocusEvent('blur'));
+      return o;
+    }));
+    const agree = (r, read) => { const m = /: (\d+) samples.*mean ([\d,.]+) TPM/.exec(read);
+      return !!m && `n=${m[1]}` === r.n && Math.abs(+m[2].replace(/,/g, '') - r.mean) <= Math.max(0.011, 0.002 * r.mean); };
+    rows.forEach((r, i) => {
+      refRows++;
+      if (!agree(r, r.read)) bad.push(`${gid} reference row ${r.t}: ${r.n}, mean ${r.mean}; readout "${r.read.slice(0, 120)}"`);
+      if (!agree(r, rows[(i + 1) % rows.length].read)) refControl = true;
+    });
+    if (rows.length !== 9) bad.push(`${gid}: ${rows.length} linked reference rows, expected 9`);
+  }
+  if (!refControl) bad.push('reference rows: positive control did not disagree');
   await dp.goto(`${base}/#/gene/PtXaTreH.05G120200`, { waitUntil: 'networkidle' });
   await dp.waitForSelector('[data-dmap]', { timeout: 15000 });
   await dp.click('[data-card=expression] button:has-text("Show all 652 samples")');
@@ -1563,7 +1588,7 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   const ok = !bad.length && controlDisagrees && profileOk && !derrs.length;
   if (!ok) failures++;
   console.log(`\n### expression:design-map-agrees  ${ok ? 'OK' : 'FAIL'}`);
-  console.log(`   ${nrows} pair-page tissue rows matched against the grid readout; positive control disagrees: ${controlDisagrees}; `
+  console.log(`   ${nrows} pair-page tissue rows and ${refRows} reference-panel rows matched against the grid readout; positive control disagrees: ${controlDisagrees}; `
     + `gene-page cell lights its samples in the profile: ${profileOk}`);
   [...bad, ...derrs].forEach((e) => console.log('   !! ' + e));
   await dp.close();
@@ -1580,7 +1605,7 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   await sp.goto(`${base}/#/`, { waitUntil: 'networkidle' });
   const studies = await sp.evaluate(async () => Object.keys(await (await fetch('data/expr/studies.json')).json()));
   const drawnOnce = () => {
-    const ids = [...document.querySelectorAll('[data-study-design] [data-i]')].map((n) => +n.dataset.i);
+    const ids = [...document.querySelectorAll('[data-card=study-design] [data-study-design] [data-i]')].map((n) => +n.dataset.i);
     const n = +((document.querySelector('[data-card=study-design] .sd-lede') || {}).textContent || '').match(/^([\d,]+) samples/)[1].replace(/,/g, '');
     const rows = document.querySelectorAll('tbody tr[data-i]').length;
     return { ok: ids.length === n && new Set(ids).size === n && rows === n, ids: ids.length, n, rows };
@@ -1596,9 +1621,9 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
       document.querySelectorAll('.sd-contrasts tbody tr').forEach((tr, j) => {
         tr.focus();
         const want = new Set(tr.dataset.ids.split(',').map(Number));
-        const got = [...document.querySelectorAll('.sd-cell[data-hot="all"]')].flatMap((c) => c.dataset.ids.split(',').map(Number));
-        const part = document.querySelectorAll('.sd-cell[data-hot="part"]').length;
-        const ctrl = document.querySelectorAll('.sd-cell[data-role="ctrl"]').length;
+        const got = [...document.querySelectorAll('[data-card=study-design] .sd-cell[data-hot="all"]')].flatMap((c) => c.dataset.ids.split(',').map(Number));
+        const part = document.querySelectorAll('[data-card=study-design] .sd-cell[data-hot="part"]').length;
+        const ctrl = document.querySelectorAll('[data-card=study-design] .sd-cell[data-role="ctrl"]').length;
         if (part || got.length !== want.size || !got.every((i) => want.has(i)) || !ctrl) out.push(`row ${j + 1}`);
         tr.blur();
       });
@@ -1609,7 +1634,7 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   }
   // Positive control for (1): duplicate one dot and the same test must fail.
   const control = await sp.evaluate((fn) => {
-    const dot = document.querySelector('[data-study-design] [data-i]');
+    const dot = document.querySelector('[data-card=study-design] [data-study-design] [data-i]');
     dot.parentNode.append(dot.cloneNode());
     return (0, eval)(`(${fn})`)().ok;
   }, drawnOnce.toString());
@@ -1617,8 +1642,8 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   const gid = 'PtXaTreH.05G194600';
   await sp.goto(`${base}/#/study/12?gene=${gid}`, { waitUntil: 'networkidle' });
   await sp.waitForSelector('.sd-gene');
-  const onStudy = await sp.evaluate(() => [...document.querySelectorAll('.sd-cell')].map((c) => {
-    const v = [...c.querySelectorAll('circle title')].map((t) => +t.textContent.split(': ')[1].replace(' TPM', ''));
+  const onStudy = await sp.evaluate(() => [...document.querySelectorAll('[data-card=study-design] .sd-cell')].map((c) => {
+    const v = [...c.querySelectorAll('circle[data-v]')].map((t) => +t.dataset.v);
     return `${v.length}:${(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2)}`;
   }).sort());
   await sp.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
@@ -1638,13 +1663,103 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   await sp.close();
 }
 
+// Study design layout and highlight hygiene.
+// (1) No label in a design drawing overlaps another, sits outside its drawing, or widens the
+//     page, at six widths, with web fonts and once without (fonts change text width). A planted
+//     overlapping label must be caught.
+// (2) Nothing stays lit after the mouse leaves a group or a dot, and a dot names its own sample.
+{
+  const scan = () => {
+    const out = [];
+    for (const panel of document.querySelectorAll('[data-card=study-design] .sd-panel')) {
+      const els = [...panel.querySelectorAll('.sd-col, .sd-row, .sd-tlab, .sd-bandlabels b, .sd-ptitle')]
+        .filter((n) => n.textContent.trim() && n.getClientRects().length);
+      const r = els.map((n) => n.getBoundingClientRect());
+      for (let a = 0; a < r.length; a++) {
+        for (let b = a + 1; b < r.length; b++) {
+          const ov = Math.min(r[a].right, r[b].right) - Math.max(r[a].left, r[b].left);
+          const oh = Math.min(r[a].bottom, r[b].bottom) - Math.max(r[a].top, r[b].top);
+          if (ov > 1 && oh > 1) out.push(`"${els[a].textContent.trim()}" overlaps "${els[b].textContent.trim()}"`);
+        }
+      }
+      for (const n of panel.querySelectorAll('.sd-n, .sd-tlab, .sd-col')) {
+        if (n.scrollWidth > n.clientWidth + 1 && getComputedStyle(n).overflow !== 'visible') out.push(`"${n.textContent.trim()}" is clipped`);
+      }
+    }
+    if (document.documentElement.scrollWidth > innerWidth + 1) out.push(`page is ${document.documentElement.scrollWidth}px wide at ${innerWidth}px`);
+    return out;
+  };
+  const lerrs = [];
+  const fresh = async (w) => {   // a new tab per width: one tab through 56 loads can run out of memory
+    const t = await browser.newPage({ viewport: { width: w, height: 900 } });
+    t.on('pageerror', (e) => lerrs.push(e.message));
+    return t;
+  };
+  let lp = null;
+  const bad = [];
+  let pages = 0;
+  const routes = ['/study/1', '/study/12', '/study/16', '/study/17', '/study/27', '/study/31',
+    '/study/12?gene=PtXaTreH.05G194600', '/study/17?gene=PtXaTreH.05G194600'];
+  for (const [w, fonts] of [[320, true], [390, true], [768, true], [1024, true], [1280, true], [1600, true], [390, false]]) {
+    if (lp) await lp.close();
+    lp = await fresh(w);
+    if (!fonts) await lp.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
+    for (const r of routes) {
+      await lp.goto(`${base}/#${r}`, { waitUntil: 'networkidle' });
+      await lp.waitForSelector('[data-card=study-design] .sd-panel', { timeout: 15000 });
+      pages++;
+      (await lp.evaluate(scan)).forEach((m) => bad.push(`${r} at ${w}px${fonts ? '' : ' without web fonts'}: ${m}`));
+    }
+    if (!fonts) await lp.unroute(/fonts\.(googleapis|gstatic)\.com/);
+  }
+  const sees = (await lp.evaluate((fn) => {
+    const a = document.querySelector('[data-card=study-design] .sd-row');
+    const b = a.cloneNode(true);
+    b.style.position = 'absolute'; b.style.left = a.offsetLeft + 'px'; b.style.top = a.offsetTop + 'px';
+    a.parentNode.append(b);
+    return (0, eval)(`(${fn})`)().length;
+  }, scan.toString())) > 0;
+  // (2) highlight hygiene, with a real mouse.
+  await lp.close();
+  lp = await fresh(1280);
+  await lp.goto(`${base}/#/study/12?gene=PtXaTreH.05G194600`, { waitUntil: 'networkidle' });
+  await lp.waitForSelector('[data-card=study-design] .sd-dot');
+  const lit = () => lp.evaluate(() => ({
+    hot: document.querySelectorAll('[data-card=study-design] [data-hot="all"], [data-card=study-design] [data-hot="part"], tr[data-hot="all"]').length,
+    read: document.querySelector('[data-card=study-design] .dmap-readout').textContent }));
+  const cell = await lp.$('[data-card=study-design] .sd-cell');
+  const cb = await cell.boundingBox();
+  await lp.mouse.move(cb.x + 4, cb.y + 4);
+  const onCell = await lit();
+  const dot = await lp.$('[data-card=study-design] .sd-dot');
+  const db = await dot.boundingBox();
+  await lp.mouse.move(db.x + db.width / 2, db.y + db.height / 2);
+  const onDot = await lit();
+  await lp.mouse.move(2, 2);
+  const after = await lit();
+  const dotNames = /^\S+.*: .*(TPM)\.$/.test(onDot.read) && onDot.read !== onCell.read;
+  const clears = after.hot === 0 && /^Each dot is one sample/.test(after.read);
+  if (!(onCell.hot > 0)) bad.push('hovering a group lit nothing');
+  if (!dotNames) bad.push(`hovering a dot did not name its sample: "${onDot.read.slice(0, 120)}"`);
+  if (!clears) bad.push(`after the mouse left, ${after.hot} marks stayed lit; readout "${after.read.slice(0, 80)}"`);
+  const ok = !bad.length && sees && !lerrs.length;
+  if (!ok) failures++;
+  console.log(`\n### study:design-layout  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${pages} page renders at 6 widths (one pass without web fonts); planted overlap caught: ${sees}; `
+    + `dot names its sample: ${dotNames}; nothing lit after leaving: ${clears}`);
+  [...bad.slice(0, 20), ...lerrs].forEach((e) => console.log('   !! ' + e));
+  await lp.close();
+}
+
 // A null handed to the browser's own append() is printed as the word "null". These two genes
 // reach their allele through a tandem array, the path that did it. Planted control as below.
 {
   const np = await browser.newPage({ viewport: { width: 1180, height: 900 } });
-  const LEAK = /null\b|undefined\b|\bNaN\b|\[object Object\]/;   // no leading \b: "3 morenull"
+  // No leading \b ("3 morenull"); "is undefined" is prose ("ω is undefined when Ks is 0"), so 05G120200 carries
+  // that sentence and must pass.
+  const LEAK = /null\b|(?<!is )undefined\b|\bNaN\b|\[object Object\]/;
   const hits = [];
-  for (const gid of ['PtXaTreH.01G009600', 'PtXaTreH.10G046700', 'PtXaTreH.08G070200']) {
+  for (const gid of ['PtXaTreH.01G009600', 'PtXaTreH.10G046700', 'PtXaTreH.08G070200', 'PtXaTreH.05G120200']) {
     await np.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
     await np.waitForTimeout(1500);
     const t = await np.evaluate(() => document.querySelector('#view').innerText);
@@ -1655,7 +1770,7 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   const ok = !hits.length && sees;
   if (!ok) failures++;
   console.log(`\n### genepage:no-leaked-null  ${ok ? 'OK' : 'FAIL'}`);
-  console.log(`   3 gene pages scanned; positive control detected: ${sees}`);
+  console.log(`   4 gene pages scanned; positive control detected: ${sees}`);
   hits.forEach((h) => console.log('   !! ' + h));
   await np.close();
 }

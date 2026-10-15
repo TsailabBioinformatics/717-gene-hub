@@ -21,10 +21,11 @@ LSG-with-conserved. The owning analysis's Result 2 says the same thing from the 
 arm A is 0.96% against a gap- and depth-matched conserved 3.61%, i.e. LSG pairs are LESS often
 fused, not more.
 """
+import roots
 import csv, gzip, io, json, os, sys
 from collections import Counter, defaultdict
 
-SRC = "<scratch>/pb_rnaseq_wt/analyses/piggyback_rnaseq_junctions/out_idesia"
+SRC = roots.path('scratch', 'pb_rnaseq_wt/analyses/piggyback_rnaseq_junctions/out_idesia')
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_I = os.path.join(ROOT, "sources", "intron_support.tsv.gz")
 OUT_S = os.path.join(ROOT, "sources", "gene_model_pairs.tsv.gz")

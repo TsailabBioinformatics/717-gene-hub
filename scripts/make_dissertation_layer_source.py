@@ -25,14 +25,15 @@ Inputs are found through environment variables so no machine path is needed in t
   MS1_EXPR  folder holding the TPM matrix                   (default: the OneDrive MS1_2026 tree)
   CH3_TABLE Table_3.S1_S3_per_gene.tsv of the final LSG set
 """
+import roots
 import csv, gzip, hashlib, io, json, os, re, subprocess, sys, time
 
 import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MS1_DUP = os.environ.get("MS1_DUP", os.path.expanduser("~/dev/ms1-dup"))
-ONEDRIVE = os.path.expanduser("~/Library/CloudStorage/OneDrive-UniversityofGeorgia/01_work")
+MS1_DUP = os.environ.get("MS1_DUP", os.path.expanduser(roots.root('ms1_dup')))
+ONEDRIVE = os.path.expanduser(roots.root('onedrive_work'))
 MS1_EXPR = os.environ.get("MS1_EXPR", os.path.join(
     ONEDRIVE, "MS1_2026/data/04_gene_atlas/expression_2026_0813_rerun"))
 CH3_TABLE = os.environ.get("CH3_TABLE", os.path.join(

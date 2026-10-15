@@ -7,7 +7,7 @@ import { paperExpr, paperHighest, lsgStatus, qcBanner, isQcFlagged, releaseLine,
 import { glossaryView } from './modules/glossary.js';
 import { downloadsView } from './modules/downloads.js';
 import { linkHub, brush } from './core/designmap.js';
-import { designOf, designDrawing, contrastList, studyContrasts } from './core/studydesign.js';
+import { designOf, designDrawing, contrastList, studyContrasts, sampleSelection } from './core/studydesign.js';
 import { FACTOR_LABEL } from './core/studydesigns.js';
 import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE,
          EVIDENCE_TIERS } from './core/registry.js';
@@ -411,7 +411,7 @@ function glanceCard(g, man) {
   if (g.resp && g.resp.v != null) {
     bits.push(['Responsiveness', el('span', {},
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} of the 117-contrast set` : ''}`))]);
+      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} of the dissertation’s curated perturbation contrasts` : ''}`))]);
   }
   if (g.allele && g.allele.id) {
     bits.push(['Allele', el('span', {},
@@ -1065,9 +1065,19 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
       + (d.varying.length ? ` that differ by ${[...d.panels, d.rows, ...d.cols].filter(Boolean).map((f) => FACTOR_LABEL[f]).join(', ')}` : '')
       + '. A filled group is wild-type control samples.'),
     geneBox, geneNote,
-    designDrawing(d, all, studies, hub, vec, vec ? gene.id : ''),
-    cs.length ? el('h3', { class: 'sd-h3' }, `Comparisons in this study (${cs.length})`) : null,
-    contrastList(cs, all, hub, vec, d));
+    designDrawing(d, all, studies, hub, vec, vec ? gene.id : ''));
+  const comparisonsCard = cs.length ? el('div', { class: 'card', 'data-card': 'study-comparisons' },
+    el('h2', {}, `Comparisons in this study (${cs.length})`),
+    el('p', { class: 'sd-lede' }, 'Point at or tap a comparison to mark its two groups in the design; '
+      + 'the group it is compared with is dashed.'),
+    contrastList(cs, all, hub, vec, d)) : null;
+  // On a phone the design scrolls away; a button brings back a copy of it, kept in step by the
+  // same selection, in a sheet (a dialog: focus stays inside, Escape closes it).
+  const sheet = el('dialog', { class: 'sd-sheet', 'aria-label': 'Study design' },
+    el('div', { class: 'sd-sheet-head' }, el('strong', {}, vec ? `${gene.id} across this study` : 'Study design'),
+      el('button', { type: 'button', class: 'btn', onclick: () => sheet.close() }, 'Close')),
+    designDrawing(d, all, studies, hub, vec, vec ? gene.id : ''));
+  const sheetBtn = el('button', { type: 'button', class: 'sd-sheet-btn', hidden: '', onclick: () => sheet.showModal() }, 'Design');
 
   // Lead with the paper, not the serial number; the number stays in the subtitle.
   const meta = studyMeta(s.citation);
@@ -1083,21 +1093,41 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     s.flags.includes('prefer_counts_over_tpm') && el('div', { class: 'warn' },
       'This study\'s single-end fragment length was not individually calibrated. Effective-length ',
       'inflation is measurable here, prefer est_counts over TPM/FPKM for this study.'),
-    designCard,
-    el('div', { class: 'card' },
+    el('div', { class: 'sd-layout' },
+      el('div', { class: 'sd-railcol' }, designCard),
+      el('div', { class: 'sd-flow' }, comparisonsCard, sampleCard, el('div', { class: 'card' },
       el('h2', {}, 'Factors and source'),
       el('p', {}, factorRow('Tissue', s.tissues), factorRow('Panel', s.panel_type),
         factorRow('Genotype', s.genotypes), factorRow('Treatment', s.treatments),
         factorRow('Growth', s.growth_conditions), factorRow('Additional', s.additional_conditions)),
       s.citation && el('p', { class: 'muted', style: 'font-size:12.5px;margin-top:10px' }, cleanCitation(s.citation)),
-      s.doi.length ? el('p', {}, ...s.doi.map((d) => el('a', { href: d, target: '_blank', rel: 'noopener' }, d))) : null),
-    sampleCard,
+      s.doi.length ? el('p', {}, ...s.doi.map((d) => el('a', { href: d, target: '_blank', rel: 'noopener' }, d))) : null))),
+    sheetBtn, sheet,
   ));
+  // The sheet button shows only on a narrow screen, and only while less than 120 px of the
+  // design is on screen (an edge touching the viewport still counts as visible to an observer).
+  {
+    const wide = window.matchMedia('(min-width: 1200px)');
+    let queued = false;
+    const sync = () => {
+      queued = false;
+      if (!designCard.isConnected) { window.removeEventListener('scroll', ask); return; }
+      const r = designCard.getBoundingClientRect();
+      const shown = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+      sheetBtn.hidden = wide.matches || shown >= 120;
+      if (wide.matches && sheet.open) sheet.close();
+    };
+    const ask = () => { if (!queued) { queued = true; requestAnimationFrame(sync); } };
+    window.addEventListener('scroll', ask, { passive: true });
+    window.addEventListener('resize', ask);
+    wide.addEventListener('change', ask);
+    ask();
+  }
   // Sample rows join the same selection as the drawing.
   sampleCard.querySelectorAll('tbody tr[data-i]').forEach((tr) => {
     const i = +tr.dataset.i;
     tr.tabIndex = 0;
-    brush(tr, hub, { key: `s:${i}`, label: all[i].label, ids: new Set([i]) });
+    brush(tr, hub, sampleSelection(all, i, vec, vec ? gene.id : ''));
   });
   hub.on((sel) => {
     sampleCard.toggleAttribute('data-sel', !!sel);

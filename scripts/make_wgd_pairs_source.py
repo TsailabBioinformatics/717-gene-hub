@@ -18,6 +18,7 @@ are rather than reconciling one to the other.
 Correlation: same basis as duplicate_coexpr.tsv.gz -- Pearson r on log2(ComBat TPM + 1) over
 652 samples. Blank r = a partner is outside the ComBat matrix or flat, NOT uncorrelated.
 """
+import roots
 import csv, gzip, io, json, os
 import numpy as np
 
@@ -25,7 +26,7 @@ from expr_range_reader import load_combat_vectors
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-SRC = "<scratch>/ms1-dup/data/54_v8_freeze_20260825/wgd_anchor_pairs_v8_reordered_20260902.csv"
+SRC = roots.path('ms1_dup', 'data/54_v8_freeze_20260825/wgd_anchor_pairs_v8_reordered_20260902.csv')
 OUT = os.path.join(ROOT, "sources", "wgd_pairs.tsv.gz")
 
 

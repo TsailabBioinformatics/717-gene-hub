@@ -23,6 +23,7 @@ Record per gene (keys kept short; ~40k of them):
   seq  one-letter sequence of the kept residues
   ss   pydssp c3 string, one of '-', 'H', 'E' per residue
 """
+import roots
 import glob
 import gzip
 import json
@@ -32,7 +33,7 @@ import sys
 import numpy as np
 import pydssp
 
-PDB_ROOT = "<scratch>/foldseek/results"
+PDB_ROOT = roots.path('scratch', 'foldseek/results')
 BB = ("N", "CA", "C", "O")
 SUFFIX = ".1.p.pdb"
 AA3 = {

@@ -126,9 +126,6 @@ function overview(man) {
         el('li', {}, el('strong', {}, 'The lineage-specific gene set is the final one. '),
           'Gene pages, Browse and the counts use the dissertation’s final set, 583 HAP1 and 621 HAP2 genes. '
           + 'The 776 HAP1 and 835 HAP2 candidates at PS18 or PS19 stay visible, and an excluded candidate says why it was excluded.'),
-        el('li', {}, el('strong', {}, 'Stress responsiveness uses an earlier contrast set. '),
-          'The responsiveness value on gene pages is a median over 117 contrasts with a control group; '
-          + 'the dissertation’s perturbation statistics use its 149 curated perturbation contrasts. The value is labelled accordingly.'),
         el('li', {}, el('strong', {}, 'Presence/absence is the strict, protein-level set. '),
           'A gene is Strict PAV when it is hemizygous, is not a tandem duplicate, has no protein-level '
           + 'match on the other haplotype and no near-full-length match at the syntenic position: '

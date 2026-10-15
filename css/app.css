@@ -638,3 +638,38 @@ h2.sect:first-child { margin-top: 2px; }
 .dmap-study { font-size: 12.5px; white-space: nowrap; align-self: center; }
 @media (max-width: 640px) { .sd-contrasts td, .sd-contrasts th { white-space: nowrap; } }
 @media (max-width: 640px) { .dmap-foot { flex-wrap: wrap; } .dmap-readout { flex: 1 1 100%; } }
+
+/* Time-course studies (12, 16, 17): groups placed at their time point, one lane per row level.
+   Season bands come from the metadata's own season labels. */
+.sd-tlgrid { display: grid; gap: 6px 4px; align-items: start; width: max-content; }
+.sd-tlgrid > .sd-row { align-self: start; padding-top: 18px; }
+.sd-lane { position: relative; height: calc(52px + 34px); }
+.sd-gene .sd-lane { height: calc(96px + 34px); }
+.sd-lane > .sd-cell { position: absolute; top: 0; }
+.sd-bands { position: absolute; inset: 0 0 0 0; z-index: 0; pointer-events: none; }
+.sd-band { position: absolute; top: 0; bottom: 0; background: var(--panel-2);
+  }
+.sd-band b { display: none; }
+.sd-bandlabels { position: relative; height: 18px; }
+.sd-bandlabels .sd-band { background: none; border: 0; }
+.sd-bandlabels .sd-band b { display: block; font-size: 12px; font-weight: 600; color: var(--ink-2); text-align: center; }
+.sd-lane > .sd-cell { z-index: 1; }
+.sd-window { position: absolute; top: calc(100% - 30px); height: 3px; background: var(--ink-3); border-radius: 2px; z-index: 1; }
+.sd-tlab { position: absolute; top: calc(100% - 24px); font-size: 11.5px; line-height: 1.2; color: var(--ink-2);
+  text-align: center; z-index: 1; }
+.sd-taxlabel { font-size: 12px; color: var(--ink-2); margin: 2px 0 0; }
+
+/* Study page: on a wide screen the design stays in view in its own column while the comparisons
+   and samples scroll beside it; on a narrow one a button opens a copy in a sheet. */
+@media (min-width: 1200px) {
+  .sd-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(380px, 1fr); gap: 0 18px; align-items: start; }
+  .sd-railcol { position: sticky; top: calc(var(--top-h, 60px) + 10px); max-height: calc(100vh - var(--top-h, 60px) - 20px); overflow: auto; }
+  .sd-railcol > .card { margin-bottom: 0; }
+}
+.sd-sheet-btn { position: fixed; right: 16px; bottom: 16px; z-index: 20; min-height: 44px; padding: 0 16px;
+  font: inherit; font-weight: 600; border: 1px solid var(--line-2); border-radius: 22px; background: var(--panel);
+  color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; }
+.sd-sheet { width: min(96vw, 900px); max-height: 85vh; border: 1px solid var(--line-2); border-radius: 8px;
+  padding: 12px 14px; background: var(--panel); color: var(--ink); }
+.sd-sheet::backdrop { background: rgba(0,0,0,0.35); }
+.sd-sheet-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }

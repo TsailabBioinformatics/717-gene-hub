@@ -28,6 +28,7 @@ row; per-haplotype category counts equal the owning analysis's own count table; 
 528 / 605 genes; array status counts equal its status_by_hap table; every partner pair has a
 divergence row or is declared missing; tandem membership unchanged from the shipped shards.
 """
+import roots
 import csv
 import gzip
 import hashlib
@@ -46,8 +47,8 @@ KS_ADDED = os.path.join(ROOT, "sources", "allele_ks_added.tsv.gz")
 
 def ms1_repo():
     for p in (os.environ.get("MS1_DUP_REPO"), os.path.join(os.path.dirname(ROOT), "ms1-dup"),
-              "<scratch>/ms1-dup", os.path.expanduser("~/ms1-dup")):
-        if p and os.path.isdir(os.path.join(p, ".git")):
+              roots.root('ms1_dup'), os.path.expanduser(roots.root('ms1_dup'))):
+        if p and os.path.exists(os.path.join(p, ".git")):  # a worktree has a .git FILE
             return p
     raise SystemExit("REFUSING: no ms1-dup git clone found (set MS1_DUP_REPO)")
 
@@ -212,6 +213,10 @@ def main():
     # the home page's "allele pairs" tile reads this; the stage that changes alleles owns it
     man.setdefault("annotation", {})["n_allele"] = sum(
         1 for sh in pending.values() for rec in sh.values() if rec.get("allele"))
+    # build_layers.py still loads the DIAMOND candidate PAV layer that this stage supersedes; drop its manifest
+    # coverage so the manifest describes the records actually shipped (no gene carries the DIAMOND record).
+    (man.get("layers") or {}).get("coverage", {}).pop("PAV / hemizygosity (DIAMOND tier1_floor, candidate set only)", None)
+    (man.get("layers") or {}).get("applied", {}).pop("pav", None)
     man["pav"] = {"strict_hap1": 528, "strict_hap2": 605,
                   "source": f"ms1-dup {pin['ms1_dup_commit'][:7]} per-gene table, strict protein-level set"}
     man["relationship"] = {

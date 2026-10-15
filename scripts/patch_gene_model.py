@@ -24,6 +24,7 @@ THREE GATES:
   2. exactly 2,629 genes carry a split flag.
   3. every flagged gene's partner is a real atlas gene.
 """
+import roots
 import csv
 import gzip
 import io
@@ -33,7 +34,7 @@ from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-SRC = "<scratch>/pb_rnaseq_wt/analyses/piggyback_rnaseq_junctions/out_idesia"
+SRC = roots.path('scratch', 'pb_rnaseq_wt/analyses/piggyback_rnaseq_junctions/out_idesia')
 I_TSV = os.path.join(ROOT, "sources", "intron_support.tsv.gz")
 P_TSV = os.path.join(ROOT, "sources", "gene_model_pairs.tsv.gz")
 

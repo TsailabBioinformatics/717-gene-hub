@@ -25,13 +25,12 @@ Structure segments are [offset_from_gene_start, length, kind] with kind 1 = CDS,
 0 = UTR, so the client draws thick CDS boxes and thin UTR boxes the way a
 manuscript locus figure does.
 """
+import roots
 import argparse, collections, gzip, hashlib, json, os, re, sys, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-GFF_DEFAULT = ("<onedrive>/01_work/"
-               "03_resources/bioPoplar Genome Files/"
-               "PtremulaxPopulusalbaALL_v5.1.gene.named.gff3")
+GFF_DEFAULT = (roots.path('onedrive_work', '03_resources/bioPoplar Genome Files/PtremulaxPopulusalbaALL_v5.1.gene.named.gff3'))
 MB = 1_000_000
 BIN = 100_000          # overview bin size
 NAME_RE = re.compile(r"Name=([^;]+)")

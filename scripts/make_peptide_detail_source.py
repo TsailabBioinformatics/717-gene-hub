@@ -23,11 +23,12 @@ is identical to make_proteomics_v2_source.py's, so the two cannot disagree.
 GATE: per-dataset detected-gene counts must equal the owning analysis's own
 aspen_dataset_meta.json, or nothing is written.
 """
+import roots
 import csv, gzip, io, json, os, sys
 from collections import defaultdict
 
-WORK = "<scratch>/proteomics_aspen"
-META = "<scratch>/ms2lsg_wt_proteomics/analyses/proteomics_translation_evidence/results/aspen_dataset_meta.json"
+WORK = roots.path('scratch', 'proteomics_aspen')
+META = roots.path('scratch', 'ms2lsg_wt_proteomics/analyses/proteomics_translation_evidence/results/aspen_dataset_meta.json')
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "sources", "peptide_detail.tsv.gz")
 FDR = 0.01

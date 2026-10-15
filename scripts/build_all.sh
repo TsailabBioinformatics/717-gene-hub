@@ -30,6 +30,7 @@ ALLOW_PARTIAL=0
 # This is read-only and runs before build_data.py can erase the previous shard layers.
 echo "== build graph =="
 python3 scripts/check_stages.py
+python3 scripts/roots.py
 
 # --- what each stage needs -------------------------------------------------------------
 # env|command|dependencies|description.  A dependency names the script that must precede
@@ -96,13 +97,7 @@ have_sapelo2=0
 if python3 scripts/preflight.py >/tmp/preflight.$$ 2>&1; then have_sapelo2=1; fi
 
 # Ask the scripts themselves where the OneDrive tree is, so this probe cannot drift from them.
-MS1_ROOT="$(python3 - <<'PY'
-import re
-src = open("scripts/patch_dup_v9_and_pav.py").read()
-m = re.search(r'^MS1\s*=\s*"([^"]+)"', src, re.M)
-print(m.group(1) if m else "")
-PY
-)"
+MS1_ROOT="$(python3 scripts/roots.py --get onedrive_ms1)"
 have_onedrive=0
 [ -n "$MS1_ROOT" ] && [ -d "$MS1_ROOT" ] && have_onedrive=1
 

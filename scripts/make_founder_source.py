@@ -25,6 +25,7 @@ GATES, all of which must pass or nothing is written:
 NOT A BUILD STAGE. Regenerates a committed source by hand; the stage that applies it is
 patch_founder_rerun.py. Needs a clone of ms2-lsg (private).
 """
+import roots
 import collections
 import csv
 import gzip
@@ -42,9 +43,7 @@ PROV = os.path.join(ROOT, "sources", "founder_families_rerun.provenance.json")
 SRC = "data/founder_families_rerun_20260926/founder_family_per_gene.tsv.gz"
 POOL = "pipeline/out/lsg_pool_idesia.tsv.gz"
 KEEP = ["gene_id", "hap", "family_phylostratum", "family_rank", "family_size", "gene_rank"]
-CANDIDATES = [os.environ.get("MS2_LSG_ROOT", ""), os.path.expanduser("~/dev/ms2-lsg"),
-              os.path.expanduser("~/dev/ms2-scratch/ms2-lsg"),
-              f"/scratch/{os.environ.get('USER', '')}/ms2-lsg"]
+CANDIDATES = [roots.root("ms2_lsg")]
 
 
 def git_blob(root, commit, path, want_blob):

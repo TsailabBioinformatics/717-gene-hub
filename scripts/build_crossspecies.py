@@ -16,11 +16,12 @@ picking the top hit -- an arbitrary pick would read as a confident ortholog call
 
 PATCHER -- runs after build_data.py, before build_facets.py.
 """
+import roots
 import csv, gzip, json, os, sys
 from collections import defaultdict
 
-GS = "<scratch>/ms2_genespace/workdir_local_47798208/syntenicHits"
-ATLAS = "<scratch>/poplar-717-atlas"
+GS = roots.path('scratch', 'ms2_genespace/workdir_local_47798208/syntenicHits')
+ATLAS = roots.root('atlas')
 
 def shard_paths(root):
     out = []

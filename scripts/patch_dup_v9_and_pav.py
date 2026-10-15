@@ -21,6 +21,7 @@ Two independent patches to every shipped shard, both local joins, no Sapelo2 nee
    hemizygous genes, not genome-wide -- genes outside that candidate set get no `pav` key
    at all, matching this site's existing convention for coverage-limited layers.
 """
+import roots
 import csv
 import json
 import os
@@ -28,7 +29,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
-MS1 = "<onedrive>/01_work/MS1_2026"
+MS1 = roots.root('onedrive_ms1')
 V9_CSV = f"{MS1}/data/55_master_v9_20260902/master_duplication_table_v9.csv"
 PAV_CSV = f"{MS1}/data/02_synteny_section/hemizygous_pav_diamond.csv"
 

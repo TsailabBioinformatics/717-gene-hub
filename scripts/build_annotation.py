@@ -21,12 +21,13 @@ truncated -- the release simply did not populate them for HAP2. Recovered as fol
 Every annotation field records which source it came from, so an asymmetry between the
 haplotypes is never mistaken for biology. See manifest.annotation.sources.
 """
-import argparse, csv, json, os, re, sys, time
+import roots
+import argparse, csv, gzip, json, os, re, sys, time
 from collections import defaultdict
 
-ANN = "<scratch>/genome_resources/pangenome/input/717Official/annotation"
-KS = "<scratch>/synt_ks/syntelog_ks.csv"
-MS2 = "<scratch>/ms2_genespace"
+ANN = roots.path('scratch', 'genome_resources/pangenome/input/717Official/annotation')
+KS = roots.path('scratch', 'synt_ks/syntelog_ks.csv')
+MS2 = roots.path('scratch', 'ms2_genespace')
 HAPFILE = {"hap1": "PtremulaxPopulusalbaHAP1_717_v5.1", "hap2": "PtremulaxPopulusalbaHAP2_716_v5.1"}
 
 # "(1 of 24) PF04564//PF04826 - U-box domain (U-box) // Armadillo-like (Arm_2)"
@@ -70,6 +71,19 @@ def read_annotation_info(hap):
             }
     return out
 
+def read_dissertation_at():
+    """gene -> (Arabidopsis locus, description) from the dissertation layer (lab annotation via the per-gene
+    master table). Same rule as patch_dissertation_layer.py: the dissertation's hit replaces Phytozome's where
+    it has one; otherwise Phytozome's is kept. Used here so the free-text search index states the same hit the
+    gene page shows (until 2026-10-14 the index kept Phytozome's older hits)."""
+    out = {}
+    with gzip.open(os.path.join(roots.root('atlas'), "sources", "dissertation_layer.tsv.gz"), "rt") as fh:
+        for r in csv.DictReader(fh, delimiter="\t"):
+            if r["at_locus"]:
+                out[r["gene_id"]] = (r["at_locus"], r["at_desc"] or None)
+    return out
+
+
 def read_go(hap):
     """h{1,2}.custom.GO -- per locus, GO id + name + namespace, both haplotypes."""
     per_gene, terms = {}, {}
@@ -111,7 +125,7 @@ def shard_paths(root):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="<scratch>/poplar-717-atlas/data")
+    ap.add_argument("--out", default=roots.path('atlas', 'data'))
     a = ap.parse_args()
 
     # ---- allele: HAP1 <-> HAP2 syntelogs ----------------------------------------------
@@ -156,6 +170,8 @@ def main():
     ann, go_terms, acc_names = {}, {}, {}
     acc_offers = defaultdict(set)
     stats = defaultdict(int)
+    diss_at = read_dissertation_at()
+    print(f"dissertation Arabidopsis hits: {len(diss_at)} genes")
     for hap in ("hap1", "hap2"):
         defl = read_defline(hap)
         info = read_annotation_info(hap)
@@ -180,10 +196,16 @@ def main():
                 # on every build. Resolved below: label only where every offer agrees.
                 if len(accs) == 1 and desc:
                     acc_offers[accs[0]].add(desc[:80])
-            if i.get("at"):
-                rec["at"] = i["at"]
-            if i.get("atd"):
-                rec["atd"] = i["atd"]
+            if locus in diss_at:
+                rec["at"], atd = diss_at[locus]
+                if atd:
+                    rec["atd"] = atd
+                stats[f"{hap}:at_from_dissertation"] += 1
+            else:
+                if i.get("at"):
+                    rec["at"] = i["at"]
+                if i.get("atd"):
+                    rec["atd"] = i["atd"]
             if pf:
                 rec["pf"] = sorted(set(pf))
             if pt:

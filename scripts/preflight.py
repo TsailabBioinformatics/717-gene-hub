@@ -9,45 +9,51 @@ plausible-looking data/ directory missing eleven layers. A loud stop is much saf
 
 Exit 0 = every source present, safe to build.  Exit 1 = do not build here.
 """
+import roots
 import os, sys
 
 SOURCES = {
     "gene models (BED)": [
-        "<scratch>/ms2_genespace/workdir/bed/Ptrxalhap1.bed",
-        "<scratch>/ms2_genespace/workdir/bed/Ptrxalhap2.bed"],
+        roots.path('scratch', 'ms2_genespace/workdir/bed/Ptrxalhap1.bed'),
+        roots.path('scratch', 'ms2_genespace/workdir/bed/Ptrxalhap2.bed')],
     "synteny (step 7 diff)": [
-        "<scratch>/ms2_genespace/step7_diff_20260901/diff_all_genes.tsv"],
+        roots.path('scratch', 'ms2_genespace/step7_diff_20260901/diff_all_genes.tsv')],
     "synteny (raw pangenes)": [
-        "<scratch>/ms2_genespace/tier3_input_v2_20260901_runA/pangenes_long_RAW.tsv.gz"],
+        roots.path('scratch', 'ms2_genespace/tier3_input_v2_20260901_runA/pangenes_long_RAW.tsv.gz')],
     "phylostratigraphy (genEra)": [
-        "<scratch>/genera/output/hap1/genera_717hap1_v5.1/80863_gene_ages.tsv",
-        "<scratch>/genera/output/hap2/genera_717hap2_v5.1/80863_gene_ages.tsv"],
+        roots.path('scratch', 'genera/output/hap1/genera_717hap1_v5.1/80863_gene_ages.tsv'),
+        roots.path('scratch', 'genera/output/hap2/genera_717hap2_v5.1/80863_gene_ages.tsv')],
     "expression (652-sample v3)": [
-        "<scratch>/ms2_genespace/expression/COLUMN_LEVEL_sample_metadata.csv",
-        "<scratch>/ms2_genespace/expression/combined_tpm_k21_rounded_20260814_study_sorted.csv"],
+        roots.path('scratch', 'ms2_genespace/expression/COLUMN_LEVEL_sample_metadata.csv'),
+        roots.path('scratch', 'ms2_genespace/expression/combined_tpm_k21_rounded_20260814_study_sorted.csv')],
     "functional annotation (Phytozome v5.1)": [
-        "<scratch>/genome_resources/pangenome/input/717Official/annotation/"
-        "PtremulaxPopulusalbaHAP1_717_v5.1.annotation_info.txt"],
-    "allele Ka/Ks": ["<scratch>/synt_ks/syntelog_ks.csv"],
+        roots.path('scratch', 'genome_resources/pangenome/input/717Official/annotation/PtremulaxPopulusalbaHAP1_717_v5.1.annotation_info.txt')],
+    "allele Ka/Ks": [roots.path('scratch', 'synt_ks/syntelog_ks.csv')],
     "duplication class (ms1-dup)": [
-        "<scratch>/ms1-dup/ms1-figures/data/dupclass_membership_v8.csv"],
+        roots.path('ms1_dup', 'ms1-figures/data/dupclass_membership_v8.csv')],
     "tandem arrays (curated union)": [
-        "<scratch>/ms1-dup/data/09_td_pairs/td_union_20260831/union_genes_final.csv"],
+        roots.path('ms1_dup', 'data/09_td_pairs/td_union_20260831/union_genes_final.csv')],
     "perturbation responsiveness": [
-        "<scratch>/ms1-dup/data/54_v8_freeze_20260825/perturbation_per_gene_v8.csv"],
+        roots.path('ms1_dup', 'data/139_perturbation_per_gene_149_20261014/perturbation_per_gene_149.csv')],
     "protein layers (ms2-lsg)": [
-        "<scratch>/ms2-lsg/analyses/strict_control_audit/results/predicted_disorder_genomewide.tsv",
-        "<scratch>/ms2-lsg/analyses/esmfold_secondary_structure/results/secondary_structure_summary.tsv",
-        "<scratch>/ms2-lsg/analyses/proteomics_translation_evidence/results/tier1_pxd064017_by_gene.tsv"],
+        roots.path('ms2_lsg', 'analyses/strict_control_audit/results/predicted_disorder_genomewide.tsv'),
+        roots.path('ms2_lsg', 'analyses/esmfold_secondary_structure/results/secondary_structure_summary.tsv'),
+        roots.path('ms2_lsg', 'analyses/proteomics_translation_evidence/results/tier1_pxd064017_by_gene.tsv')],
     "reference annotation (/work)": [
-        "/work/cjtlab/717Official/annotation/PtremulaxPopulusalbaHAP1_717_v5.1.gene_exons.gff3",
-        "/work/cjtlab/717Official/annotation/PtremulaxPopulusalbaHAP1_717_v5.1.repeatmasked_assembly_v5.0.gff3"],
+        roots.path('work', '717Official/annotation/PtremulaxPopulusalbaHAP1_717_v5.1.gene_exons.gff3'),
+        roots.path('work', '717Official/annotation/PtremulaxPopulusalbaHAP1_717_v5.1.repeatmasked_assembly_v5.0.gff3')],
     "cross-species synteny (own GENESPACE run)": [
-        "<scratch>/ms2_genespace/workdir_local_47798208/syntenicHits/"
-        "Ptrichocarpa_vs_Ptrxalhap1.synHits.txt.gz"],
+        roots.path('scratch', 'ms2_genespace/workdir_local_47798208/syntenicHits/Ptrichocarpa_vs_Ptrxalhap1.synHits.txt.gz')],
 }
 
 def main():
+    upstream = roots.upstream_status()
+    if not all(status["ok"] for status in upstream):
+        print("UPSTREAM ROOT(S) NOT CURRENT. Do not build here.")
+        for status in upstream:
+            if not status["ok"]:
+                print(f"  {status['name']}: {status['path']}")
+        return 1
     missing = {}
     for label, paths in SOURCES.items():
         gone = [p for p in paths if not os.path.exists(p)]

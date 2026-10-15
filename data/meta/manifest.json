@@ -2,9 +2,9 @@
  "annotation": {
   "go_terms": 4862,
   "n_allele": 56386,
-  "n_annotated": 60746,
+  "n_annotated": 60856,
   "n_presence": 62385,
-  "search_tokens": 35377,
+  "search_tokens": 36751,
   "sources": {
    "best_arabidopsis": "annotation_info.txt (both haplotypes)",
    "go": "GO/h{1,2}.custom.GO (lab-built, both haplotypes, with term names)",
@@ -12,7 +12,7 @@
    "pfam_panther": "annotation_info.txt for HAP1; parsed from defline.txt for HAP2 because HAP2's annotation_info domain columns are empty in the release"
   }
  },
- "built": "2026-10-13T21:02:02-0400",
+ "built": "2026-10-14T19:20:10-0400",
  "chromatin": {
   "accessible_region_definition": "genic or within 2 kb of the start, replicates merged -- the source paper's own classification. A 500 bp window fails, because 55% of conserved gene starts have their nearest accessible region more than 2 kb away, which is that paper's headline finding about distal elements in plants.",
   "genes_whose_ortholog_is_ambiguous": 6329,
@@ -199,7 +199,7 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.18.1",
+ "data_version": "0.19.0",
  "dissertation": {
   "analysis_repository_commit": "59eec6bd",
   "arabidopsis_hit_kept_from_older_annotation": 372,
@@ -693,7 +693,7 @@
    "ord": 63960,
    "org": 362,
    "prot": 63945,
-   "resp": 49289,
+   "resp": 49492,
    "td": 13663,
    "te": 63923
   },
@@ -706,7 +706,7 @@
    "genomic order (computed from atlas coordinates)": 63960,
    "neighbour co-expression": 63829,
    "organelle homology": "63960 scanned, 362 with a hit",
-   "perturbation responsiveness": "63960 scanned, 49289 with a value",
+   "perturbation responsiveness": "63960 scanned, 49492 with a value; median |log2FC| over the eligible contrasts of the 149 curated perturbation contrasts",
    "predicted disorder": 63910,
    "proteomics PXD023826": 57845,
    "proteomics PXD025636": 57845,
@@ -735,7 +735,13 @@
    "T": "tandem"
   },
   "esmfold_note": "ESMFold structure covers 40,685 of 63,960 genes (64%). Absence is coverage, not a structural claim.",
-  "proteomics_note": "Three independent PXD datasets, reported separately. Detection rates differ ~4x (3,989 / 18,739 / 21,449 genes), so a gene absent from one is not undetected."
+  "proteomics_note": "Three independent PXD datasets, reported separately. Detection rates differ ~4x (3,989 / 18,739 / 21,449 genes), so a gene absent from one is not undetected.",
+  "responsiveness": {
+   "contrast_set": "curated perturbation contrasts",
+   "eligibility": "max(arm mean TPM) >= 5",
+   "n_contrasts": 149,
+   "statistic": "median |log2FC|"
+  }
  },
  "lsg_pool": {
   "frozen": {

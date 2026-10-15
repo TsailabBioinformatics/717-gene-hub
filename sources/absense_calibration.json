@@ -1,0 +1,29 @@
+{
+ "absense_calibration": {
+  "at_the_boundary_species": {
+   "coverage_of_nominal_99pct_PI_hap1": 0.61,
+   "coverage_of_nominal_99pct_PI_hap2": 0.594,
+   "direction": "abSENSE OVER-predicts what a Salix homolog would have scored. An expected score that is too high makes an observed absence look more surprising than it is, which under-estimates detection_failure_prob and over-calls surprising_absence.",
+   "median_bias_bitscore_hap1": 18.9,
+   "median_bias_bitscore_hap2": 19.2,
+   "species": "Salix purpurea -- the rank-18 boundary. Every HDF flag on this pool is a prediction at this species."
+  },
+  "for_contrast_in_genus": {
+   "Idesia polycarpa": 0.815,
+   "Populus nigra": 0.952,
+   "Populus trichocarpa": 0.982
+  },
+  "global_fit": {
+   "coverage_of_nominal_99pct_PI_hap1": 0.8806,
+   "coverage_of_nominal_99pct_PI_hap2": 0.8715,
+   "mean_abs_error_bitscore": 44.5,
+   "pearson_r_hap1": 0.9814,
+   "pearson_r_hap2": 0.9827
+  },
+  "headline": "abSENSE flags are worst calibrated at exactly the boundary that defines this pool, and biased in the direction that over-calls a young gene. Quote the flag with this number, never alone.",
+  "measured": "2026-09-09, abSENSE --predall over 868,127 predicted-vs-observed bitscore pairs (ms2-lsg analyses/absense_hdf, jobs 48015768_1/_2)",
+  "this_is_the_optimistic_bound": "It is measured in-sample, and on the wrong genes: a Salix pair only exists for a gene that HAS a Salix homolog, which by definition is not an LSG. For a real PS18 gene the Salix prediction is pure out-of-sample extrapolation. 0.59-0.61 is what the model achieves at that boundary on the easy cases."
+ },
+ "extracted_from": "origin/main:data/meta/manifest.json lsg_qc.absense_calibration",
+ "note": "abSENSE calibration measured for the LSG QC layer. Until 2026-10-14 it lived only in the committed data/meta/manifest.json (lsg_qc.absense_calibration), so a full rebuild, which rewrites the manifest first, could not pass patch_lsg_qc.py. Extracted verbatim from origin/main data 0.18.1."
+}

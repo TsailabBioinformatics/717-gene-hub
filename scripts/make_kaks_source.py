@@ -26,14 +26,15 @@ trichocarpa cell -- n_pairs, median NG86 omega and median YN00 omega, 11 cells -
 nothing. The HAP1_HAP2 cells of that table are deliberately not gated on: it counts each
 pair once per partner gene, so its n is exactly twice a per-gene-keyed count.
 """
+import roots
 import csv, gzip, io, json, os, sys
 import statistics as st
 from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-K = "<scratch>/ms2lsg_wt_proteomics/analyses/kaks_populus/results/kaks_all_pairs.tsv.gz"
-POOL = "<scratch>/ms2lsg_wt_proteomics/pipeline/out/lsg_pool_idesia.tsv.gz"
-PUB = "<scratch>/kaks_populus/out/kaks_summary_by_class.tsv"
+K = roots.path('scratch', 'ms2lsg_wt_proteomics/analyses/kaks_populus/results/kaks_all_pairs.tsv.gz')
+POOL = roots.path('scratch', 'ms2lsg_wt_proteomics/pipeline/out/lsg_pool_idesia.tsv.gz')
+PUB = roots.path('scratch', 'kaks_populus/out/kaks_summary_by_class.tsv')
 OUT = os.path.join(ROOT, "sources", "kaks_ptri.tsv.gz")
 ARMS = ("HAP1_Ptri", "HAP2_Ptri")
 
