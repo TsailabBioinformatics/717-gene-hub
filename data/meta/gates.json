@@ -1,6 +1,6 @@
 {
- "data_version": "0.21.0",
- "n_checks": 102,
+ "data_version": "0.22.0",
+ "n_checks": 104,
  "n_failed": 0,
  "checks": [
   {
@@ -134,9 +134,19 @@
    "detail": ""
   },
   {
-   "name": "contrasts.json covers the full 191-contrast panel",
+   "name": "contrasts.json is the dissertation's 165 curated contrasts",
    "ok": true,
-   "detail": "191"
+   "detail": "165"
+  },
+  {
+   "name": "149 of them are the perturbation contrasts behind responsiveness",
+   "ok": true,
+   "detail": "149"
+  },
+  {
+   "name": "responsiveness recomputed from the shipped contrasts equals each sampled gene's record",
+   "ok": true,
+   "detail": "132 genes, 0 differ, e.g. []"
   },
   {
    "name": "every contrast sample index is in range",
@@ -281,7 +291,7 @@
   {
    "name": "no embargoed LSG candidate label in any published file",
    "ok": true,
-   "detail": "1488 text files"
+   "detail": "1489 text files"
   },
   {
    "name": "ancestral karyotype counts match the placement coverage, per haplotype",

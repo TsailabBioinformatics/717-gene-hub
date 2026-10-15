@@ -2067,14 +2067,14 @@ for (const [name, gid, want] of [
 // Computed in the browser from the gene's own 652-sample vector and the control/perturbation
 // sample indices already shipped in contrasts.json -- nothing new is built for it.
 //
-// The expected values here were computed INDEPENDENTLY in python straight off the blob
-// (mockups/compute_contrasts.py) before the panel existed, so this is a cross-implementation
-// check, not the panel agreeing with itself. PtXaTreH.19G110500 is a WNK-family kinase and the
+// The expected values here were computed INDEPENDENTLY in python straight off the blob and the
+// shipped curated contrasts (2026-10-15, after the switch from the v4 191 panel to the
+// dissertation's 165), so this is a cross-implementation check, not the panel agreeing with itself. PtXaTreH.19G110500 is a WNK-family kinase and the
 // two largest responses in the whole panel are both drought, off a real expression base --
 // annotation and measurement agreeing is the reason this gene was chosen for the check.
 //
 // The n columns are the substance, not decoration: the median contrast here is 3 samples per
-// side and 27 of the 191 have a single sample on one side. Those bars must be drawn (hiding
+// side and 5 of the 165 have a single sample on one side. Those bars must be drawn (hiding
 // them would misrepresent the panel), dimmed, and counted in the caveat.
 {
   const xp = await browser.newPage({ viewport: { width: 1180, height: 1000 } });
@@ -2107,6 +2107,7 @@ for (const [name, gid, want] of [
       nWeak: weak.filter(Boolean).length,
       weakAllLowN: weak.every((w, i) => w === /^1v|v1$/.test(ns[i])),
       caveat: (pn.textContent.match(/(\d+) of these \d+ contrasts have a single sample/) || [])[1],
+      resp: pn.querySelector('[data-resp]')?.dataset.resp,
       states: /not a differential-expression test/.test(pn.textContent)
         && /no multiple-testing correction/.test(pn.textContent),
       reverseNotClaimed: !/which genes respond/i.test(pn.textContent),
@@ -2116,15 +2117,15 @@ for (const [name, gid, want] of [
   });
 
   const ok = !xerrs.length && !c.missing
-    && c.total === '191' && c.median === '0.579'
+    && c.total === '165' && c.median === '0.629'
     && c.top === '+6.13' && c.topN === '3v3' && /chronic drought/.test(c.topLabel || '')
     && c.second === '+5.86'
-    && c.caveat === '27' && c.nWeak === 2 && c.weakAllLowN
+    && c.caveat === '5' && c.nWeak === 0 && c.weakAllLowN && c.resp === '0.674'
     && c.states && c.reverseNotClaimed
     && c.heading === 'Expression' && c.tabs.length === 2;
   if (!ok) failures++;
   console.log(`\n### expression:response-by-contrast  ${ok ? 'OK' : 'FAIL'}`);
-  console.log(`   "${c.heading}" tabs [${(c.tabs || []).join(' | ')}]; scored ${c.total}, median ${c.median}`);
+  console.log(`   "${c.heading}" tabs [${(c.tabs || []).join(' | ')}]; scored ${c.total}, median ${c.median}, responsiveness ${c.resp}`);
   console.log(`   top ${c.top} (n=${c.topN}) ${c.topLabel}; second ${c.second}`);
   console.log(`   ${c.caveat} single-sample contrasts; ${c.nWeak} of the drawn bars dimmed, all of them low-n: ${c.weakAllLowN}`);
   console.log(`   states it is not a DE test: ${c.states}; does not claim the reverse question: ${c.reverseNotClaimed}`);
@@ -3288,8 +3289,9 @@ for (const scheme of ['light', 'dark']) {
 
 // Studies 2 and 3 sample developing and mature xylem; the tissue fields say only "xylem", so the
 // design once drew two sites as one group (n=8). ArrayExpress (E-MTAB-7288, E-MTAB-7587): 8 and 6
-// groups of 4. The drawing must show exactly those groups, label each sample's site, and say that
-// the shipped comparisons pool the two sites.
+// groups of 4. The drawing must show exactly those groups and label each sample's site, and since
+// the switch to the dissertation's curated contrasts every comparison stays within one site (or
+// compares the two sites), 4 against 4.
 {
   const p = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
   const errs = [];
@@ -3302,7 +3304,9 @@ for (const scheme of ['light', 'dark']) {
       const keys = new Map();
       document.querySelectorAll('.sd-cell').forEach((c) => keys.set(c.dataset.ids, c.dataset.ids.split(',').length));
       return { groups: keys.size, sizes: [...new Set(keys.values())],
-        pooled: [...document.querySelectorAll('.sd-contrasts tbody tr')].every((t) => /developing xylem \+ mature xylem, pooled/.test(t.innerText)),
+        pooled: [...document.querySelectorAll('.sd-contrasts tbody tr')].every((t) =>
+          /^(developing xylem|mature xylem|developing xylem to mature xylem)$/.test(t.children[2].textContent.trim())
+          && /4 vs 4/.test(t.innerText)),
         sites: [...new Set([...document.querySelectorAll('tr[data-i] td:nth-child(2)')].map((t) => t.textContent))].sort().join('|') };
     });
     got[id].ok = got[id].groups === groups && got[id].sizes.join() === '4' && got[id].pooled
@@ -3311,6 +3315,30 @@ for (const scheme of ['light', 'dark']) {
   const ok = !errs.length && got[2].ok && got[3].ok;
   if (!ok) failures++;
   console.log(`\n### study:xylem-sites  ${ok ? 'OK' : 'FAIL'}  ${JSON.stringify(got)}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await p.close();
+}
+
+// The shipped contrasts are the dissertation's curated set: no arm mixes developing and mature
+// xylem (the v4 panel's six pooled study 2/3 contrasts are gone), and studies 2 and 3 carry their
+// 17 site-split contrasts, 4 against 4.
+{
+  const p = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto(`${base}/#/`, { waitUntil: 'networkidle' });
+  const r = await p.evaluate(async () => {
+    const { loadContrasts, loadExprSamples } = await import('./js/core/data.js');
+    const [cs, ss] = await Promise.all([loadContrasts(), loadExprSamples()]);
+    const site = (i) => ss[i].label.split('_')[1];
+    const x = cs.filter((c) => [...c.ctrl, ...c.pert].some((i) => ss[i].study === 2 || ss[i].study === 3));
+    return { n: cs.length, resp: cs.filter((c) => c.resp).length, xylem: x.length,
+      mixed: x.filter((c) => new Set(c.ctrl.map(site)).size > 1 || new Set(c.pert.map(site)).size > 1).length,
+      fours: x.every((c) => c.ctrl.length === 4 && c.pert.length === 4) };
+  });
+  const ok = !errs.length && r.n === 165 && r.resp === 149 && r.xylem === 17 && r.mixed === 0 && r.fours;
+  if (!ok) failures++;
+  console.log(`\n### contrasts:curated-set  ${ok ? 'OK' : 'FAIL'}  ${JSON.stringify(r)}`);
   errs.forEach((e) => console.log('   !! ' + e));
   await p.close();
 }

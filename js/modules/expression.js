@@ -68,6 +68,10 @@ function contrastCard(g) {
     const absSorted = rows.map((r) => Math.abs(r.lfc)).sort((a, b) => a - b);
     const med = absSorted[Math.floor(absSorted.length / 2)];
     const lowN = rows.filter((r) => r.nc < 2 || r.np < 2).length;
+    // The dissertation's responsiveness, as the record carries it (resp): median |log2FC| over
+    // the perturbation contrasts where either arm reaches a mean of 5 TPM. These are the same
+    // contrasts as the bars; scripts/validate_data.py recomputes it from them on a gene sample.
+    const resp = g.resp || null;
     // "Largest" names one contrast in bold, so it must not be a 1-vs-1 comparison when a
     // replicated one exists; the bars above still show every contrast in |log2FC| order.
     const lead = sorted.find((r) => r.nc >= 2 && r.np >= 2) || sorted[0];
@@ -103,7 +107,12 @@ function contrastCard(g) {
         el('dd', {}, el('span', { class: 'mono' }, lead.lfc.toFixed(2)), ' in ',
           el('strong', {}, lead.tissue), `, ${lead.label} (${lead.nc} vs ${lead.np} samples)`,
           el('span', { class: 'muted' }, `, mean ${fmt(Math.round(lead.base))} TPM on the larger side`
-            + (leadWeak ? '; single sample on one side' : '')))),
+            + (leadWeak ? '; single sample on one side' : ''))),
+        el('dt', {}, 'Responsiveness'),
+        el('dd', {}, !resp
+          ? el('span', { class: 'muted' }, 'not reached 5 TPM in any perturbation contrast')
+          : [el('span', { class: 'mono', 'data-resp': resp.v.toFixed(3) }, resp.v.toFixed(3)),
+            el('span', { class: 'muted' }, `, median |log2FC| over the ${fmt(resp.n)} of 149 perturbation contrasts where the gene reaches 5 TPM (the dissertation\u2019s measure)`)])),
       lowN ? el('p', { class: 'warn-n-note' },
         el('strong', {}, `${lowN} of these ${rows.length} contrasts have a single sample on one side. `),
         'A fold change from one sample against one sample has no dispersion estimate and cannot '
@@ -113,10 +122,9 @@ function contrastCard(g) {
         'Fold change is mean(perturbation)+1 over mean(control)+1 on the raw TPM vector, using '
         + 'the control and perturbation sample indices shipped in contrasts.json. It is a '
         + 'descriptive ratio, not a differential-expression test: no dispersion model, no '
-        + 'multiple-testing correction, and study is not accounted for. The card’s median '
-        + 'is computed over every scorable contrast here, which need not match the '
-        + '“responsiveness” figure on the Tissues view, which uses a stricter '
-        + 'eligibility rule.'));
+        + 'multiple-testing correction, and study is not accounted for. The median above is over '
+        + 'every contrast; responsiveness keeps only the perturbation contrasts where the gene is '
+        + 'expressed, and is the figure the Tissues view quotes.'));
     status.remove();
   })().catch((e) => { status.textContent = `Contrast response unavailable: ${e.message}`; });
 

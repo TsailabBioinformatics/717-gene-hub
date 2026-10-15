@@ -33,5 +33,5 @@ keywords:
   - lineage-specific genes
   - expression atlas
 license-url: "https://github.com/TsailabBioinformatics/poplar-717-atlas/blob/main/LICENSE"
-version: "0.21.0"
-date-released: "2026-10-14"
+version: "0.22.0"
+date-released: "2026-10-15"

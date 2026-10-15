@@ -199,7 +199,7 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.21.0",
+ "data_version": "0.22.0",
  "dissertation": {
   "analysis_repository_commit": "59eec6bd",
   "arabidopsis_hit_kept_from_older_annotation": 372,
@@ -446,10 +446,11 @@
  "expression": {
   "bucket_size": 250,
   "combat_eligible_genes": 59599,
+  "contrast_set": "the dissertation's curated contrast set (ms1-dup data/60_curated_contrasts_20260915), 165 contrasts",
   "n_bioprojects": 38,
   "n_buckets": 257,
-  "n_contrasts": 191,
-  "n_contrasts_recommended": 117,
+  "n_contrasts": 165,
+  "n_contrasts_perturbation": 149,
   "n_samples": 652,
   "n_studies": 28,
   "tau_excludes": [

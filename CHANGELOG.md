@@ -9,6 +9,29 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.22.0 - 2026-10-15 - The comparisons are the dissertation's curated set
+
+**`data/expr/contrasts.json` is now the dissertation's 165 curated contrasts (data).** It was the v4
+191-contrast panel. `build_contrasts.py` reads ms1-dup `data/60_curated_contrasts_20260915/
+curated_contrasts_652panel.csv` (through `roots.path('ms1_dup')`, pinned by
+`sources/upstream_pins.json`) and refuses unless it gets 165 contrasts, 149 of them perturbation
+contrasts (categories 1-7, flagged `resp`), and no arm that mixes developing and mature xylem.
+Each entry gains `sub`, `tier` and `within` (the factors held fixed, as the curated table states
+them); `recommended` is gone. The study pages, the Expression card's contrast view and the
+scrubber all read it, so they now show the comparisons the dissertation computed on; studies 2
+and 3 carry 17 site-split contrasts, 4 against 4, where the v4 panel had 6 pooled ones.
+
+**Responsiveness on the Expression card (site).** The contrast view states the gene's
+responsiveness from its record, the median |log2FC| over the perturbation contrasts where it
+reaches 5 TPM. New gate: recomputing it in python from the shipped contrasts and the raw blob
+reproduces the record on every one of 132 sampled genes (one contrast of PtXaTreH.01G297800 has an
+arm mean of exactly 5.0000 TPM, a float32 versus float64 tie at the line; ties within 1e-4 are
+accepted either way). The check `expression:response-by-contrast` now expects values computed
+independently in python on the new set (165 scored, median 0.629, responsiveness 0.674).
+
+The scrubber names colliding contrasts by the curated `within` factors instead of id tokens. The
+runtime pooled-site label added earlier the same day is removed: no shipped contrast pools sites.
+
 ## Studies 2 and 3: developing and mature xylem are separate groups
 
 Both studies sampled developing and mature xylem, but every tissue field in `samples.json` says
@@ -22,8 +45,15 @@ table and the readouts show the site. No data changed. The six comparisons the a
 these studies (`data/expr/contrasts.json`, from the older v4 191-contrast panel) put 4 developing
 and 4 mature samples in each arm; the comparisons table now says "developing xylem + mature
 xylem, pooled". The dissertation's curated contrast set (ms1-dup data/60), which the 149-contrast
-stress responsiveness is computed on, already splits them by site (4 vs 4), so no gene's
-responsiveness pooled the sites. New check `study:xylem-sites`, which fails on the previous build.
+stress responsiveness is computed on, already splits them by site (4 vs 4), so no current gene
+value pooled the sites. Four of those six were among the 117 recommended contrasts behind the
+pre-0.19.0 responsiveness (s2 drought vs control, long and short day; s3 continuous and
+discontinuous abscisic acid vs control), so values before 0.19.0 included site-pooled arms; the
+two s2 short-day vs long-day rows were not recommended. `loadContrasts` now names the pooling on
+those six wherever a comparison's tissue is printed (gene Expression card, scrubber, study
+pages): "xylem (developing + mature, pooled)". New checks `study:xylem-sites`, which fails on the
+previous build, and `contrasts:pooled-sites-named` (exactly the six, and the label reaches the
+scored rows).
 
 ## The 3D model draws helices and strands
 

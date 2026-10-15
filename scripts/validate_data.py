@@ -10,7 +10,7 @@ pointer would 404 only for the unlucky gene; an allele link to a nonexistent gen
 dead end a reader hits before a maintainer does.
 """
 import argparse
-import glob, gzip, json, os, re, struct, subprocess, sys
+import glob, gzip, json, math, os, re, struct, subprocess, sys
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -371,8 +371,46 @@ def main():
                 bad_range.append(c["id"])
             if not c["ctrl"] or not c["pert"]:
                 bad_empty.append(c["id"])
-        check("contrasts.json covers the full 191-contrast panel", len(contrasts) == 191,
+        check("contrasts.json is the dissertation's 165 curated contrasts", len(contrasts) == 165,
               str(len(contrasts)))
+        check("149 of them are the perturbation contrasts behind responsiveness",
+              sum(1 for c in contrasts if c.get("resp")) == 149,
+              str(sum(1 for c in contrasts if c.get("resp"))))
+        # The shipped contrasts must be the ones the responsiveness was computed on: recompute it
+        # from the raw blob for a fixed sample of genes and compare with the record (resp.v).
+        resp_bad, resp_n = [], 0
+        blobs = {}
+        for gid in sorted(genes)[::400]:
+            rec = genes[gid][2]
+            if not (rec.get("x") or {}).get("o") or not rec.get("resp"):
+                continue
+            hap = "hap1" if gid.startswith("PtXaTreH") else "hap2"
+            if hap not in blobs:
+                blobs[hap] = open(f"{DATA}/expr/raw_{hap}.gzb", "rb")
+            o, ln = rec["x"]["o"]
+            blobs[hap].seek(o)
+            vec = json.loads(gzip.decompress(blobs[hap].read(ln)))
+            # An arm mean within 1e-4 of the 5 TPM line is a tie: the dissertation sums in float32
+            # and can land a hair under 5 where float64 lands on it (PtXaTreH.01G297800, one
+            # contrast at 5.0000). Either side of a tie may match; nothing else may differ.
+            def med_at(line):
+                el = []
+                for c in contrasts:
+                    if not c.get("resp"):
+                        continue
+                    mc = sum(vec[i] for i in c["ctrl"]) / len(c["ctrl"])
+                    mp = sum(vec[i] for i in c["pert"]) / len(c["pert"])
+                    if max(mc, mp) >= line:
+                        el.append(abs(math.log2((mp + 1) / (mc + 1))))
+                el.sort()
+                m = (el[len(el) // 2] if len(el) % 2 else (el[len(el) // 2 - 1] + el[len(el) // 2]) / 2) if el else None
+                return m, len(el)
+            resp_n += 1
+            if not any(m is not None and abs(m - rec["resp"]["v"]) <= 0.0015 and n == rec["resp"]["n"]
+                       for m, n in (med_at(5 - 1e-4), med_at(5 + 1e-4))):
+                resp_bad.append(gid)
+        check("responsiveness recomputed from the shipped contrasts equals each sampled gene's record",
+              resp_n > 50 and not resp_bad, f"{resp_n} genes, {len(resp_bad)} differ, e.g. {resp_bad[:3]}")
         check("every contrast sample index is in range", not bad_range,
               f"{len(bad_range)} bad, e.g. {bad_range[:3]}" if bad_range else "")
         check("every contrast has both a control and a perturbation arm", not bad_empty,

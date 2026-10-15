@@ -17,9 +17,9 @@ export function contrastRows(vec, contrasts) {
       lfc: Math.log2((mp + 1) / (mc + 1)),
       nc: ctrl.length, np: pert.length,
       base: Math.max(mc, mp),
-      tissue: c.tissue, kind: c.kind,
+      tissue: c.tissue, kind: c.kind, within: c.within || '',
       label: `${c.pert_label} vs ${c.control_label}`,
-      rec: !!c.recommended,
+      resp: !!c.resp,   // one of the 149 perturbation contrasts behind the responsiveness value
     });
   }
   return rows;

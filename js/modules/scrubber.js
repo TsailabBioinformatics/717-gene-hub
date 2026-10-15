@@ -1,7 +1,7 @@
 // Module: expression scrubber. Plan section 2.3 -- paint the same locus window by
 // expression instead of duplication class: a tissue strip (median TPM, already computed
 // per gene) and a contrast strip (log2 fold-change, computed live from each gene's own
-// raw 652-sample vector against the curated 191-contrast panel's own sample lists).
+// raw 652-sample vector against the dissertation's 165 curated contrasts' own sample lists).
 //
 // No per-gene, per-contrast table exists or is built here -- checked directly, a table
 // that looked like one (`log2FC_per_gene_per_contrast_v4.csv`) turned out to predate the
@@ -321,13 +321,12 @@ function geneCard(g) {
     byKind = new Map();
     contrasts.forEach((c) => { if (!byKind.has(c.kind)) byKind.set(c.kind, []); byKind.get(c.kind).push(c); });
 
-    // 57 of the 191 contrasts collided: two genuinely different comparisons rendered as the
-    // same string because the label drops the nested factor that separates them (a CO2 level,
-    // a recovery timepoint). The id keeps it, after `_vs_`. So for each colliding group, show
-    // exactly the tokens that DIFFER between its members -- which is guaranteed to
-    // disambiguate, without guessing which factor matters.
-    const factors = (c) => (c.id.split('_vs_')[1] || '').split(',')
-      .map((t) => t.replace(/^_+/, '').trim()).filter(Boolean);
+    // Contrasts can collide: two genuinely different comparisons render as the same string
+    // because the label drops the factor held fixed that separates them (a CO2 level, a day
+    // length). The curated table states those factors (`within`). For each colliding group,
+    // show exactly the ones that DIFFER between its members -- guaranteed to disambiguate,
+    // without guessing which factor matters; the id is the last resort.
+    const factors = (c) => (c.within ? c.within.split('; ') : [c.id]).map((t) => t.trim()).filter(Boolean);
     const groups = new Map();
     contrasts.forEach((c) => {
       const k = `${c.tissue}|${c.control_label}|${c.pert_label}`;
@@ -352,10 +351,9 @@ function geneCard(g) {
       sel.append(grp);
     }
     contrastRow.append(el('p', { class: 'muted', style: 'margin:0 0 6px;font-size:11.5px' },
-      'Treatment and genotype contrasts are the primary comparisons (117). Growth condition '
-      + 'and other condition are secondary design factors (74), nested inside a study rather '
-      + 'than its main question, not lower quality. Where two contrasts share a label, the '
-      + 'factor that separates them is shown in brackets.'));
+      'The dissertation\u2019s 165 curated contrasts, grouped by kind; the 149 in the first seven '
+      + 'kinds are the perturbation contrasts behind each gene\u2019s responsiveness. Where two '
+      + 'contrasts share a label, the factor that separates them is shown in brackets.'));
     sel.addEventListener('change', () => {
       const [kind, ci] = sel.value.split('|');
       const c = byKind.get(kind)[+ci];

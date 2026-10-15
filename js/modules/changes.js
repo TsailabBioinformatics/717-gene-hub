@@ -4,6 +4,10 @@
 import { el } from '../core/dom.js';
 
 const RELEASES = [
+  ['0.22.0', '2026-10-15', 'The comparisons the dissertation computed on', [
+    'Study pages, the Expression card’s contrast view and the expression scrubber now use the dissertation’s 165 curated comparisons instead of an older panel of 191. The 149 treatment comparisons among them are the ones behind each gene’s stress responsiveness, which the contrast view now states.',
+    'In the two xylem studies, every comparison now stays within developing or within mature xylem, 4 samples against 4. The older panel had pooled the two sites in six comparisons.',
+  ]],
   ['0.21.0', '2026-10-14', 'Sequences for every gene, and a better search', [
     'Every gene page has a Sequences card: protein, coding sequence (CDS), transcript and genomic span, from the Phytozome v5.1 annotation, each with Copy and FASTA buttons. Before this, only the 40,686 proteins with a predicted structure could be downloaded.',
     'Browse downloads FASTA of any of the four kinds for a selection of up to 2,000 genes.',
@@ -12,7 +16,7 @@ const RELEASES = [
     'Each page has its own title in the browser tab; after following a link, keyboard focus moves to the new page’s heading, and a “Skip to content” link is the first thing Tab reaches. Section links on a gene page move focus to the section. Scrolling is not animated when the system asks for reduced motion.',
     'Saving a Browse selection as a set now says so beside the button. This page is new.',
     'The 3D model draws helices and strands as ribbons and arrows, following the model’s own assignment, instead of a plain line through the chain (2026-10-15).',
-    'The two xylem studies (drought and short days; abscisic acid) show developing and mature xylem as separate groups of 4, as deposited, instead of pooled groups of 8; their comparisons are marked as pooling the two (2026-10-15).',
+    'The two xylem studies (drought and short days; abscisic acid) show developing and mature xylem as separate groups of 4, as deposited, instead of pooled groups of 8 (2026-10-15).',
   ]],
   ['0.20.0', '2026-10-14', 'Do other methods agree?', [
     'Gene-age and tandem-duplication cards say whether independent methods agree with the call: a second gene-age program and deeper searches for the young genes, three published tandem callers for tandem genes. These are cross-checks; no call changed.',
