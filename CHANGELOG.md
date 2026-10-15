@@ -9,6 +9,16 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## The 3D model draws helices and strands
+
+The viewer drew a tube through the C-alpha atoms (3Dmol's `trace` style), because its cartoon
+draws nothing for a C-alpha-only model; helix and strand were only in the hover readout. Each
+residue now gets a stand-in carbonyl O, 1.24 A from its C-alpha along the normal of the two
+C-alpha steps around it, which orients the ribbon only, and each atom gets the model's DSSP state
+(`ss`, `ssbegin`, `ssend`), so the cartoon draws helices and strand arrows. No data changed. The
+model check now asserts that the viewer's helix and strand residue counts equal the DSSP string's,
+on three genes including a beta barrel (PtXaTreH.01G241900).
+
 ## 0.21.0 - 2026-10-14 - Sequences for every gene, a ranked search, keyboard access, a page of changes
 
 **Sequences for every gene (data).** `data/seq/seq_hap{1,2}.gzb` hold protein, CDS, transcript and

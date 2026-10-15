@@ -12,7 +12,7 @@ import { PLDDT_BANDS, plddtBand } from '../core/palette.js';
 import { onDispose } from '../core/lifecycle.js';
 
 // ---- 3D model (TODO 34) ----
-// A Calpha trace, not the full-atom model: the genome's full-atom models are 2.3 GB gzipped,
+// A ribbon drawn from the Calpha atoms, not the full-atom model: the genome's full-atom models are 2.3 GB gzipped,
 // over what a static Pages site may host. 3Dmol.js is vendored and fetched only when a reader
 // asks for a model, so no gene page pays ~540 KB for a viewer it does not open.
 let viewerLib = null;
@@ -39,20 +39,44 @@ const AA3 = {
 const SS_NAME = { H: 'helix', E: 'strand', '-': 'coil' };
 const rj = (v, w) => String(v).padStart(w);
 
-/** A Calpha-only PDB with pLDDT as the B-factor. No HELIX / SHEET records: 3Dmol's default
- *  cartoon draws NOTHING for a Calpha-only model (found by screenshot, 2026-09-10, after a
- *  check that only asserted a canvas existed had passed), and the 'trace' style that does
- *  draw it ignores secondary structure. The DSSP state is in the hover readout instead. */
-function caPdb(m) {
+/** A PDB with the Calpha atoms, pLDDT as the B-factor, and one stand-in carbonyl O per residue.
+ *  3Dmol's cartoon draws NOTHING for a Calpha-only model (found by screenshot, 2026-09-10): it
+ *  needs an O to orient the ribbon. The stand-in sits 1.24 A from the Calpha along the normal of
+ *  the two Calpha-Calpha steps around it, which in a helix points along the helix axis and in a
+ *  strand lies in the sheet, the directions a real C=O takes. It orients the ribbon only; it is
+ *  not a predicted atom position. Helix and strand come from the model's own DSSP string. */
+function ribbonPdb(m) {
   const out = [];
+  const P = (i) => [m.ca[3 * i], m.ca[3 * i + 1], m.ca[3 * i + 2]];
+  const f = (v) => rj(v.toFixed(3), 8);
   for (let i = 0; i < m.n; i++) {
-    const f = (v) => rj(v.toFixed(3), 8);
-    out.push(`ATOM  ${rj(i + 1, 5)}  CA  ${AA3[m.seq[i]] || 'UNK'} A${rj(i + 1, 4)}    `
-      + `${f(m.ca[3 * i])}${f(m.ca[3 * i + 1])}${f(m.ca[3 * i + 2])}`
-      + `  1.00${rj(m.pl[i].toFixed(2), 6)}           C`);
+    const c = P(i);
+    let o = c;
+    if (m.n >= 3) {
+      const j = Math.min(Math.max(i, 1), m.n - 2);       // ends borrow their neighbour's frame
+      const a = P(j).map((x, k) => x - P(j - 1)[k]);
+      const b = P(j + 1).map((x, k) => x - P(j)[k]);
+      const nrm = [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+      const len = Math.hypot(...nrm) || 1;
+      o = c.map((x, k) => x + (1.24 * nrm[k]) / len);
+    }
+    const res = `${AA3[m.seq[i]] || 'UNK'} A${rj(i + 1, 4)}    `;
+    const tail = `  1.00${rj(m.pl[i].toFixed(2), 6)}           `;
+    out.push(`ATOM  ${rj(2 * i + 1, 5)}  CA  ${res}${f(c[0])}${f(c[1])}${f(c[2])}${tail}C`);
+    out.push(`ATOM  ${rj(2 * i + 2, 5)}  O   ${res}${f(o[0])}${f(o[1])}${f(o[2])}${tail}O`);
   }
   out.push('END');
   return out.join('\n');
+}
+
+/** Give each atom the model's DSSP state (3Dmol reads ss / ssbegin / ssend, not our string). */
+function assignSS(model, ss) {
+  for (const a of model.selectedAtoms({})) {
+    const t = ss[a.resi - 1];
+    a.ss = t === 'H' ? 'h' : t === 'E' ? 's' : 'c';
+    a.ssbegin = t !== '-' && ss[a.resi - 2] !== t;
+    a.ssend = t !== '-' && ss[a.resi] !== t;
+  }
 }
 
 let liveViewer = null;   // one WebGL context at a time; browsers cap how many a page may hold
@@ -73,7 +97,7 @@ async function openModel(geneId, holder) {
   const readoutDefault = 'Drag to rotate, scroll or pinch to zoom. Hover a residue for its confidence and DSSP state.';
   const readout = el('div', { class: 'mono struct-readout' }, readoutDefault);
   const stage = el('div', { class: 'struct-stage', role: 'img',
-    'aria-label': `C-alpha trace of the ESMFold model, ${m.n} residues, coloured by pLDDT` });
+    'aria-label': `Ribbon of the ESMFold model, ${m.n} residues, helices and strands drawn, coloured by pLDDT` });
   holder.append(
     stage, readout,
     el('div', { class: 'struct-legend' }, ...PLDDT_BANDS.map((b, k) => el('span', { class: 'struct-key' },
@@ -81,19 +105,19 @@ async function openModel(geneId, holder) {
       `${b.label} (${b.range}) `,
       el('span', { class: 'mono' }, `${fmt(counts[k])} · ${((100 * counts[k]) / m.n).toFixed(0)}%`)))),
     el('p', { class: 'muted', style: 'margin:6px 0 0;font-size:12px' },
-      `${fmt(m.n)} residues. One point per residue (the C-alpha atom), joined in chain order and `
-      + "coloured by the model's own per-residue confidence, pLDDT. Side chains and helix or strand "
-      + 'shapes are not drawn; hover a residue for its DSSP state, which is what the bars above '
-      + 'count. Where the trace is yellow or orange the model is guessing, and the path of the '
-      + 'chain there is not a prediction of shape.'));
+      `${fmt(m.n)} residues. A ribbon through the C-alpha atoms, drawn as a helix or a strand `
+      + "arrow where the model's own DSSP assignment says so (what the bars above count), and "
+      + "coloured by the model's per-residue confidence, pLDDT. Side chains are not drawn. Where "
+      + 'the ribbon is yellow or orange the model is guessing, and the path of the chain there is '
+      + 'not a prediction of shape.'));
 
   if (liveViewer) { try { liveViewer.clear(); } catch (_) { /* already gone */ } }
   const v = lib.createViewer(stage, { backgroundColor: 'white', backgroundAlpha: 0, antialias: true });
   liveViewer = v;
   stage.__viewer = v;   // read by scripts/check.mjs, which asserts pixels were actually drawn
-  v.addModel(caPdb(m), 'pdb');
-  v.setStyle({}, { cartoon: { style: 'trace', thickness: 0.5,
-    colorfunc: (a) => PLDDT_BANDS[plddtBand(a.b)].color } });
+  const model = v.addModel(ribbonPdb(m), 'pdb');
+  assignSS(model, m.ss);
+  v.setStyle({}, { cartoon: { colorfunc: (a) => PLDDT_BANDS[plddtBand(a.b)].color } });
   v.setHoverable({}, true,
     (a) => { readout.textContent = `${a.resn} ${a.resi} · pLDDT ${a.b.toFixed(1)} · ${SS_NAME[m.ss[a.resi - 1]]}`; },
     () => { readout.textContent = readoutDefault; });
@@ -484,9 +508,9 @@ async function overview(man) {
           'No claim here is independent of ESMFold.'),
         el('li', {}, el('strong', {}, 'ESMFold coverage is 64%. '),
           'A gene without a model is not a gene without a structure.'),
-        el('li', {}, el('strong', {}, 'The 3D model is a C-alpha trace, coloured by pLDDT. '),
-          'One point per residue, no side chains, because the full-atom models for the genome '
-          + 'are too large for this static site. Yellow and orange mean the model is guessing, '
+        el('li', {}, el('strong', {}, 'The 3D model is a ribbon drawn from the C-alpha atoms, coloured by pLDDT. '),
+          'Helices and strands follow the model\'s DSSP assignment; there are no side chains, because '
+          + 'the full-atom models for the genome are too large for this static site. Yellow and orange mean the model is guessing, '
           + 'and most of a lineage-specific gene\'s model is yellow and orange.'),
         el('li', {}, el('strong', {}, 'Peptide matches are asymmetric evidence. '),
           'A gene-unique peptide, seen in more than one spectrum in a P. x canescens dataset, is '

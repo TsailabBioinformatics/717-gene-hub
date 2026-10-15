@@ -537,9 +537,13 @@ async function checkModel(name, geneId, { theme = null, expect = [] } = {}) {
   // A canvas existing is not a model being drawn: the first version of this check passed on
   // three blank canvases (3Dmol's default cartoon renders nothing for a Calpha-only model).
   // So re-render through the viewer, and count painted pixels and which pLDDT colours appear.
+  // Since 2026-10-15 the ribbon draws helices and strands: the viewer's atoms must carry exactly the
+  // helix and strand residue counts of the model's DSSP string.
   const px = await mp.evaluate(async () => {
     const v = document.querySelector('.struct-stage')?.__viewer;
     if (!v) return { painted: 0, bands: [] };
+    const atoms = v.getModel().selectedAtoms({ atom: 'CA' });
+    const ssSeen = { h: atoms.filter((a) => a.ss === 'h').length, s: atoms.filter((a) => a.ss === 's').length };
     const img = new Image();
     img.src = v.pngURI();
     await img.decode();
@@ -559,8 +563,14 @@ async function checkModel(name, geneId, { theme = null, expect = [] } = {}) {
         if (Math.abs(d[i] - w[0]) + Math.abs(d[i + 1] - w[1]) + Math.abs(d[i + 2] - w[2]) < 90) seen[k]++;
       });
     }
-    return { painted: painted / (d.length / 4), bands: seen };
+    return { painted: painted / (d.length / 4), bands: seen, ssSeen };
   });
+  const ssWant = await mp.evaluate(async (gid) => {
+    const { loadStructure } = await import('./js/core/data.js');
+    const m = await loadStructure(gid);
+    return { h: [...m.ss].filter((c) => c === 'H').length, s: [...m.ss].filter((c) => c === 'E').length };
+  }, geneId);
+  const ssOk = px.ssSeen && px.ssSeen.h === ssWant.h && px.ssSeen.s === ssWant.s;
   const r = await mp.evaluate(() => {
     const holder = document.querySelector('.struct-holder');
     const keys = [...document.querySelectorAll('.struct-key .mono')]
@@ -577,16 +587,18 @@ async function checkModel(name, geneId, { theme = null, expect = [] } = {}) {
   // every band the legend says has residues must show up as pixels of that colour
   const bandsDrawn = r.keys.every((k, i) => k === 0 || px.bands[i] > 0);
   const ok = !errs.length && !missing.length && r.keys.length === 4 && r.n > 0 && r.sum === r.n
-    && r.w > 0 && r.h > 0 && px.painted > 0.005 && bandsDrawn;
+    && r.w > 0 && r.h > 0 && px.painted > 0.005 && bandsDrawn && ssOk;
   if (!ok) failures++;
   console.log(`\n### ${name}  ${ok ? 'OK' : 'FAIL'}  n=${r.n} bands=${JSON.stringify(r.keys)} canvas=${r.w}x${r.h}`
-    + ` painted=${(100 * px.painted).toFixed(2)}% band-pixels=${JSON.stringify(px.bands)}`);
+    + ` painted=${(100 * px.painted).toFixed(2)}% band-pixels=${JSON.stringify(px.bands)}`
+    + ` helix/strand residues drawn ${JSON.stringify(px.ssSeen)} vs DSSP ${JSON.stringify(ssWant)}`);
   errs.forEach((e) => console.log('   !! ' + e));
   missing.forEach((m) => console.log(`   !! expected text not found: "${m}"`));
   await mp.close();
 }
 await checkModel('model-confident', 'PtXaTreH.01G021800',
-  { expect: ['233 residues', 'very high', 'helix or strand shapes are not drawn'] });
+  { expect: ['233 residues', 'very high', 'drawn as a helix or a strand arrow'] });
+await checkModel('model-strands', 'PtXaTreH.01G241900', { expect: ['287 residues'] });
 await checkModel('model-lsg', 'PtXaTreH.01G001500', { expect: ['112 residues', 'the model is guessing'] });
 await checkModel('model-confident-dark', 'PtXaTreH.01G021800', { theme: 'dark' });
 

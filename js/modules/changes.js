@@ -11,6 +11,7 @@ const RELEASES = [
     'The search list works from the keyboard (arrow keys, Enter, Escape) and announces how many results it found.',
     'Each page has its own title in the browser tab; after following a link, keyboard focus moves to the new page’s heading, and a “Skip to content” link is the first thing Tab reaches. Section links on a gene page move focus to the section. Scrolling is not animated when the system asks for reduced motion.',
     'Saving a Browse selection as a set now says so beside the button. This page is new.',
+    'The 3D model draws helices and strands as ribbons and arrows, following the model’s own assignment, instead of a plain line through the chain (2026-10-15).',
   ]],
   ['0.20.0', '2026-10-14', 'Do other methods agree?', [
     'Gene-age and tandem-duplication cards say whether independent methods agree with the call: a second gene-age program and deeper searches for the young genes, three published tandem callers for tandem genes. These are cross-checks; no call changed.',
