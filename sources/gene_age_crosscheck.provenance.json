@@ -1,0 +1,44 @@
+{
+ "columns": [
+  "gene_id",
+  "hap",
+  "r",
+  "f",
+  "p"
+ ],
+ "note_structure_union": "11, not the summary's 12: the contamination/HGT-labelled gene is excluded per RUN_LOG 27f; it is no longer a candidate",
+ "pin": "gene_age_crosscheck.pin.json",
+ "reproduces": {
+  "blastp_only": 26,
+  "deep_blastp": 73,
+  "deep_nomask": 55,
+  "deep_tantan": 18,
+  "frozen": {
+   "HAP1": 842,
+   "HAP2": 883
+  },
+  "masking_sensitive": 37,
+  "mmseqs": {
+   "HAP1": 86,
+   "HAP2": 82
+  },
+  "pfam": {
+   "HAP1": 12,
+   "HAP2": 5
+  },
+  "phylostratr_shared": {
+   "HAP1": 741,
+   "HAP2": 787
+  },
+  "struct": {
+   "3di": 10,
+   "Swiss": 6,
+   "Uni50": 10,
+   "all_three": 6,
+   "union": 11
+  }
+ },
+ "rows": 1725,
+ "sha256_uncompressed": "6f3c355223108d91e5fc9a6ad514bea4eb1a7d5b7947d7e230dfb8305c672bd9",
+ "what": "per-gene independent gene-age checks on the frozen candidate pool; bits in r (ran) and f (found older homology), see the generator's docstring"
+}

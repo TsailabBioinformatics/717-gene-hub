@@ -917,11 +917,27 @@ def main():
                 1 if (r.get("rel") or {}).get("qc") else 0,
                 1 if (x.get("p") or {}).get("ok") else 0,
                 ps.get("rank") if ps.get("rank") is not None else -1,
+                # re-derived from the found bits, not copied from ps.xc.v: Pfam (4) or structure
+                # (32) -> disagree; any other check (1, 2, 8, 16) -> search-sensitive
+                ((2 if ps["xc"]["f"] & 36 else 1 if ps["xc"]["f"] & 27 else 0) if ps.get("xc") else -1),
+                (lambda d: ((0 if d['xt']['t'] == 7 else 1 if d['xt']['t'] else 2 if d['xt']['x'] else 3) if d.get('td') else (4 if d['xt']['t'] else -1)) if d.get('xt') else -1)(r.get("dup") or {}),
             ]
 
         # zip() truncates to the shorter list, so a column added to build_facets.py without
         # being added here would be compared against nothing and pass silently. Assert the
         # widths agree first -- the check below is only meaningful if they do.
+        # Gene-age cross-checks: only on candidates, every candidate has one, found is within
+        # ran, and the HAP1-only checks never appear as run on a HAP2 gene.
+        xc_bad = []
+        for gid, (hap, _, rec) in genes.items():
+            ps = rec.get("ps") or {}
+            xc = ps.get("xc")
+            if bool(xc) != bool(ps.get("lsg")):
+                xc_bad.append(f"{gid}: cross-check {'on a non-candidate' if xc else 'missing on a candidate'}")
+            elif xc and (xc["f"] & ~xc["r"] or (hap == "hap2" and xc["r"] & 56) or (("p" in xc) != bool(xc["f"] & 1))):
+                xc_bad.append(f"{gid}: inconsistent bits {xc}")
+        check("gene-age cross-checks sit on exactly the candidates, with consistent bits",
+              not xc_bad, "; ".join(xc_bad[:4]))
         check("the validator covers every facet column",
               len(facet_row("hap1", genes[idx[0]][2], fac["vocab"])) == len(fac["cols"]),
               f"validator reproduces {len(facet_row('hap1', genes[idx[0]][2], fac['vocab']))} "

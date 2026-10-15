@@ -34,8 +34,17 @@ export const FILTERS = [
   { id: 'lsg', label: 'Lineage-specific gene (LSG)', kind: 'select',
     options: ['final_set', 'candidate_excluded', 'not_a_candidate'],
     test: (r, v) => ['not_a_candidate', 'final_set', 'candidate_excluded'][r.lsg] === v },
+  // Cross-checks run after the dissertation's analysis, on its candidates only. They never
+  // change the set above; a filter on them selects candidates, not a different set.
+  { id: 'xage', label: 'Other gene-age methods', kind: 'select',
+    options: ['agree', 'search_sensitive', 'disagree'],
+    test: (r, v) => r.xa >= 0 && ['agree', 'search_sensitive', 'disagree'][r.xa] === v },
   { id: 'ps_min', label: 'Phylostratum ≥', kind: 'number', placeholder: '18',
     test: (r, v) => r.ps != null && r.ps >= +v },
+  // Cross-check against three published tandem callers; never part of the dissertation's set.
+  { id: 'xtandem', label: 'Published tandem tools', kind: 'select',
+    options: ['all_three', 'some', 'nearby_copy_only', 'none', 'tools_only'],
+    test: (r, v) => r.xt >= 0 && ['all_three', 'some', 'nearby_copy_only', 'none', 'tools_only'][r.xt] === v },
   // exact, not >=: a stratum bar on the phylostratigraphy page means THAT stratum
   { id: 'ps', label: 'Phylostratum =', kind: 'number', placeholder: '18',
     test: (r, v) => r.ps === +v },
@@ -120,7 +129,8 @@ export const FILTERS = [
 // Display names for option values. The values themselves stay as they are, because they are
 // URL parameters and saved links depend on them; only the label follows the dissertation's
 // names for the two whole-genome events (aWGT, sWGD).
-const OPTION_LABEL = { salicoid: 'sWGD', gamma: 'aWGT', aWGD_era: 'aWGT era', not_classified: 'not classified (quality-flagged)',
+const OPTION_LABEL = { search_sensitive: 'search-sensitive', all_three: 'all three call it tandem', some: 'one or two call it tandem',
+  nearby_copy_only: 'a nearby copy only (proximal)', none: 'none calls it tandem or nearby', tools_only: 'tools tandem, not in the dissertation\u2019s set', salicoid: 'sWGD', gamma: 'aWGT', aWGD_era: 'aWGT era', not_classified: 'not classified (quality-flagged)',
   final_set: 'in the final LSG set', candidate_excluded: 'candidate, excluded from the final set', not_a_candidate: 'not a candidate',
   C: 'C (singleton)', D: 'D (dispersed only)',
   ...Object.fromEntries(Object.entries(CATEGORY).map(([k, c]) => [k, c.name])) };
@@ -129,8 +139,8 @@ const optLabel = (v) => OPTION_LABEL[v]
 
 export const FILTER_GROUPS = [
   { id: 'where', label: 'Genome', ids: ['hap', 'chr', 'allele', 'rel', 'qc'] },
-  { id: 'age', label: 'Age and conservation', ids: ['lsg', 'ps_min', 'cls'] },
-  { id: 'dup', label: 'Duplication', ids: ['tandem', 'wgd9', 'dup'] },
+  { id: 'age', label: 'Age and conservation', ids: ['lsg', 'xage', 'ps_min', 'cls'] },
+  { id: 'dup', label: 'Duplication', ids: ['tandem', 'xtandem', 'wgd9', 'dup'] },
   { id: 'expr', label: 'Expression', ids: ['top', 'tau_min', 'tok', 'xin'] },
   { id: 'func', label: 'Function and protein', ids: ['at', 'ms'] },
   { id: 'sel', label: 'Selection against P. trichocarpa', ids: ['w_min', 'w_max'] },
@@ -140,6 +150,8 @@ const HINTS = {
   hap: 'HAP1 is the tremula haplotype, HAP2 alba',
   cls: 'GENESPACE class across the 12-genome panel, which lacks P. alba',
   lsg: 'the dissertation\u2019s final set, 583 HAP1 / 621 HAP2, out of 776 / 835 candidates',
+  xage: 'cross-checks on candidates, run after the dissertation\u2019s analysis; they never change its set',
+  xtandem: 'DupGen_finder, MCScanX and doubletrouble on the same annotation; a cross-check, not part of the dissertation\u2019s tandem set',
   qc: 'gene models set aside as pseudogene-like or degenerate; choose "no" to match the dissertation\u2019s counts',
   dup: 'S sWGD, A aWGT, T tandem, D dispersed, C singleton',
   tok: 'the dissertation counts tissue-specific genes among these only',
@@ -166,6 +178,8 @@ const KEYS = {
   tandem: (r) => [r.tandem ? 'yes' : 'no'], ms: (r) => [r.ms > 0 ? 'yes' : 'no'],
   xin: (r) => r.xin, qc: (r) => [r.qc ? 'yes' : 'no'], tok: (r) => [r.tok ? 'yes' : 'no'], dup: (r) => [r.dup],
   lsg: (r) => [['not_a_candidate', 'final_set', 'candidate_excluded'][r.lsg]],
+  xage: (r) => (r.xa >= 0 ? [['agree', 'search_sensitive', 'disagree'][r.xa]] : []),
+  xtandem: (r) => (r.xt >= 0 ? [['all_three', 'some', 'nearby_copy_only', 'none', 'tools_only'][r.xt]] : []),
   wgd: (r) => wgdKeys(r.wgd), wgd9: (r) => wgdKeys(r.wgd9), rel: (r) => [r.rel || 'not_classified'],
 };
 function wgdKeys(w) {
@@ -322,7 +336,7 @@ function exportTSV(state) {
   // comments (#) stating the release, so a file found later can be traced to its version.
   const head = ['gene_id', 'haplotype', 'chr', 'description', 'duplication_class_code', 'sWGD', 'aWGT',
                 'in_tandem_array', 'relationship_category', 'has_allele', 'quality_flagged',
-                'phylostratum_used', 'phylostratum_genEra', 'LSG_status',
+                'phylostratum_used', 'phylostratum_genEra', 'LSG_status', 'other_gene_age_methods',
                 'tau_reference_panel', 'peak_tissue_reference_panel', 'mean_TPM_ge_5_reference_panel',
                 'synteny_class_GENESPACE', 'genomes_in_orthogroup', 'omega_vs_ptrichocarpa',
                 'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy'];
@@ -331,6 +345,7 @@ function exportTSV(state) {
     '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology), as in the dissertation',
     '# tau and peak tissue: mean TPM in 9 tissue groups of the 222-sample reference panel; empty where no group mean reaches 5 TPM',
     '# The dissertation counts quality-filtered genes only: keep quality_flagged = no to reproduce its numbers',
+    '# other_gene_age_methods: independent cross-checks on candidates, run after the dissertation’s analysis; never part of its call',
     head.join('\t')];
   const LSG = ['not_a_candidate', 'final_set', 'candidate_excluded'];
   for (const i of state.matches) {
@@ -342,7 +357,7 @@ function exportTSV(state) {
       r.wgd9 & 1 ? 'yes' : 'no', r.wgd9 & 2 ? 'yes' : 'no', r.tandem ? 'yes' : 'no',
       r.rel ? (CATEGORY[r.rel] ? CATEGORY[r.rel].name : r.rel) : 'not classified (quality-flagged)',
       r.allele ? 'yes' : 'no', r.qc ? 'yes' : 'no',
-      r.ps ?? '', r.psg ?? '', LSG[r.lsg],
+      r.ps ?? '', r.psg ?? '', LSG[r.lsg], r.xa >= 0 ? ['agree', 'search_sensitive', 'disagree'][r.xa] : '',
       r.tau == null ? '' : r.tau.toFixed(3), r.top ?? '', r.tok ? 'yes' : 'no',
       r.cls ?? '', r.npres ?? '',
       // an empty cell would read as "not measured"; these are measured absences

@@ -313,6 +313,34 @@ function karyotypeSection(g) {
   return wrap;
 }
 
+// Tandem cross-check (dup.xt, patch_dup_crosscheck.py): which of three published callers also
+// call this gene tandem (t) or a nearby copy (x). Bits 1 DupGen_finder, 2 MCScanX, 4 doubletrouble.
+const XT_TOOLS = [[1, 'DupGen_finder'], [2, 'MCScanX'], [4, 'doubletrouble']];
+const names = (bits) => XT_TOOLS.filter(([b]) => bits & b).map(([, n]) => n);
+const andList = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
+function tandemCrossCheck(d) {
+  const x = d.xt;
+  if (!x) return null;
+  const t = names(x.t), p = names(x.x);
+  const near = 'a nearby copy (proximal: close by on the chromosome with other genes between, which the '
+    + 'dissertation\u2019s rule counts as part of one array)';
+  let line;
+  if (d.td) {
+    if (x.t === 7) line = 'All three published tandem-duplication tools also call it tandem (DupGen_finder, MCScanX and doubletrouble).';
+    else if (t.length) line = `${['', 'One', 'Two'][t.length]} of three published tools call${t.length === 1 ? 's' : ''} it tandem (${andList(t)})`
+      + (p.length ? `; ${andList(p)} call${p.length === 1 ? 's' : ''} it ${near}.` : '.');
+    else if (p.length) line = `Published tools call it ${near}, not tandem (${andList(p)}).`;
+    else line = 'None of three published tandem tools (DupGen_finder, MCScanX, doubletrouble) calls it tandem or a nearby copy.';
+  } else if (t.length) {
+    line = `${andList(t)} call${t.length === 1 ? 's' : ''} it tandem; the dissertation\u2019s curated tandem set does not include it.`;
+  } else {
+    return null;
+  }
+  return el('span', { 'data-xt': '' }, line,
+    el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+      'A cross-check run on the same annotation, not part of the dissertation\u2019s call.'));
+}
+
 function geneCard(g) {
   const para = g.para;
   const inArray = !!((g.syn || {}).flags || {}).ar;
@@ -330,6 +358,8 @@ function geneCard(g) {
         el('span', { class: 'muted mono', style: 'font-size:11.5px' }, `  ${g.dup.t}`),
         el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
           'A gene can belong to several duplication modes at once; the code concatenates them.')));
+    const xt = tandemCrossCheck(g.dup);
+    if (xt) kv.append(el('dt', {}, 'Published tools'), el('dd', {}, xt));
     if (g.te && g.te.all != null) {
       const near = Object.entries(g.te).filter(([k]) => k !== 'all')
         .sort((a, b) => a[1] - b[1]).slice(0, 3);

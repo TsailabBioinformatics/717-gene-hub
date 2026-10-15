@@ -35,6 +35,8 @@ SOURCE_GENERATORS = {
     "make_dissertation_layer_source.py",
     "make_duplicate_coexpr_source.py",
     "make_founder_source.py",
+    "make_dup_crosscheck_source.py",
+    "make_gene_age_crosscheck_source.py",
     "make_gene_model_source.py",
     "make_kaks_source.py",
     "make_karyotype_source.py",

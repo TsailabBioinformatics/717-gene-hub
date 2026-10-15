@@ -142,11 +142,16 @@ def main():
             1 if xp.get("ok") else 0,
             # genEra's own rank (differs from `ps` only for the reassigned PS19 genes)
             ps.get("rank") if ps.get("rank") is not None else -1,
+            # gene-age cross-checks on candidates: 0 agree, 1 search-sensitive, 2 disagree, -1 not a candidate
+            (ps.get("xc") or {}).get("v", -1) if ps.get("xc") else -1,
+            # tandem cross-check: 0 all three published callers tandem, 1 some, 2 a nearby copy only,
+            # 3 none, 4 callers tandem but not in the dissertation's set; -1 nothing to say
+            ((0 if dup['xt']['t'] == 7 else 1 if dup['xt']['t'] else 2 if dup['xt']['x'] else 3) if dup.get('td') else (4 if dup['xt']['t'] else -1)) if dup.get('xt') else -1,
         ])
 
     out = {
         "cols": ["hap", "chr", "cls", "ps", "tau", "top", "allele", "at", "wgd", "wgd9", "ccd",
-                 "tandem", "npres", "amb", "xin", "w", "ms", "aek", "rel", "dup", "lsg", "qc", "tok", "psg"],
+                 "tandem", "npres", "amb", "xin", "w", "ms", "aek", "rel", "dup", "lsg", "qc", "tok", "psg", "xa", "xt"],
         "vocab": {"chr": chrs, "cls": clss, "top": tops, "xin": XIN_TISSUES, "rel": rels, "dup": dups},
         "rows": rows,
     }

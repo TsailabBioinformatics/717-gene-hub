@@ -9,6 +9,41 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.20.0 - 2026-10-14 - Do other methods agree? Cross-check lines for gene age and tandem duplication
+
+**New per-gene field `dup.xt` on 13,186 genes (data).** The Duplication card says whether three
+published tandem callers, run on the same annotation (DupGen_finder, MCScanX and
+doubletrouble), also call the gene tandem. Of the dissertation's tandem genes, all three tools
+agree on 3,000 of 6,663 HAP1 and 2,921 of 6,385 HAP2; one or two tools on 1,116 and 1,099; the
+tools call a further 1,732 and 1,558 a nearby copy (proximal: close by, with other genes
+between, which the dissertation's rule counts as part of one array); and none of the tools
+calls 815 and 807 either. 38 HAP1 and 52 HAP2 genes the tools call tandem are not in the
+dissertation's set. The line is worded as a difference of definition and says it is a
+cross-check, not part of the call; no duplication field changed (the patch stage refuses if one
+does). Browse gains "Published tandem tools". The whole-genome duplication comparison is held
+back: the tools report collinear blocks of any age, not the dissertation's two dated events.
+
+**New per-gene field `ps.xc` on the 776 HAP1 and 835 HAP2 candidates (data).** Each candidate's
+gene-age card now says whether independent methods agree with its call. Six checks were run on
+HAP1 candidates and three on HAP2: a second gene-age program on a different database
+(phylostratr), a deeper profile search (MMseqs2, read as an upper bound), protein-family
+profiles (Pfam), and on HAP1 only the same search with repeat masking off, a more sensitive
+pairwise search (BLASTP), and a search of predicted protein structures. The outcome is
+"agree" (no check finds a homolog outside Populus), "search-sensitive" (only search-choice
+checks do), or "disagree" (Pfam or the structure search does). On the final set: HAP1 543 /
+36 / 4, HAP2 584 / 37 / 0. These are cross-checks run after the dissertation's analysis: the
+line says so on every gene, and no call, set or rank changed (the patch stage refuses if the
+final set moves).
+
+Source: the gene-age comparison's per-gene tables, pinned by commit and checksum
+(`sources/gene_age_crosscheck.pin.json`); `make_gene_age_crosscheck_source.py` refuses unless
+it reproduces the comparison's published summary from its own rows. Browse gains the filter
+"Other gene-age methods" and an export column; the gene-age overview gains a count table whose
+numbers link to their lists. New checks: the validator re-derives the outcome from the bits,
+`check_aggregates.py` recomputes the counts, `check_required_layers.py` holds the field equal to
+its source, and `check.mjs` tests one gene per outcome and Browse against the manifest with a
+planted flipped row.
+
 ## The tissue table lights its reference samples; responsiveness wording follows 0.19.0
 
 Site only. With 0.19.0's per-sample reference-panel flag, each row of the gene page's tissue

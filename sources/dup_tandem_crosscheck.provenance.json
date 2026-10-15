@@ -1,0 +1,43 @@
+{
+ "columns": [
+  "gene_id",
+  "hap",
+  "t",
+  "x",
+  "td"
+ ],
+ "pin": "dup_tandem_crosscheck.pin.json",
+ "reproduces": {
+  "all_three": {
+   "HAP1": 3000,
+   "HAP2": 2921
+  },
+  "dissertation_tandem": {
+   "HAP1": 6663,
+   "HAP2": 6385
+  },
+  "neither": {
+   "HAP1": 815,
+   "HAP2": 807
+  },
+  "proximal_only": {
+   "HAP1": 1732,
+   "HAP2": 1558
+  },
+  "unfiltered_tandem": {
+   "HAP1": {
+    "DupGen_finder": 4249,
+    "MCScanX": 3155,
+    "doubletrouble": 4197
+   },
+   "HAP2": {
+    "DupGen_finder": 4126,
+    "MCScanX": 3050,
+    "doubletrouble": 4072
+   }
+  }
+ },
+ "rows": 13186,
+ "sha256_uncompressed": "f116df4992f2d4384c3560239e006909aba87e76cae346bd9005c55a19a307f5",
+ "what": "which published callers call each gene tandem or proximal; see the generator's docstring"
+}

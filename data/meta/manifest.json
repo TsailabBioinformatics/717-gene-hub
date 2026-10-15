@@ -199,7 +199,7 @@
   "source": "this atlas's own GENESPACE run 47798208, syntenicHits",
   "target": "Populus trichocarpa (Potri, v4.1 ids)"
  },
- "data_version": "0.19.0",
+ "data_version": "0.20.0",
  "dissertation": {
   "analysis_repository_commit": "59eec6bd",
   "arabidopsis_hit_kept_from_older_annotation": 372,
@@ -331,6 +331,44 @@
   },
   "what": "Summaries recomputed from the gene records, on the dissertation's gene basis: quality-filtered gene models, each haplotype separately."
  },
+ "dup_crosscheck": {
+  "callers": {
+   "DupGen_finder": 1,
+   "MCScanX": 2,
+   "doubletrouble": 4
+  },
+  "outcomes": [
+   "all_three",
+   "some",
+   "nearby_copy_only",
+   "none",
+   "tools_only"
+  ],
+  "per_haplotype": {
+   "all_three": {
+    "HAP1": 3000,
+    "HAP2": 2921
+   },
+   "nearby_copy_only": {
+    "HAP1": 1732,
+    "HAP2": 1558
+   },
+   "none": {
+    "HAP1": 815,
+    "HAP2": 807
+   },
+   "some": {
+    "HAP1": 1116,
+    "HAP2": 1099
+   },
+   "tools_only": {
+    "HAP1": 38,
+    "HAP2": 52
+   }
+  },
+  "source_sha256": "f116df4992f2d4384c3560239e006909aba87e76cae346bd9005c55a19a307f5",
+  "what": "whether three published duplication callers also call a gene tandem; a cross-check, never part of the dissertation's call"
+ },
  "duplicate_coexpr": {
   "basis": "Pearson r on log2(ComBat-corrected TPM + 1) over 652 samples -- the same matrix the neighbour co-expression (nb) uses, because a 652-sample correlation spans 28 studies and is therefore a cross-study comparison.",
   "coverage": "A pair needs BOTH partners in the ComBat matrix (59,599 of 63,960 genes), so 7,707 of 32,333 duplicate pairs have no value. Absence means 'not comparable', not 'uncorrelated'.",
@@ -431,7 +469,7 @@
   }
  },
  "facets": {
-  "bytes": 3768390,
+  "bytes": 4137411,
   "cols": [
    "hap",
    "chr",
@@ -456,7 +494,9 @@
    "lsg",
    "qc",
    "tok",
-   "psg"
+   "psg",
+   "xa",
+   "xt"
   ],
   "n_rows": 63960
  },
@@ -473,6 +513,85 @@
   "n_families": 16062,
   "singletons": 2900,
   "why_drawable": "measured before building the view: the largest component is 85 genes, so no family is too large to render."
+ },
+ "gene_age_crosscheck": {
+  "bits": {
+   "blastp_only": 16,
+   "deeper_profile_search": 2,
+   "pfam": 4,
+   "phylostratr": 1,
+   "structure": 32,
+   "unmasked_search": 8
+  },
+  "hap1_only": [
+   "unmasked_search",
+   "blastp_only",
+   "structure"
+  ],
+  "outcomes": [
+   "agree",
+   "search_sensitive",
+   "disagree"
+  ],
+  "per_set": {
+   "excluded": {
+    "HAP1": {
+     "agree": 152,
+     "disagree": 6,
+     "search_sensitive": 35
+    },
+    "HAP2": {
+     "agree": 171,
+     "disagree": 3,
+     "search_sensitive": 40
+    }
+   },
+   "final": {
+    "HAP1": {
+     "agree": 543,
+     "disagree": 4,
+     "search_sensitive": 36
+    },
+    "HAP2": {
+     "agree": 584,
+     "disagree": 0,
+     "search_sensitive": 37
+    }
+   },
+   "final_found": {
+    "HAP1": {
+     "blastp_only": 8,
+     "deeper_profile_search": 23,
+     "pfam": 3,
+     "phylostratr": 25,
+     "structure": 3,
+     "unmasked_search": 8
+    },
+    "HAP2": {
+     "blastp_only": 0,
+     "deeper_profile_search": 20,
+     "pfam": 0,
+     "phylostratr": 29,
+     "structure": 0,
+     "unmasked_search": 0
+    }
+   },
+   "pool": {
+    "HAP1": {
+     "agree": 695,
+     "disagree": 10,
+     "search_sensitive": 71
+    },
+    "HAP2": {
+     "agree": 755,
+     "disagree": 3,
+     "search_sensitive": 77
+    }
+   }
+  },
+  "rule": "disagree if Pfam or the structure search found older homology; search-sensitive if only the others did",
+  "source_sha256": "6f3c355223108d91e5fc9a6ad514bea4eb1a7d5b7947d7e230dfb8305c672bd9",
+  "what": "independent gene-age checks on every candidate; cross-checks run after the dissertation's analysis, never part of its call"
  },
  "gene_model": {
   "intron_support": {

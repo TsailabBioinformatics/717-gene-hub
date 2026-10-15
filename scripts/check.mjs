@@ -1751,6 +1751,124 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   await lp.close();
 }
 
+// Gene-age cross-checks (ps.xc). One gene per outcome, a HAP2 gene, an excluded candidate and a
+// non-candidate; then Browse's counts per outcome against the manifest, with a planted flip of
+// one facet row that the same comparison must catch.
+await check('gene-xc-agree', '#/gene/PtXaTreH.01G001500',
+  { expect: ['Other gene-age methods agree', 'none of the 6 independent checks', 'do not change its call'], forbid: ['disagree'] });
+await check('gene-xc-sensitive', '#/gene/PtXaTreH.01G018800',
+  { expect: ['search-sensitive', 'MMseqs2', 'upper bound'], forbid: ['Other methods disagree'] });
+await check('gene-xc-disagree', '#/gene/PtXaTreH.10G204200',
+  { expect: ['Other methods disagree', 'Pfam', 'Foldseek', 'do not change its call', 'yes, in the final set'] });
+await check('gene-xc-hap2', '#/gene/PtXaAlbH.01G053900',
+  { expect: ['search-sensitive', 'run on HAP1 only'] });
+await check('gene-xc-excluded', '#/gene/PtXaTreH.05G032500',
+  { expect: ['candidate, excluded from the final set', 'Other methods disagree'] });
+await check('gene-xc-absent', '#/gene/PtXaTreH.01G000300',
+  { forbid: ['gene-age methods', 'Other methods'] });
+{
+  const xp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  const xerrs = [];
+  xp.on('pageerror', (e) => xerrs.push(e.message));
+  await xp.goto(`${base}/#/`, { waitUntil: 'networkidle' });
+  const man = await xp.evaluate(async () => (await (await fetch('data/meta/manifest.json')).json()).gene_age_crosscheck);
+  const bad = [];
+  const counts = {};
+  for (const h of ['hap1', 'hap2']) {
+    for (const o of ['agree', 'search_sensitive', 'disagree']) {
+      await xp.goto(`${base}/#/browse?hap=${h}&lsg=final_set&xage=${o}`, { waitUntil: 'networkidle' });
+      await xp.waitForSelector('.bz-count', { timeout: 15000 });
+      await xp.waitForTimeout(400);
+      const n = +(await xp.$eval('.bz-count', (e) => e.textContent)).match(/^([\d,]+)/)[1].replace(/,/g, '');
+      counts[`${h}/${o}`] = n;
+      const want = man.per_set.final[h.toUpperCase()][o];
+      if (n !== want) bad.push(`${h} ${o}: Browse ${n}, manifest ${want}`);
+    }
+    const sum = ['agree', 'search_sensitive', 'disagree'].reduce((a, o) => a + counts[`${h}/${o}`], 0);
+    if (sum !== { hap1: 583, hap2: 621 }[h]) bad.push(`${h}: outcomes sum to ${sum}`);
+  }
+  // planted control: serve the page a facet index with one final-set HAP1 row flipped from agree
+  // to disagree; the same Browse-versus-manifest comparison must now fail.
+  const cp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await cp.route('**/data/index/facets.json*', async (route) => {
+    const res = await route.fetch();
+    const f = await res.json();
+    const c = Object.fromEntries(f.cols.map((n, i) => [n, i]));
+    const k = f.rows.findIndex((r) => r[c.lsg] === 1 && r[c.hap] === 0 && r[c.xa] === 0);
+    f.rows[k][c.xa] = 2;
+    await route.fulfill({ response: res, body: JSON.stringify(f) });
+  });
+  await cp.goto(`${base}/#/browse?hap=hap1&lsg=final_set&xage=disagree`, { waitUntil: 'networkidle' });
+  await cp.waitForSelector('.bz-count', { timeout: 15000 });
+  await cp.waitForTimeout(400);
+  const planted = +(await cp.$eval('.bz-count', (e) => e.textContent)).match(/^([\d,]+)/)[1].replace(/,/g, '');
+  const sees = planted !== man.per_set.final.HAP1.disagree;
+  await cp.close();
+  const ok = !bad.length && sees && !xerrs.length;
+  if (!ok) failures++;
+  console.log(`\n### browse:xage-counts  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${JSON.stringify(counts)}; a planted flipped row is caught: ${sees}`);
+  [...bad, ...xerrs].forEach((e) => console.log('   !! ' + e));
+  await xp.close();
+}
+
+// Tandem cross-checks (dup.xt): one gene per outcome on the Duplication card, and Browse's counts
+// against the manifest with a planted flipped facet row the comparison must catch.
+for (const [name, gid, want] of [
+  ['all-three', 'PtXaTreH.01G000400', 'All three published tandem-duplication tools also call it tandem'],
+  ['some', 'PtXaTreH.01G000300', 'Two of three published tools call it tandem'],
+  ['nearby', 'PtXaTreH.01G004300', 'a nearby copy (proximal'],
+  ['none', 'PtXaTreH.01G005600', 'None of three published tandem tools'],
+  ['tools-only', 'PtXaTreH.01G017400', 'the dissertation’s curated tandem set does not include it']]) {
+  const tp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await tp.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
+  await tp.waitForTimeout(800);
+  const t = await tp.evaluate(() => { const dt = [...document.querySelectorAll('[data-card=duplication] dt')].find((d) => d.textContent === 'Published tools');
+    return dt ? dt.nextElementSibling.textContent : ''; });
+  const ok = t.includes(want) && t.includes('not part of the dissertation’s call');
+  if (!ok) failures++;
+  console.log(`\n### gene-xt-${name}  ${ok ? 'OK' : 'FAIL'}`);
+  if (!ok) console.log(`   !! ${gid}: "${t.slice(0, 160)}"`);
+  await tp.close();
+}
+{
+  const xp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await xp.goto(`${base}/#/`, { waitUntil: 'networkidle' });
+  const man = await xp.evaluate(async () => (await (await fetch('data/meta/manifest.json')).json()).dup_crosscheck);
+  const OUT = ['all_three', 'some', 'nearby_copy_only', 'none', 'tools_only'];
+  const bad = [], counts = {};
+  const countOf = async (page, h, o) => {
+    await page.goto(`${base}/#/browse?hap=${h}&xtandem=${o}`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.bz-count', { timeout: 15000 });
+    await page.waitForTimeout(400);
+    return +(await page.$eval('.bz-count', (e) => e.textContent)).match(/^([\d,]+)/)[1].replace(/,/g, '');
+  };
+  for (const h of ['hap1', 'hap2']) {
+    for (const o of OUT) {
+      const n = await countOf(xp, h, o);
+      counts[`${h}/${o}`] = n;
+      if (n !== man.per_haplotype[o][h.toUpperCase()]) bad.push(`${h} ${o}: Browse ${n}, manifest ${man.per_haplotype[o][h.toUpperCase()]}`);
+    }
+  }
+  const cp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await cp.route('**/data/index/facets.json*', async (route) => {
+    const res = await route.fetch();
+    const f = await res.json();
+    const c = Object.fromEntries(f.cols.map((n, i) => [n, i]));
+    const k = f.rows.findIndex((r) => r[c.hap] === 0 && r[c.xt] === 0);
+    f.rows[k][c.xt] = 4;
+    await route.fulfill({ response: res, body: JSON.stringify(f) });
+  });
+  const sees = (await countOf(cp, 'hap1', 'tools_only')) !== man.per_haplotype.tools_only.HAP1;
+  await cp.close();
+  const ok = !bad.length && sees;
+  if (!ok) failures++;
+  console.log(`\n### browse:xtandem-counts  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${JSON.stringify(counts)}; a planted flipped row is caught: ${sees}`);
+  bad.forEach((e) => console.log('   !! ' + e));
+  await xp.close();
+}
+
 // A null handed to the browser's own append() is printed as the word "null". These two genes
 // reach their allele through a tandem array, the path that did it. Planted control as below.
 {
@@ -1784,7 +1902,10 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
   const routes = ['/', '/browse', '/arrays', '/array/HAP1_U00120', '/pair/PtXaTreH.05G120200', '/map/hap1/Chr01',
     '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads',
     '/gene/PtXaTreH.08G070200', '/gene/PtXaAlbH.18G016900', '/gene/PtXaTreH.19G087400',
-    '/gene/PtXaAlbH.05G122300', '/gene/PtXaTreH.10G046700', '/gene/PtXaTreH.01G006100', '/family/PtXaTreH.08G070200'];
+    '/gene/PtXaAlbH.05G122300', '/gene/PtXaTreH.10G046700', '/gene/PtXaTreH.01G006100', '/family/PtXaTreH.08G070200',
+    // (study pages are not scanned: their sample tables print the studies' own sample labels,
+    // such as 17_apical_bud_spring_a_rep1, which match the folder-name pattern by shape)
+    '/gene/PtXaTreH.10G204200', '/gene/PtXaAlbH.01G053900', '/gene/PtXaTreH.01G018800'];
   const ip = await browser.newPage({ viewport: { width: 1180, height: 900 } });
   const hits = [];
   for (const r of routes) {

@@ -111,6 +111,29 @@ def check_expression_ranges(checks, records, manifest):
                      f"manifest {ranges.get(bytes_key)} vs blobs {actual_sizes}")
 
 
+def check_gene_age_crosscheck(checks, records):
+    """Every candidate carries the cross-check its source row gives, and nothing else does."""
+    rows = {r["gene_id"]: (int(r["r"]), int(r["f"])) for r in gz_rows(ROOT / "sources" / "gene_age_crosscheck.tsv.gz")}
+    cand = {g for g, (_h, rec) in records.items() if (rec.get("ps") or {}).get("lsg")}
+    have = {g: (rec["ps"]["xc"]["r"], rec["ps"]["xc"]["f"]) for g, (_h, rec) in records.items()
+            if (rec.get("ps") or {}).get("xc")}
+    checks.check("gene-age cross-checks on exactly the candidates, equal to sources/gene_age_crosscheck.tsv.gz",
+                 set(have) == cand and all(have[g] == rows.get(g) for g in have),
+                 f"{len(have):,} genes carry one, {len(cand):,} candidates")
+
+
+def check_dup_crosscheck(checks, records):
+    """Every quality-filtered gene in the tandem cross-check source carries its row, nothing else does."""
+    rows = {r["gene_id"]: (int(r["t"]), int(r["x"])) for r in gz_rows(ROOT / "sources" / "dup_tandem_crosscheck.tsv.gz")}
+    want = {g for g, (_h, rec) in records.items() if g in rows and rec.get("dup") is not None
+            and not (rec.get("rel") or {}).get("qc")}
+    have = {g: (rec["dup"]["xt"]["t"], rec["dup"]["xt"]["x"]) for g, (_h, rec) in records.items()
+            if (rec.get("dup") or {}).get("xt")}
+    checks.check("tandem cross-checks equal sources/dup_tandem_crosscheck.tsv.gz on quality-filtered genes",
+                 set(have) == want and all(have[g] == rows[g] for g in have),
+                 f"{len(have):,} genes carry one, {len(want):,} expected")
+
+
 def check_wgd_pairs(checks, records):
     rows = gz_rows(ROOT / "sources" / "wgd_pairs.tsv.gz")
     expected = Counter()
@@ -462,6 +485,8 @@ def main():
 
     check_expression_ranges(checks, records, manifest)
     check_wgd_pairs(checks, records)
+    check_gene_age_crosscheck(checks, records)
+    check_dup_crosscheck(checks, records)
     check_gene_model(checks, records, manifest)
     check_peptide_detail(checks, records, manifest)
     check_promoter_positions(checks, records, manifest)

@@ -99,6 +99,43 @@ function qcSummary(qc) {
       + 'above are the evidence for criteria 2 and 3.'));
 }
 
+// Independent gene-age checks on a candidate (ps.xc, patch_gene_age_crosscheck.py). Cross-checks
+// run after the dissertation's analysis: they never change its call, and the line says so.
+// Bits: 1 phylostratr, 2 deeper profile search, 4 Pfam, 8 unmasked search, 16 BLASTP only,
+// 32 structure; 8, 16 and 32 were run on HAP1 only.
+const STRATUM = ['', 'cellular organisms', 'Eukaryota', 'Viridiplantae', 'Streptophyta', 'Streptophytina',
+  'Embryophyta', 'Tracheophyta', 'Euphyllophyta', 'Spermatophyta', 'Magnoliopsida', 'Mesangiospermae',
+  'Pentapetalae', 'rosids', 'fabids', 'Malpighiales', 'Salicaceae', 'Saliceae', 'Populus'];
+const XC_SEARCH = [
+  [1, (x) => `a second gene-age program on a different database (phylostratr), `
+    + (x.p === 17 ? 'one stratum older (Saliceae)' : `placing it at ${STRATUM[x.p] || 'PS' + x.p} (PS${x.p})`)],
+  [2, () => 'a deeper profile search (MMseqs2; an upper bound, it can overstate age)'],
+  [8, () => 'the same search with repeat masking switched off (DIAMOND)'],
+  [16, () => 'a more sensitive pairwise search (BLASTP)'],
+];
+const XC_POSITIVE = [[4, 'a protein-family profile (Pfam)'], [32, 'a search of predicted protein structures (Foldseek, genEra structure mode)']];
+const listing = (a) => (a.length < 2 ? a.join('') : a.length === 2 ? `${a[0]} and ${a[1]}`
+  : `${a.slice(0, -1).join('; ')}; and ${a[a.length - 1]}`);
+const nRun = (r) => [1, 2, 4, 8, 16, 32].filter((b) => r & b).length;
+function crossCheckLine(x, hap) {
+  const sens = XC_SEARCH.filter(([b]) => x.f & b).map(([, t]) => t(x));
+  const pos = XC_POSITIVE.filter(([b]) => x.f & b).map(([, t]) => t);
+  const head = x.v === 2
+    ? el('span', {}, el('strong', {}, 'Other methods disagree: '), `${listing(pos)} found older homology`,
+        sens.length ? `, and so did ${listing(sens)}.` : '.')
+    : x.v === 1
+      ? el('span', {}, el('strong', {}, 'This call is search-sensitive: '),
+          `it holds with the default search, but a homolog outside Populus appears with ${listing(sens)}.`)
+      : el('span', {}, el('strong', {}, 'Other gene-age methods agree: '),
+          `none of the ${nRun(x.r)} independent checks run on this gene found a homolog outside Populus.`);
+  return el('span', { 'data-xc': ['agree', 'search_sensitive', 'disagree'][x.v] }, head,
+    hap === 'hap2' ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+      'Three of the six checks (the unmasked search, the more sensitive search and the structure search) '
+      + 'were run on HAP1 only.') : null,
+    el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
+      'These are cross-checks run after the dissertation’s analysis. They do not change its call above.'));
+}
+
 function geneCard(g) {
   const p = g.ps;
   if (!p) return null;
@@ -136,6 +173,7 @@ function geneCard(g) {
             + `annotated, so the dissertation reassigns it to PS${f.u}.`) : null,
           el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
             'Candidates are the 776 HAP1 and 835 HAP2 genes at PS18 or PS19; the final set is 583 HAP1 and 621 HAP2.')));
+    if (p.xc) add('Other methods', crossCheckLine(p.xc, g.id.startsWith('PtXaTreH') ? 'hap1' : 'hap2'));
   }
   // The frozen 2026-04 genEra call, where its rank differs from the pool's call shown above.
   // Provenance only (C5, Chen 2026-09-21 evening): it drives no filter, count or default view,
@@ -246,6 +284,29 @@ function ladderChart(rows, hap, max) {
       + '(PS ≥ 18). Click a stratum to browse its genes.'));
 }
 
+/** Counts of the cross-check outcome on the final set, each a link to its Browse list. */
+function crossCheckCard(man) {
+  const x = man.gene_age_crosscheck;
+  if (!x) return null;
+  const row = (o, label) => el('tr', {}, el('td', {}, label),
+    ...['HAP1', 'HAP2'].map((h) => el('td', { class: 'num' },
+      el('a', { href: browseHref({ hap: h.toLowerCase(), lsg: 'final_set', xage: o }) }, fmt(x.per_set.final[h][o])))));
+  return el('div', { class: 'card', 'data-xc-overview': '' },
+    el('h2', {}, 'Do other gene-age methods agree?', el('span', { class: 'tag' }, 'cross-checks, final set')),
+    el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
+      el('thead', {}, el('tr', {}, el('th', {}, 'Outcome'), el('th', { class: 'num' }, 'HAP1'), el('th', { class: 'num' }, 'HAP2'))),
+      el('tbody', {},
+        row('agree', 'Agree: no independent check finds a homolog outside Populus'),
+        row('search_sensitive', 'Search-sensitive: only some search settings find one'),
+        row('disagree', 'Disagree: a protein-family profile or a structure search finds one')))),
+    el('p', { class: 'muted', style: 'font-size:12px;margin:8px 0 0' },
+      'Six independent checks on HAP1 genes, three on HAP2 genes (the unmasked search, the more sensitive '
+      + 'search and the structure search were run on HAP1 only), so the two columns are not directly '
+      + 'comparable. These are cross-checks run after the dissertation’s analysis; they do not change its set. '
+      + 'Each gene page states which checks ran and what they found; Browse filters on them under '
+      + '"Other gene-age methods".'));
+}
+
 async function overview(man) {
   const ps = man.phylostrat;
   if (!ps) return el('div', { class: 'empty' }, 'Phylostratigraphy data not built.');
@@ -314,6 +375,7 @@ async function overview(man) {
         'Each excluded gene is counted under the first criterion it meets. On a gene page an excluded '
         + 'candidate reads "candidate, excluded" with its reason. In Browse, the filter "Lineage-specific gene (LSG)" '
         + 'selects the final set; "Phylostratum ≥ 18" selects all candidates.')),
+    crossCheckCard(man),
     el('div', { class: 'hap-pair' },
       el('div', { class: 'card' },
         el('h2', {}, 'Genes per stratum', el('span', { class: 'tag' }, 'HAP1')),

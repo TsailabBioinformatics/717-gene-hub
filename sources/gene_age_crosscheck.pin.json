@@ -1,0 +1,76 @@
+{
+ "archive": {
+  "dir": "ch29576_ms2/gene_age_comparison_20261014",
+  "files": {
+   "3di_PDB": {
+    "path": "foldseek/results/lsg_vs_PDB_3di.tsv",
+    "sha256": "67d1ec3ad502209c01778b1f3950000eb30b0d58f9a325b9a902f9662335a6d8"
+   },
+   "3di_Proteome": {
+    "path": "foldseek/results/lsg_vs_Proteome_3di.tsv",
+    "sha256": "22aaf46ca73ce703eaf756d82d4d1f21c1dfdb42be89252c9650eaebd0088809"
+   },
+   "3di_Swiss": {
+    "path": "foldseek/results/lsg_vs_Swiss_3di.tsv",
+    "sha256": "324831c08893b08b9983700c24519601917f2be2909869298fef2161474dc54f"
+   },
+   "pfam_hap1": {
+    "path": "profile_search/pfam/HAP1_pfam_domtbl.txt",
+    "sha256": "b95c84e1125a17ade8dcf6e9974d77145cda350879aa9baee3c76301d3059ed3"
+   },
+   "pfam_hap2": {
+    "path": "profile_search/pfam/HAP2_pfam_domtbl.txt",
+    "sha256": "b0ba400aa8f3496bd50f3a0d7a32f2d697044e9709c164ce30c9b539b4f3f8aa"
+   },
+   "struct_Swiss": {
+    "path": "genera_struct/Swiss/genera_struct_Swiss/80863_gene_ages.tsv",
+    "sha256": "3b2a122c82df80b01f9a6c6c8b47705317105a872a95640ec1db5ffcd75d2f4b"
+   },
+   "struct_Uni50": {
+    "path": "genera_struct/Uni50/genera_struct_Uni50/80863_gene_ages.tsv",
+    "sha256": "2cb702f2b179f5236e2198c64eb52e5a38d1459c9b54492c899df77ef36939e8"
+   },
+   "taxid_family": {
+    "path": "foldseek/results/taxid_family.tsv",
+    "sha256": "bb51762a83c1f863e3f992d77d2b107abf512711a0227175a7297dbdaf14c65d"
+   }
+  },
+  "root": "work (roots.py)"
+ },
+ "git": {
+  "branch": "chen-gene-age-comparison",
+  "commit": "9475bd0d65f38ed6c0d565be79b0ee33d0473f4e",
+  "files": {
+   "blastp_only": {
+    "blob": "8313553b16fb50d98d6906fa7932acdb7b90b816",
+    "path": "analyses/gene_age_comparison/results/blastp_only_deep_hap1.txt"
+   },
+   "cross_arm_hap1": {
+    "blob": "13cba80a3ff71ba7b1812a608a2496a620203f09",
+    "path": "analyses/gene_age_comparison/results/lsg_cross_arm_hap1.tsv"
+   },
+   "masking_sensitive": {
+    "blob": "0e698c669950e56c3774709fe541846922cba185",
+    "path": "analyses/gene_age_comparison/results/masking_sensitive_hap1.txt"
+   },
+   "masking_test": {
+    "blob": "be8815856afafe012ded7b6aefc9e13e15d584ed",
+    "path": "analyses/gene_age_comparison/results/masking_test_hap1_pool.tsv"
+   },
+   "mmseqs_depth": {
+    "blob": "9b58bb3965b1240d4d6ff20eb7ce708bc6bb1f72",
+    "path": "analyses/gene_age_comparison/results/mmseqs_depth_per_gene.tsv"
+   },
+   "phylostratr_hap1": {
+    "blob": "e7cc1d3ea8a2467deee9183feb640eea5612f985",
+    "path": "analyses/gene_age_comparison/results/compare_pstock_vs_genera_hap1.tsv"
+   },
+   "phylostratr_hap2": {
+    "blob": "b3d339a68e88d5e20f4ec03db475ca01421e2ed6",
+    "path": "analyses/gene_age_comparison/results/compare_pstock_vs_genera_hap2.tsv"
+   }
+  },
+  "repository": "ms2_lsg (roots.py)"
+ },
+ "what": "inputs of make_gene_age_crosscheck_source.py"
+}

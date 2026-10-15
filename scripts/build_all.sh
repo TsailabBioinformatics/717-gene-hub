@@ -66,6 +66,8 @@ STAGES=(
   "repo|patch_copies.py|build_data.py|copies of an array on both haplotypes"
 
   "repo|patch_dissertation_layer.py|patch_wgd_pairs.py,patch_syntelog_categories.py,patch_lsg_qc.py,build_expression.py,build_annotation.py,patch_kaks.py|dissertation's tissue specificity, final LSG set, Arabidopsis hit, names; class summaries"
+  "repo|patch_gene_age_crosscheck.py|patch_lsg_qc.py,patch_dissertation_layer.py|gene-age cross-checks on every candidate (never part of the call)"
+  "repo|patch_dup_crosscheck.py|patch_syntelog_categories.py,patch_dissertation_layer.py|tandem cross-checks against published callers (never part of the call)"
 
   "onedrive|build_combat.py|build_expression.py|ComBat-seq view"
   "onedrive|build_expr_ranges.py|build_expression.py,build_combat.py|range-addressable expression blobs"

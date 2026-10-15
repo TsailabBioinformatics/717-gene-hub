@@ -438,6 +438,10 @@ export function facetRow(facets, i) {
     wgd9: o.wgd9 | 0,     // the adopted call
     dup: (v.dup || [])[o.dup] ?? null,   // duplication class letters
     lsg: o.lsg | 0,       // 1 final LSG set, 2 candidate excluded from it, 0 neither
+    // gene-age cross-checks on candidates: 0 agree, 1 search-sensitive, 2 disagree, -1 not a candidate
+    xa: o.xa == null ? -1 : o.xa,
+    // tandem cross-check: 0 all three callers, 1 some, 2 nearby copy only, 3 none, 4 callers only, -1 nothing
+    xt: o.xt == null ? -1 : o.xt,
     qc: !!o.qc,           // gene model flagged by quality control
     psg: o.psg == null || o.psg < 0 ? null : o.psg,   // genEra's own rank
     tandem: !!o.tandem,

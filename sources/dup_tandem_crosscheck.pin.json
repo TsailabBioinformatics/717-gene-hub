@@ -1,0 +1,41 @@
+{
+ "archive": {
+  "dir": "ch29576_ms1/dup_compare_717_20261014",
+  "files": {
+   "dtrouble_Pt1": {
+    "path": "results/dtrouble/Pt1/Pt1.genes.tsv",
+    "sha256": "f7cb389ccd3643beeeefe79a11c6679edfe93ecdd9481ab2d8b6bfbaf1a309bd"
+   },
+   "dtrouble_Pt2": {
+    "path": "results/dtrouble/Pt2/Pt2.genes.tsv",
+    "sha256": "0b5645562e5755c39a32a29dbbca67be79783ff4adc0ad00ff7b58451d690b88"
+   },
+   "dupgen_Pt1_proximal": {
+    "path": "results/Pt1/Pt1.proximal.pairs",
+    "sha256": "6947f5ce4592ce16922b430876ec29521897df7c7943dd0048d424f99a307dcb"
+   },
+   "dupgen_Pt1_tandem": {
+    "path": "results/Pt1/Pt1.tandem.pairs",
+    "sha256": "0bc21c9ec732f4b62759b541c549931b40bfd63b5c8c514ec5bf43bff6e798dc"
+   },
+   "dupgen_Pt2_proximal": {
+    "path": "results/Pt2/Pt2.proximal.pairs",
+    "sha256": "51b8bb8380f54cbeb15f1ea5cc130337125d0589aadf3b29f843f487acfcd7b8"
+   },
+   "dupgen_Pt2_tandem": {
+    "path": "results/Pt2/Pt2.tandem.pairs",
+    "sha256": "16d72f4302b52d724cc8a57684bd0bea855b3c1cdc7e4caa5d781c12ea7a53b3"
+   },
+   "mcscanx_Pt1": {
+    "path": "work/Pt1/mcscanx/Pt1.gene_type",
+    "sha256": "80828b57394ddffc56fdaec77cdcd4d0a6e6cc98c7fca07454ebf6960fb9c9bb"
+   },
+   "mcscanx_Pt2": {
+    "path": "work/Pt2/mcscanx/Pt2.gene_type",
+    "sha256": "1cc5514ac9ce30f17cc28946dc0d522ce41bd07109eb046b06f5f8913f6f9807"
+   }
+  },
+  "root": "work (roots.py)"
+ },
+ "what": "inputs of make_dup_crosscheck_source.py"
+}
