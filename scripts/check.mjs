@@ -3343,6 +3343,69 @@ for (const scheme of ['light', 'dark']) {
   await p.close();
 }
 
+// Contrast view controls: each filter keeps only matching rows, each sort orders them, and the two
+// responsiveness switches together reproduce the gene's own responsiveness (112 contrasts, 0.674 for
+// PtXaTreH.19G110500, computed independently in python), which ties the filters to the record.
+{
+  const p = await browser.newPage({ viewport: { width: 1180, height: 1100 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto(base + '/#/gene/PtXaTreH.19G110500', { waitUntil: 'networkidle' });
+  await p.waitForTimeout(2500);
+  await p.evaluate(() => {
+    const pn = document.querySelector('.viewpanel[data-view="contrasts"]');
+    const host = pn && pn.closest('.card.viewgroup');
+    const i = host ? [...host.querySelectorAll('.viewpanel')].indexOf(pn) : -1;
+    if (i >= 0) host.querySelectorAll('.viewtab')[i].click();
+  });
+  await p.waitForSelector('[data-cv-switch="resp"]');
+  const read = () => p.evaluate(() => {
+    const pn = document.querySelector('.viewpanel[data-view="contrasts"]');
+    return {
+      summary: pn.querySelector('.cv-summary').textContent,
+      median: pn.querySelector('[data-cv-median]')?.dataset.cvMedian || null,
+      kinds: [...pn.querySelectorAll('[data-cv-row]')].map((x) => x.dataset.kind),
+      labs: [...pn.querySelectorAll('.lfc-lab')].map((x) => x.textContent),
+      vals: [...pn.querySelectorAll('.lfc-val')].map((x) => parseFloat(x.textContent.replace('−', '-'))),
+      weak: pn.querySelectorAll('.lfc-n.warn-n').length,
+      chips: Object.fromEntries([...pn.querySelectorAll('[data-cv-kind]')].map((b) => [b.dataset.cvKind || 'All', +b.querySelector('.cv-n').textContent])),
+    };
+  });
+  const r0 = await read();
+  const mixed = new Set(r0.kinds).size > 1;                        // positive control: kinds differ before filtering
+  await p.click('[data-cv-switch="resp"]');
+  await p.click('[data-cv-switch="expressed"]');
+  const r1 = await read();
+  const respOk = /^112 of 165 contrasts match/.test(r1.summary) && r1.median === '0.674';
+  await p.click('[data-cv-switch="resp"]'); await p.click('[data-cv-switch="expressed"]');
+  await p.click('[data-cv-kind="Phytohormone"]');
+  const r2 = await read();
+  const kindOk = r2.kinds.length > 0 && r2.kinds.every((k) => k === 'Phytohormone')
+    && new RegExp(`^${r0.chips.Phytohormone} of 165`).test(r2.summary);
+  await p.click('[data-cv-kind=""]');
+  await p.selectOption('[data-cv-sort]', 'down');
+  const r3 = await read();
+  const sortOk = r3.vals.every((v, i) => i === 0 || v >= r3.vals[i - 1]) && r3.vals[0] < 0;
+  await p.selectOption('[data-cv-sort]', 'abs');
+  await p.selectOption('[data-cv-tissue]', 'xylem');
+  const r4 = await read();
+  const tissueOk = r4.labs.length > 0 && r4.labs.every((t) => / · xylem( · |$)/.test(t));
+  await p.selectOption('[data-cv-tissue]', '');
+  await p.click('[data-cv-switch="replicated"]');
+  await p.click('.cv-more');
+  const r5 = await read();
+  const n5 = +(r5.summary.match(/^(\d+) of/) || [])[1];
+  const repOk = r5.weak === 0 && r5.vals.length === n5 && n5 === 160;
+  const parts = { mixed, respOk, kindOk, sortOk, tissueOk, repOk };
+  const ok = !errs.length && Object.values(parts).every(Boolean);
+  if (!ok) failures++;
+  console.log(`\n### expression:contrast-view-controls  ${ok ? 'OK' : 'FAIL'}  ${Object.entries(parts).filter(([, v]) => !v).map(([k]) => k).join(' ') || 'all parts'}`);
+  if (!ok) console.log('   ' + JSON.stringify({ r1: r1.summary, m: r1.median, r2: r2.summary, r3: r3.vals.slice(0, 4), r4: r4.labs.slice(0, 2), r5: r5.summary, w: r5.weak }));
+  errs.forEach((e) => console.log('   !! ' + e));
+  await p.screenshot({ path: `${outdir}/contrast-view.png` });
+  await p.close();
+}
+
 // Search engine (0.21): each kind of query lands on the gene a reader means, the dropdown is a
 // working combobox from the keyboard, and no query reads a gene file. The positive control drops
 // the "cesa8" token from its shard; the same assertion must then fail, or it proves nothing.

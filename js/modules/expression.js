@@ -40,6 +40,11 @@ const TISSUE_STUDIES = { leaf_young: 1, leaf_old: 1, bark: 7, root: 6, xylem: 10
  *  in its natural habitat.
  * ------------------------------------------------------------------------------------- */
 const LFC_MAX = 6.5;          // axis half-range; values beyond are clamped and marked
+// The curated set's own category order (its numbers 1-9; the first seven are the perturbation
+// contrasts behind responsiveness).
+const KIND_ORDER = ['Abiotic stress', 'Mechanical and gravitropic', 'Phytohormone', 'Biotic interaction',
+  'Wounding and defoliation', 'Genetic perturbation', 'Genotype x environment', 'Developmental and anatomical',
+  'Control vs control (QC)'];
 
 function contrastCard(g) {
   if (!g.x) return null;
@@ -64,7 +69,6 @@ function contrastCard(g) {
     if (!rows.length) { status.textContent = 'No contrast could be scored for this gene.'; return; }
 
     const sorted = [...rows].sort((a, b) => Math.abs(b.lfc) - Math.abs(a.lfc));
-    const shown = sorted.slice(0, 10);
     const absSorted = rows.map((r) => Math.abs(r.lfc)).sort((a, b) => a - b);
     const med = absSorted[Math.floor(absSorted.length / 2)];
     const lowN = rows.filter((r) => r.nc < 2 || r.np < 2).length;
@@ -77,30 +81,102 @@ function contrastCard(g) {
     const lead = sorted.find((r) => r.nc >= 2 && r.np >= 2) || sorted[0];
     const leadWeak = lead.nc < 2 || lead.np < 2;
 
+    // ---- the list: filter by kind, tissue and three switches; sort five ways ----------------
+    // Whole-panel facts below (median, largest, responsiveness) do not move with the filters;
+    // the line above the bars says what the filtered list holds.
+    const KINDS = [...new Set(rows.map((r) => r.kind))].sort((a, b) =>
+      KIND_ORDER.indexOf(a) - KIND_ORDER.indexOf(b));
+    const TISSUES = [...new Set(rows.map((r) => r.tissue))].sort();
+    const st = { kind: '', tissue: '', resp: false, expressed: false, replicated: false, sort: 'abs', all: false };
+    const SORTS = {
+      abs: ['Largest change', (a, b) => Math.abs(b.lfc) - Math.abs(a.lfc)],
+      up: ['Most up', (a, b) => b.lfc - a.lfc],
+      down: ['Most down', (a, b) => a.lfc - b.lfc],
+      kind: ['By kind', (a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind) || Math.abs(b.lfc) - Math.abs(a.lfc)],
+      study: ['By study', (a, b) => a.study - b.study || a.id.localeCompare(b.id)],
+    };
+    const keep = (r, ignoreKind = false) => (ignoreKind || !st.kind || r.kind === st.kind)
+      && (!st.tissue || r.tissue === st.tissue) && (!st.resp || r.resp)
+      && (!st.expressed || r.base >= 5) && (!st.replicated || (r.nc >= 2 && r.np >= 2));
+
+    const kindRow = el('div', { class: 'cv-kinds', role: 'group', 'aria-label': 'Kind of comparison' });
+    const tissueSel = el('select', { 'aria-label': 'Tissue', 'data-cv-tissue': '' },
+      el('option', { value: '' }, 'All tissues'), ...TISSUES.map((t) => el('option', { value: t }, t)));
+    const sortSel = el('select', { 'aria-label': 'Sort', 'data-cv-sort': '' },
+      ...Object.entries(SORTS).map(([k, [name]]) => el('option', { value: k }, name)));
+    const sw = (key, text) => {
+      const box = el('input', { type: 'checkbox', 'data-cv-switch': key });
+      box.addEventListener('change', () => { st[key] = box.checked; st.all = false; draw(); });
+      return el('label', { class: 'cv-switch' }, box, ` ${text}`);
+    };
+    const switches = el('div', { class: 'cv-switches' },
+      sw('resp', 'Treatment comparisons only (the 149 behind responsiveness)'),
+      sw('expressed', 'Gene reaches 5 TPM in either group'),
+      sw('replicated', 'At least 2 samples on each side'));
+    tissueSel.addEventListener('change', () => { st.tissue = tissueSel.value; st.all = false; draw(); });
+    sortSel.addEventListener('change', () => { st.sort = sortSel.value; draw(); });
+    const controls = el('div', { class: 'cv-controls' }, kindRow,
+      el('div', { class: 'cv-selects' }, el('label', {}, 'Tissue ', tissueSel), el('label', {}, 'Sort ', sortSel)),
+      switches);
+    const summary = el('p', { class: 'sub cv-summary', style: 'margin:0 0 9px', 'aria-live': 'polite' });
     const grid = el('div', { class: 'lfc-rows' });
-    for (const r of shown) {
-      const mag = Math.min(Math.abs(r.lfc), LFC_MAX) / LFC_MAX * 50;   // % of full track
-      const weak = r.nc < 2 || r.np < 2;
-      const bar = el('b', {
-        class: 'lfc-fill ' + (r.lfc >= 0 ? 'up' : 'down') + (weak ? ' weak' : ''),
-        style: (r.lfc >= 0 ? 'left:50%;' : `right:50%;`) + `width:${mag}%`,
-      });
-      grid.append(
-        el('span', { class: 'lfc-lab', title: `${r.label} · ${r.tissue} · ${r.kind}` },
-          r.label, el('span', { class: 'muted' }, ` · ${r.tissue}`)),
-        el('span', { class: 'lfc-track' }, el('i', { class: 'lfc-zero' }), bar),
-        el('span', { class: 'lfc-val mono' }, (r.lfc >= 0 ? '+' : '−') + Math.abs(r.lfc).toFixed(2)),
-        el('span', { class: 'lfc-n mono' + (weak ? ' warn-n' : '') }, `${r.nc}v${r.np}`),
-      );
+    const more = el('button', { type: 'button', class: 'btn cv-more', hidden: '' });
+    more.addEventListener('click', () => { st.all = !st.all; draw(); });
+
+    function draw() {
+      // kind chips: counts follow the other filters, so a chip never promises rows it cannot show
+      clear(kindRow);
+      const base = rows.filter((r) => keep(r, true));
+      for (const k of ['', ...KINDS]) {
+        const n = k ? base.filter((r) => r.kind === k).length : base.length;
+        const b = el('button', { type: 'button', class: 'cv-chip', 'data-cv-kind': k, 'aria-pressed': String(st.kind === k),
+          disabled: n === 0 && st.kind !== k ? '' : null }, `${k || 'All'} `, el('span', { class: 'cv-n' }, String(n)));
+        b.addEventListener('click', () => { st.kind = k; st.all = false; draw(); });
+        kindRow.append(b);
+      }
+      const list = rows.filter((r) => keep(r)).sort(SORTS[st.sort][1]);
+      const shown = st.all ? list : list.slice(0, 10);
+      clear(grid);
+      for (const r of shown) {
+        const mag = Math.min(Math.abs(r.lfc), LFC_MAX) / LFC_MAX * 50;   // % of full track
+        const weak = r.nc < 2 || r.np < 2;
+        const bar = el('b', {
+          class: 'lfc-fill ' + (r.lfc >= 0 ? 'up' : 'down') + (weak ? ' weak' : ''),
+          style: (r.lfc >= 0 ? 'left:50%;' : `right:50%;`) + `width:${mag}%`,
+        });
+        const fixed = r.within.split('; ').filter((t) => t && t !== 'WT').join('; ');
+        const held = fixed ? ` · ${fixed}` : '';
+        grid.append(
+          el('span', { class: 'lfc-lab', 'data-cv-row': r.id, 'data-kind': r.kind,
+            title: `${r.label} · ${r.tissue}${held} · ${r.kind}${r.sub ? ', ' + r.sub : ''} · study ${r.study}` },
+            r.study ? el('a', { href: `#/study/${r.study}`, class: 'cv-study' }, r.label) : r.label,
+            el('span', { class: 'muted' }, ` · ${r.tissue}${held}`)),
+          el('span', { class: 'lfc-track' }, el('i', { class: 'lfc-zero' }), bar),
+          el('span', { class: 'lfc-val mono' }, (r.lfc >= 0 ? '+' : '−') + Math.abs(r.lfc).toFixed(2)),
+          el('span', { class: 'lfc-n mono' + (weak ? ' warn-n' : '') }, `${r.nc}v${r.np}`),
+        );
+      }
+      const filtered = list.length !== rows.length;
+      const abs = list.map((r) => Math.abs(r.lfc)).sort((a, b) => a - b);
+      const m = abs.length ? (abs.length % 2 ? abs[(abs.length - 1) / 2] : (abs[abs.length / 2 - 1] + abs[abs.length / 2]) / 2) : null;
+      summary.replaceChildren(...(!filtered
+        ? [`All ${rows.length} shipped contrasts scored for this gene; the ${shown.length} ${st.sort === 'abs' ? 'largest' : SORTS[st.sort][0].toLowerCase()} shown. Every bar carries its sample counts.`]
+        : list.length
+          ? [`${list.length} of ${rows.length} contrasts match; ${shown.length} shown, ${SORTS[st.sort][0].toLowerCase()} first. `,
+            'Median |log2FC| of these ', el('span', { class: 'mono', 'data-cv-median': m.toFixed(3) }, m.toFixed(3)), '.']
+          : ['No contrast matches these filters.']));
+      more.hidden = list.length <= 10;
+      more.textContent = st.all ? 'Show the first 10' : `Show all ${list.length}`;
     }
+    draw();
 
     body.append(
-      el('p', { class: 'sub', style: 'margin:0 0 9px' },
-        `All ${rows.length} shipped contrasts scored for this gene; the ${shown.length} largest `
-        + 'shown. Every bar carries its sample counts.'),
+      controls,
+      summary,
       grid,
       el('div', { class: 'lfc-axis' },
         el('span', {}, el('i', {}, `−${LFC_MAX}`), el('i', {}, '0'), el('i', {}, `+${LFC_MAX}`))),
+      more,
       el('dl', { class: 'kv', style: 'margin-top:12px' },
         el('dt', {}, 'Median |log2FC|'), el('dd', { class: 'mono' }, med.toFixed(3)),
         el('dt', {}, leadWeak ? 'Largest' : 'Largest, replicated'),

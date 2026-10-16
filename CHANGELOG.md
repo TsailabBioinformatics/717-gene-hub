@@ -9,6 +9,21 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## The contrast view filters and sorts
+
+The Expression card's contrast view showed the 10 largest fold changes only. It now has a row of
+kind chips (the curated set's nine categories, each with the number of contrasts it would leave
+under the other filters), a tissue menu, five sort orders (largest change, most up, most down, by
+kind, by study) and three switches: treatment contrasts only (the 149 behind responsiveness),
+gene reaches 5 TPM in either group, and at least 2 samples on each side. The list shows 10 with a
+"Show all" button; each row links to its study page and names the factors held fixed. A line above
+the bars states how many contrasts match and their median |log2FC|; the whole-panel median,
+largest change and responsiveness below do not move with the filters. With the first two
+switches on, the list is exactly the responsiveness set: new check
+`expression:contrast-view-controls` requires 112 contrasts and median 0.674 for
+PtXaTreH.19G110500 (the values computed independently in python), plus each filter and sort.
+On a phone the chips scroll in one row and each contrast's name sits on its own line.
+
 ## 0.22.0 - 2026-10-15 - The comparisons are the dissertation's curated set
 
 **`data/expr/contrasts.json` is now the dissertation's 165 curated contrasts (data).** It was the v4

@@ -7,6 +7,7 @@ const RELEASES = [
   ['0.22.0', '2026-10-15', 'The comparisons the dissertation computed on', [
     'Study pages, the Expression card’s contrast view and the expression scrubber now use the dissertation’s 165 curated comparisons instead of an older panel of 191. The 149 treatment comparisons among them are the ones behind each gene’s stress responsiveness, which the contrast view now states.',
     'In the two xylem studies, every comparison now stays within developing or within mature xylem, 4 samples against 4. The older panel had pooled the two sites in six comparisons.',
+    'The contrast view can be filtered by kind of comparison, tissue, treatment comparisons only, expression level and replication, and sorted five ways; each comparison links to its study (2026-10-16).',
   ]],
   ['0.21.0', '2026-10-14', 'Sequences for every gene, and a better search', [
     'Every gene page has a Sequences card: protein, coding sequence (CDS), transcript and genomic span, from the Phytozome v5.1 annotation, each with Copy and FASTA buttons. Before this, only the 40,686 proteins with a predicted structure could be downloaded.',

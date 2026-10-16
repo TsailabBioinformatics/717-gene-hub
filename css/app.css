@@ -711,3 +711,29 @@ h2.sect:first-child { margin-top: 2px; }
 .change ul { margin: 0; padding-left: 18px; line-height: 1.55; max-width: 68ch; }
 .change li + li { margin-top: 4px; }
 @media (max-width: 600px) { .change { grid-template-columns: 1fr; } .change-when { flex-direction: row; gap: 10px; } }
+
+/* Contrast view controls (Expression card). */
+.cv-controls { display: grid; gap: 8px; margin: 0 0 12px; }
+.cv-kinds { display: flex; flex-wrap: wrap; gap: 6px; }
+.cv-chip { font: inherit; font-size: 12.5px; padding: 5px 10px; min-height: 32px; border: 1px solid var(--line-2);
+  border-radius: 999px; background: var(--panel); color: var(--ink); cursor: pointer; }
+.cv-chip .cv-n { color: var(--ink-3); font-variant-numeric: tabular-nums; margin-left: 2px; }
+.cv-chip[aria-pressed="true"] { background: var(--accent-ink); border-color: var(--accent-ink); color: var(--panel); }
+.cv-chip[aria-pressed="true"] .cv-n { color: inherit; opacity: .8; }
+.cv-chip:disabled { opacity: .45; cursor: default; }
+.cv-selects { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--ink-2); }
+.cv-selects select { font: inherit; min-height: 32px; padding: 0 6px; border: 1px solid var(--line-2);
+  border-radius: 6px; background: var(--panel-2); color: var(--ink); }
+.cv-switches { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); }
+.cv-switch { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; }
+.cv-more { margin: 8px 0 0; }
+.lfc-lab a.cv-study { color: inherit; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 2px; }
+/* Phones: the kind chips scroll sideways in one row, and a contrast's name gets its own line above
+   its bar instead of being cut to a few letters. */
+@media (max-width: 640px) {
+  .cv-kinds { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .cv-chip { flex: 0 0 auto; }
+  .lfc-rows, .lfc-axis { grid-template-columns: 1fr 46px 38px; }
+  .lfc-rows .lfc-lab { grid-column: 1 / -1; white-space: normal; margin-top: 4px; }
+  .lfc-axis > span { grid-column: 1; }
+}
