@@ -16,7 +16,7 @@ export function contrastRows(vec, contrasts) {
       id: c.id,
       lfc: Math.log2((mp + 1) / (mc + 1)),
       nc: ctrl.length, np: pert.length,
-      base: Math.max(mc, mp),
+      base: Math.max(mc, mp), mc, mp,
       tissue: c.tissue, kind: c.kind, within: c.within || '', sub: c.sub || '', tier: c.tier || '',
       study: +((/^s(\d+)\./.exec(c.id) || [])[1] || 0),
       label: `${c.pert_label} vs ${c.control_label}`,

@@ -9,6 +9,37 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## 0.22.1 - 2026-10-17 - Study labels, read counts, and the expression views' statistics
+
+**Read counts for studies 26 and 30 (data).** The study pages printed "–" in the Reads column for 27
+samples. Traced upstream: the dissertation's COLUMN_LEVEL_sample_metadata.csv has no
+total_read_count for those samples and no library_layout for study 30, and its run-level table
+lists study 26 as 0 reads. New committed source `sources/expr_read_count_supplement.tsv` (NCBI SRA
+spots and layout for the 27 runs, `make_read_count_supplement_source.py`) and stage
+`patch_read_counts.py`, which fills only blank fields. `reads` is SRA spots, as for every other
+sample (checked on SRR1293453). New gate: every sample states its read count and layout.
+
+**Study labels (site).** `studyMeta` named two-author citations "X et al." (Kins & Janz, Yu &
+Janz and two more), left the institutional author of study 8 blank, and took the journal of
+studies 20, 25 and 31 from inside the title ("alba", "Plant"). It now names one or two authors,
+gives an institution as written, takes the journal as the last segment before the volume or link,
+and reads data-set citations as title plus repository. The five studies with no paper (the source
+marks them unpublished; their DOIs were not dropped) link their deposited data set in the studies
+table and say so on the study page, instead of a dash. The citation text shown is unchanged:
+`cleanCitation` already cut the curation notes some entries carry after the URL.
+
+**Tissues view (site).** Columns for median, range (lowest to highest sample), samples and
+studies beside the dissertation's mean, all over the same reference-panel samples; means to one
+decimal; a switch between panel order and highest mean first. Larger type.
+
+**Contrast view (site).** Larger type, a header row, the mean TPM of the control and the treated
+group on every row, and a sort by highest expression. Small inline type across the Expression
+card raised to 12.5-13 px.
+
+New check `expression:metadata-and-tissue-stats`: the labels above, five data-set links and no
+bare dash in the studies table, depth on every study 26 sample, the recomputed mean equal to the
+record's for all nine tissues, filled statistics, and the mean sort. It fails on the 0.22.0 site.
+
 ## The contrast view filters and sorts
 
 The Expression card's contrast view showed the 10 largest fold changes only. It now has a row of

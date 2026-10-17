@@ -144,7 +144,7 @@ await check('study-1', '#/study/1',
 // URL ("Set the title in italics...", "If the lab prefers personal attribution..."). The page
 // shows the reference and stops at its link; the paper title leads where one parses cleanly.
 await check('study-citation-clean-4', '#/study/4',
-  { expect: ['Transcription profiling of Populus', 'Jakobi et al. 2020', 'E-MTAB-8683'],
+  { expect: ['Transcription profiling of Populus', 'Jakobi & Janz 2020', 'E-MTAB-8683'],
     forbid: ['If you prefer', 'reverse-italicized', 'Set the title'], wait: 1000 });
 await check('study-citation-clean-8', '#/study/8',
   { expect: ['Study 8', 'PRJNA275366'], forbid: ['Asterisks', 'If the lab prefers', 'inferred from'], wait: 1000 });
@@ -1570,13 +1570,14 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
     await dp.mouse.move(0, 0);
     const rows = await dp.evaluate(() => [...document.querySelectorAll('[data-paper-expr] tbody tr[data-ids]')].map((tr) => {
       tr.dispatchEvent(new FocusEvent('focus'));
-      const o = { t: tr.dataset.tissue, mean: +tr.cells[1].textContent.replace(/,/g, ''), n: tr.cells[2].textContent.trim(),
+      const o = { t: tr.dataset.tissue, mean: +tr.cells[1].textContent.replace(/,/g, ''), n: 'n=' + tr.querySelector('[data-stat="n"]').textContent.trim(),
         read: document.querySelector('[data-dmap] .dmap-readout').textContent };
       tr.dispatchEvent(new FocusEvent('blur'));
       return o;
     }));
     const agree = (r, read) => { const m = /: (\d+) samples.*mean ([\d,.]+) TPM/.exec(read);
-      return !!m && `n=${m[1]}` === r.n && Math.abs(+m[2].replace(/,/g, '') - r.mean) <= Math.max(0.011, 0.002 * r.mean); };
+      // the table shows means to one decimal (0.22.1), so agreement is to that precision
+      return !!m && `n=${m[1]}` === r.n && Math.abs(+m[2].replace(/,/g, '') - r.mean) <= Math.max(0.051, 0.002 * r.mean); };
     rows.forEach((r, i) => {
       refRows++;
       if (!agree(r, r.read)) bad.push(`${gid} reference row ${r.t}: ${r.n}, mean ${r.mean}; readout "${r.read.slice(0, 120)}"`);
@@ -3403,6 +3404,52 @@ for (const scheme of ['light', 'dark']) {
   if (!ok) console.log('   ' + JSON.stringify({ r1: r1.summary, m: r1.median, r2: r2.summary, r3: r3.vals.slice(0, 4), r4: r4.labs.slice(0, 2), r5: r5.summary, w: r5.weak }));
   errs.forEach((e) => console.log('   !! ' + e));
   await p.screenshot({ path: `${outdir}/contrast-view.png` });
+  await p.close();
+}
+
+// Expression metadata and the Tissues view (2026-10-17). Study labels come from the citations:
+// two authors are named ("Kins & Janz"), an institution is given as written, and a title holding
+// "P. alba." keeps its real journal. Unpublished studies link their data set, never a bare dash.
+// Every sample states its depth. The Tissues view's recomputed mean must equal the record's for
+// every tissue, its statistic cells are filled, and the mean sort orders the rows.
+{
+  const p = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  const labels = await p.goto(`${base}/#/`, { waitUntil: 'networkidle' }).then(() => p.evaluate(async () => {
+    const { studyMeta } = await import('./js/core/cite.js');
+    const s = await (await fetch('data/expr/studies.json')).json();
+    const m = (k) => studyMeta(s[k].citation);
+    return { s2: m('2').firstAuthor, s8: m('8').firstAuthor, s20: m('20').journal, s25: m('25').journal,
+      s31: m('31').journal, s1: m('1').firstAuthor, nullAuthors: Object.keys(s).filter((k) => !m(k).firstAuthor || !m(k).year) };
+  }));
+  const labOk = labels.s2 === 'Kins & Janz' && labels.s8 === 'University of Georgia' && labels.s1 === 'Georgii et al.'
+    && labels.s20 === 'International Journal of Molecular Sciences' && labels.s25 === 'Plant, Cell & Environment'
+    && labels.s31 === 'The Plant Journal' && labels.nullAuthors.length === 0;
+  await p.goto(`${base}/#/module/expression`, { waitUntil: 'networkidle' });
+  await p.waitForTimeout(800);
+  const paperCol = await p.evaluate(() => [...document.querySelectorAll('tr')].map((tr) => tr.lastElementChild?.textContent.trim()));
+  const dataSets = paperCol.filter((t) => t === 'data set').length;
+  const bareDash = paperCol.filter((t) => t === '–').length;
+  await p.goto(`${base}/#/study/26`, { waitUntil: 'networkidle' });
+  await p.waitForTimeout(800);
+  const s26 = await p.evaluate(() => [...document.querySelectorAll('tr[data-i]')].map((tr) => tr.children[7]?.textContent.trim()));
+  const depthOk = s26.length === 18 && s26.every((t) => /^[\d.,]+/.test(t) && t !== '–');
+  await p.goto(`${base}/#/gene/PtXaTreH.19G110500`, { waitUntil: 'networkidle' });
+  await p.waitForSelector('[data-paper-expr] tr[data-mean-check]', { timeout: 20000 });
+  const t = await p.evaluate(() => [...document.querySelectorAll('[data-paper-expr] tbody tr')].map((tr) => ({
+    t: tr.dataset.tissue, rec: +tr.dataset.mean, chk: tr.dataset.meanCheck ? +tr.dataset.meanCheck : null,
+    filled: ['median', 'range', 'studies'].every((k) => tr.querySelector(`[data-stat="${k}"]`).textContent.trim() !== '') })));
+  const meanOk = t.length === 9 && t.every((r) => r.chk != null && Math.abs(r.chk - r.rec) <= 0.011 && r.filled);
+  await p.click('[data-pt-sort="mean"]');
+  const sorted = await p.evaluate(() => [...document.querySelectorAll('[data-paper-expr] tbody tr')].map((tr) => +tr.dataset.mean));
+  const sortOk = sorted.every((v, i) => i === 0 || v <= sorted[i - 1]);
+  const parts = { labOk, dataSets: dataSets === 5, noBareDash: bareDash === 0, depthOk, meanOk, sortOk };
+  const ok = !errs.length && Object.values(parts).every(Boolean);
+  if (!ok) failures++;
+  console.log(`\n### expression:metadata-and-tissue-stats  ${ok ? 'OK' : 'FAIL'}  ${Object.entries(parts).filter(([, v]) => !v).map(([k]) => k).join(' ') || 'all parts'}`);
+  if (!ok) console.log('   ' + JSON.stringify({ labels, dataSets, bareDash, s26: s26.slice(0, 3), t: t.slice(0, 3) }));
+  errs.forEach((e) => console.log('   !! ' + e));
   await p.close();
 }
 

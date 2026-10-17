@@ -58,7 +58,7 @@ function contrastCard(g) {
     'data-view-tag': 'computed in the browser',
   }, el('h2', {}, 'Response by contrast'));
   const body = el('div', {});
-  const status = el('p', { class: 'muted', style: 'font-size:11.5px;margin:6px 0 0' },
+  const status = el('p', { class: 'muted', style: 'font-size:13px;margin:6px 0 0' },
     'Scoring this gene against every shipped contrast…');
   card.append(body, status);
 
@@ -94,6 +94,7 @@ function contrastCard(g) {
       down: ['Most down', (a, b) => a.lfc - b.lfc],
       kind: ['By kind', (a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind) || Math.abs(b.lfc) - Math.abs(a.lfc)],
       study: ['By study', (a, b) => a.study - b.study || a.id.localeCompare(b.id)],
+      base: ['Highest expression', (a, b) => b.base - a.base],
     };
     const keep = (r, ignoreKind = false) => (ignoreKind || !st.kind || r.kind === st.kind)
       && (!st.tissue || r.tissue === st.tissue) && (!st.resp || r.resp)
@@ -137,6 +138,11 @@ function contrastCard(g) {
       const list = rows.filter((r) => keep(r)).sort(SORTS[st.sort][1]);
       const shown = st.all ? list : list.slice(0, 10);
       clear(grid);
+      if (shown.length) {
+        grid.append(el('span', { class: 'lfc-head' }, 'Comparison'), el('span', { class: 'lfc-head lfc-headbar' }, 'log2 fold change'),
+          el('span', { class: 'lfc-head num' }, 'log2FC'), el('span', { class: 'lfc-head num' }, 'n'),
+          el('span', { class: 'lfc-head num lfc-tpm', title: 'Mean TPM of the control group, then of the treated group' }, 'TPM ctrl → treated'));
+      }
       for (const r of shown) {
         const mag = Math.min(Math.abs(r.lfc), LFC_MAX) / LFC_MAX * 50;   // % of full track
         const weak = r.nc < 2 || r.np < 2;
@@ -154,6 +160,7 @@ function contrastCard(g) {
           el('span', { class: 'lfc-track' }, el('i', { class: 'lfc-zero' }), bar),
           el('span', { class: 'lfc-val mono' }, (r.lfc >= 0 ? '+' : '−') + Math.abs(r.lfc).toFixed(2)),
           el('span', { class: 'lfc-n mono' + (weak ? ' warn-n' : '') }, `${r.nc}v${r.np}`),
+          el('span', { class: 'lfc-tpm mono', 'data-cv-tpm': '' }, `${tpm(r.mc)} → ${tpm(r.mp)}`),
         );
       }
       const filtered = list.length !== rows.length;
@@ -194,7 +201,7 @@ function contrastCard(g) {
         'A fold change from one sample against one sample has no dispersion estimate and cannot '
         + 'be distinguished from noise; those bars are dimmed. Ranking by |log2FC| alone would '
         + 'put them beside a real result.') : null,
-      el('p', { class: 'muted', style: 'font-size:11px;margin:9px 0 0' },
+      el('p', { class: 'muted', style: 'font-size:12.5px;margin:9px 0 0' },
         'Fold change is mean(perturbation)+1 over mean(control)+1 on the raw TPM vector, using '
         + 'the control and perturbation sample indices shipped in contrasts.json. It is a '
         + 'descriptive ratio, not a differential-expression test: no dispersion model, no '
@@ -208,6 +215,8 @@ function contrastCard(g) {
 }
 
 const PAPER_TISSUES = ['leaf_young', 'leaf', 'leaf_old', 'xylem', 'bark', 'root', 'stem', 'bud', 'catkin'];
+/** TPM to one decimal (thousands separated), so a column of means lines up. */
+const tpm = (v) => (v == null ? '–' : v.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
 
 /** Tissue specificity exactly as the dissertation computes it. This is the value to quote. */
 function paperBlock(g, man) {
@@ -223,19 +232,39 @@ function paperBlock(g, man) {
           ? el('strong', {}, 'Counted as tissue-specific')
           : el('span', {}, 'Not counted as tissue-specific'),
         ` (τ ≥ ${TAU_SPECIFIC} and mean TPM ≥ 5; this gene’s mean is ${p.m != null ? p.m.toFixed(2) : '–'} TPM).`);
+  // Mean is the dissertation's (the record); median, range and studies are filled in from the
+  // same reference-panel samples once the vector loads (see geneCard), and the recomputed mean
+  // must equal the record's (data-mean-check).
+  const tbody = el('tbody', {}, ...PAPER_TISSUES.map((t, k) => el('tr', { 'data-tissue': t, 'data-order': k, 'data-mean': p.t[t] },
+    el('td', {}, t === p.top ? el('strong', {}, t) : t),
+    el('td', { class: 'num mono' }, tpm(p.t[t])),
+    el('td', { class: 'num mono', 'data-stat': 'median' }, ''),
+    el('td', { class: 'num mono pt-range', 'data-stat': 'range' }, ''),
+    el('td', { class: 'num', 'data-stat': 'n' }, n[t] != null ? fmt(n[t]) : ''),
+    el('td', { class: 'num', 'data-stat': 'studies' }, ''),
+    el('td', { class: 'pt-barcell' }, el('div', { class: 'bar',
+      style: `width:${Math.max((p.t[t] / max) * 100, p.t[t] > 0 ? 1.5 : 0)}%;background:var(--accent)` })))));
+  const order = el('div', { class: 'pt-sort', role: 'group', 'aria-label': 'Order of tissue groups' });
+  for (const [k, label] of [['panel', 'Panel order'], ['mean', 'Highest mean first']]) {
+    const b = el('button', { type: 'button', class: 'cv-chip', 'data-pt-sort': k, 'aria-pressed': String(k === 'panel') }, label);
+    b.addEventListener('click', () => {
+      order.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const rows = [...tbody.children].sort((a, z) => (k === 'mean' ? +z.dataset.mean - +a.dataset.mean : +a.dataset.order - +z.dataset.order));
+      tbody.append(...rows);
+    });
+    order.append(b);
+  }
   return el('div', { 'data-paper-expr': '' },
     el('p', { class: 'sub', style: 'margin:0 0 8px' }, verdict),
-    el('table', { class: 'data' },
+    order,
+    el('div', { class: 'scroll-x' }, el('table', { class: 'data pt-table' },
       el('thead', {}, el('tr', {}, el('th', {}, 'Tissue group'), el('th', { class: 'num' }, 'Mean TPM'),
-        el('th', {}, ''), el('th', {}, ''))),
-      el('tbody', {}, ...PAPER_TISSUES.map((t) => el('tr', { 'data-tissue': t },
-        el('td', {}, t === p.top ? el('strong', {}, t) : t),
-        el('td', { class: 'num' }, fmt(p.t[t])),
-        el('td', { class: 'muted', style: 'font-size:11px' }, n[t] != null ? `n=${n[t]}` : ''),
-        el('td', { style: 'width:46%' }, el('div', { class: 'bar',
-          style: `width:${Math.max((p.t[t] / max) * 100, p.t[t] > 0 ? 1.5 : 0)}%;background:var(--accent)` })))))),
-    el('p', { class: 'muted', style: 'font-size:11px;margin:6px 0 0' },
-      `As in the dissertation: ${PAPER_TAU_HOW}. Leaf ages are kept as separate groups.`));
+        el('th', { class: 'num' }, 'Median'), el('th', { class: 'num pt-range' }, 'Range'),
+        el('th', { class: 'num' }, 'Samples'), el('th', { class: 'num' }, 'Studies'), el('th', { class: 'pt-barcell' }, ''))),
+      tbody)),
+    el('p', { class: 'muted pt-note' },
+      `As in the dissertation: ${PAPER_TAU_HOW}. Leaf ages are kept as separate groups. Median and range `
+      + '(lowest to highest sample) are over the same reference-panel samples as the mean.'));
 }
 
 function geneCard(g, man) {
@@ -253,7 +282,7 @@ function geneCard(g, man) {
     el('h2', {}, 'Expression', el('span', { class: 'tag' }, 'kallisto k21')),
     paperBlock(g, man),
     dmapHolder,
-    el('p', { class: 'muted', style: 'font-size:11px;margin:4px 0 0' },
+    el('p', { class: 'muted', style: 'font-size:12.5px;margin:4px 0 0' },
       'These are TPM for this haplotype’s gene model. Reads were quantified against both '
       + 'haplotypes together, so reads that fit this gene and its allele equally well are divided '
       + 'between them by kallisto’s estimate, not assigned by phasing. This is not '
@@ -275,7 +304,7 @@ function geneCard(g, man) {
         + 'domain can also correlate neighbors.')) : null,
   );
   const btn = el('button', {
-    style: 'margin-top:10px;font-size:12px;padding:4px 9px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
+    style: 'margin-top:10px;font-size:13px;padding:4px 9px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
     onclick: async (e) => {
       e.target.disabled = true; e.target.textContent = 'Loading…';
       const holder = el('div', { id: 'expr-profile', style: 'margin-top:12px' });
@@ -298,7 +327,7 @@ function geneCard(g, man) {
             renderCurrent = () => { clear(body).append(render()); hub.repaint(); };
             renderCurrent();
           },
-          style: 'font-size:12px;padding:4px 10px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
+          style: 'font-size:13px;padding:4px 10px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
         }, label);
         return b;
       };
@@ -314,7 +343,7 @@ function geneCard(g, man) {
       // signal to batch-correct -- see sources/combat_tpm.provenance.json. Never implies the
       // corrected value is more correct; it is a narrower cross-study comparison view only.
       if (g.x.cb) {
-        const src = el('div', { style: 'display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:11.5px;color:var(--ink-2)' },
+        const src = el('div', { style: 'display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:13px;color:var(--ink-2)' },
           'Values: ');
         const mkSrc = (label, isRaw) => {
           const b = el('button', {
@@ -333,7 +362,7 @@ function geneCard(g, man) {
               b.textContent = label;
               renderCurrent();
             },
-            style: 'font-size:11.5px;padding:3px 8px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
+            style: 'font-size:13px;padding:3px 8px;border:1px solid var(--line-2);border-radius:5px;background:var(--panel-2);color:var(--ink);cursor:pointer',
           }, label);
           return b;
         };
@@ -341,7 +370,7 @@ function geneCard(g, man) {
         const cbBtn = mkSrc('ComBat-corrected (cross-study)', false);
         rawBtn.dataset.on = 'true'; rawBtn.style.background = 'var(--accent)'; rawBtn.style.color = '#fff';
         src.append(rawBtn, cbBtn,
-          el('span', { style: 'font-size:11px' },
+          el('span', { style: 'font-size:12.5px' },
             '– batch-adjusted for comparing this gene ACROSS studies; raw stays primary everywhere else on this site.'));
         holder.insertBefore(src, tabs);
       }
@@ -368,6 +397,14 @@ function geneCard(g, man) {
         const vals = vec ? ids.map((i) => vec[i]) : [];
         const mean = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
         const nst = new Set(ids.map((i) => samples[i].study)).size;
+        if (vals.length) {
+          const sv = [...vals].sort((a, b) => a - b);
+          const med = sv.length % 2 ? sv[(sv.length - 1) / 2] : (sv[sv.length / 2 - 1] + sv[sv.length / 2]) / 2;
+          tr.querySelector('[data-stat="median"]').textContent = tpm(med);
+          tr.querySelector('[data-stat="range"]').textContent = `${tpm(sv[0])} – ${tpm(sv[sv.length - 1])}`;
+          tr.dataset.meanCheck = (Math.round(mean * 100) / 100).toFixed(2);
+        }
+        tr.querySelector('[data-stat="studies"]').textContent = String(nst);
         tr.dataset.ids = ids.join(',');
         tr.tabIndex = 0;
         brush(tr, hub, { key: `ref:${t}`, ids: new Set(ids),
@@ -411,7 +448,7 @@ function conditionTable(vec, samples, studies, hub, geneId) {
 
   const cond = (s) => [s.treatment, s.growth, s.additional].filter(Boolean).join(' · ') || 'baseline';
   return el('div', {},
-    el('p', { class: 'muted', style: 'font-size:12px;margin:0 0 8px' },
+    el('p', { class: 'muted', style: 'font-size:13px;margin:0 0 8px' },
       `${rows.length} conditions across ${new Set(rows.map((r) => r.s.study)).size} studies, `
       + 'each a mean over its replicates. Bars share one scale.'),
     el('div', { class: 'scroll-x', style: 'max-height:520px;overflow-y:auto' },
@@ -422,9 +459,9 @@ function conditionTable(vec, samples, studies, hub, geneId) {
           el('th', { class: 'num' }, 'Mean TPM'), el('th', {}, ''))),
         el('tbody', {}, ...rows.map((r) => brush(el('tr', { 'data-ids': r.ids.join(','), tabindex: '0' },
           el('td', {}, el('a', { href: `#/study/${r.s.study}?gene=${geneId}`, class: 'mono' }, r.s.study)),
-          el('td', { style: 'font-size:12px' }, r.s.tissue_analysis || r.s.tissue || '–'),
-          el('td', { style: 'font-size:12px' }, cond(r.s)),
-          el('td', { style: 'font-size:12px' }, r.s.genotype || '–'),
+          el('td', { style: 'font-size:13px' }, r.s.tissue_analysis || r.s.tissue || '–'),
+          el('td', { style: 'font-size:13px' }, cond(r.s)),
+          el('td', { style: 'font-size:13px' }, r.s.genotype || '–'),
           el('td', { class: 'num' }, r.n),
           el('td', { class: 'num' }, r.mean.toFixed(2)),
           el('td', { style: 'width:30%' },
@@ -443,7 +480,7 @@ function fullProfile(vec, samples, studies, hub, geneId) {
   });
   const max = Math.max(...vec, 0.01);
   const wrap = el('div', {});
-  const legend = el('div', { style: 'display:flex;gap:14px;align-items:center;font-size:12px;margin-bottom:8px;color:var(--ink-2)' },
+  const legend = el('div', { style: 'display:flex;gap:14px;align-items:center;font-size:13px;margin-bottom:8px;color:var(--ink-2)' },
     el('span', {}, el('i', { class: 'dot', style: 'background:var(--c-core);display:inline-block' }), ' control'),
     el('span', {}, el('i', { class: 'dot', style: 'background:var(--c-disp);display:inline-block' }), ' perturbation'));
   wrap.append(el('h3', { style: 'font-size:13px;margin:0 0 6px' }, 'Every sample'), legend);
@@ -462,8 +499,8 @@ function fullProfile(vec, samples, studies, hub, geneId) {
       hub, { key: `s:${r.i}`, label: r.label, ids: new Set([r.i]) }));
     });
     wrap.append(el('div', { style: 'display:flex;align-items:center;gap:10px;padding:4px 0;border-top:1px solid var(--line)' },
-      el('a', { href: `#/study/${sid}?gene=${geneId}`, class: 'mono', style: 'font-size:11px;width:28px;flex:none' }, sid),
-      el('span', { class: 'muted', style: 'font-size:11px;width:220px;flex:none' }, study.tissues.join('/')),
+      el('a', { href: `#/study/${sid}?gene=${geneId}`, class: 'mono', style: 'font-size:12.5px;width:28px;flex:none' }, sid),
+      el('span', { class: 'muted', style: 'font-size:12.5px;width:220px;flex:none' }, study.tissues.join('/')),
       strip));
   }
   return wrap;
@@ -483,7 +520,7 @@ function studyRow(s) {
   return el('tr', { style: 'cursor:pointer', onclick: () => { location.hash = href; } },
     el('td', {},
       el('a', { href }, title || `Study ${s.id}`),
-      el('div', { class: 'muted', style: 'font-size:11.5px;margin-top:2px' },
+      el('div', { class: 'muted', style: 'font-size:13px;margin-top:2px' },
         first ? `${first}${year ? ' ' + year[1] : ''}` : `study ${s.id}`)),
     el('td', { class: 'num' }, fmt(s.n)),
     el('td', {}, s.tissues.join(', ')),
@@ -491,12 +528,17 @@ function studyRow(s) {
     el('td', {}, ...s.bioprojects.map((b, i) => el('span', {},
       i ? ', ' : '',
       el('a', { href: `https://www.ebi.ac.uk/ena/browser/view/${b}`, target: '_blank',
-                rel: 'noopener', class: 'mono', style: 'font-size:11.5px',
+                rel: 'noopener', class: 'mono', style: 'font-size:13px',
                 onclick: (e) => e.stopPropagation() }, b)))),
+    // Five studies have no paper yet (the source table marks them unpublished); their deposited
+    // data set is the reference, so link that instead of printing a dash.
     el('td', {}, s.doi && s.doi.length
       ? el('a', { href: s.doi[0], target: '_blank', rel: 'noopener',
                   onclick: (e) => e.stopPropagation() }, 'paper')
-      : el('span', { class: 'muted' }, '–')),
+      : meta.url
+        ? el('a', { href: meta.url, target: '_blank', rel: 'noopener', title: 'No paper listed; the deposited data set',
+                    onclick: (e) => e.stopPropagation() }, 'data set')
+        : el('span', { class: 'muted' }, 'none listed')),
   );
 }
 
@@ -542,7 +584,7 @@ async function overview(man) {
     ),
     el('div', { class: 'card' },
       el('h2', {}, 'WT-control samples per tissue', el('span', { class: 'tag' }, 'baseline denominator')),
-      el('p', { class: 'muted', style: 'font-size:12px;margin:0 0 10px' },
+      el('p', { class: 'muted', style: 'font-size:13px;margin:0 0 10px' },
         `The per-tissue tables on the tandem-array and allele-pair pages show the median TPM across these WT-control samples; τ and peak tissue do not use them (see the card above). `
         + `stem, bud, catkin and callus are thin (≤5), read differences with that in mind.`),
       tissuePanelMatrix(man)),
@@ -553,7 +595,7 @@ async function overview(man) {
           el('th', {}, 'Tissue'), el('th', {}, 'Panel'), el('th', {}, 'BioProject'),
           el('th', {}, 'Paper'))),
         el('tbody', {}, ...list.map(studyRow))))),
-    el('p', { class: 'muted', style: 'font-size:11.5px' },
+    el('p', { class: 'muted', style: 'font-size:13px' },
       'Full matrix CSVs (TPM/FPKM/counts, all 652 samples × 63,960 genes) are not on this ',
       'site; the per-gene and per-study pages carry the same values. Ask the author for the raw CSVs.'),
   );

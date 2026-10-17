@@ -1,6 +1,6 @@
 {
- "data_version": "0.22.0",
- "n_checks": 104,
+ "data_version": "0.22.1",
+ "n_checks": 105,
  "n_failed": 0,
  "checks": [
   {
@@ -132,6 +132,11 @@
    "name": "genome-map index LSG mark equals the gene record's pool call",
    "ok": true,
    "detail": ""
+  },
+  {
+   "name": "every RNA-seq sample states its read count and library layout",
+   "ok": true,
+   "detail": "652 samples"
   },
   {
    "name": "contrasts.json is the dissertation's 165 curated contrasts",

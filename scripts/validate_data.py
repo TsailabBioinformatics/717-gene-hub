@@ -360,6 +360,15 @@ def main():
 
     # Expression scrubber (section 2.3): every contrast's sample indices must be in
     # range for the 652-sample vectors they will index into, and both arms non-empty.
+    # Every sample states its sequencing depth and layout (the study pages print both); the upstream
+    # metadata left 27 blank, filled from SRA by patch_read_counts.py.
+    samples_path = f"{DATA}/expr/samples.json"
+    if os.path.exists(samples_path):
+        smp = json.load(open(samples_path))
+        no_depth = [s["label"] for s in smp if not isinstance(s.get("reads"), int) or s["reads"] <= 0 or not s.get("layout")]
+        check("every RNA-seq sample states its read count and library layout", not no_depth,
+              f"{len(no_depth)} without, e.g. {no_depth[:3]}" if no_depth else f"{len(smp)} samples")
+
     contrasts_path = f"{DATA}/expr/contrasts.json"
     if os.path.exists(contrasts_path):
         contrasts = json.load(open(contrasts_path))

@@ -74,6 +74,7 @@ STAGES=(
   "onedrive|build_combat.py|build_expression.py|ComBat-seq view"
   "onedrive|build_expr_ranges.py|build_expression.py,build_combat.py|range-addressable expression blobs"
   "repo|build_contrasts.py|build_expression.py|contrast index (the dissertation's 165 curated contrasts)"
+  "repo|patch_read_counts.py|build_expression.py|sequencing depth and layout the upstream metadata leaves blank (studies 26, 30; from SRA)"
   "onedrive|build_locus.py|build_data.py,patch_dissertation_layer.py|locus tiles + genome map"
   "repo|patch_map_overlays.py|build_locus.py,patch_lsg_pool.py,patch_proteomics_v2.py,patch_kaks.py,patch_chromatin.py|genome-map overlays from current shards"
   "repo|build_families.py|build_annotation.py,build_duplication.py,patch_wgd_pairs.py,patch_duplicate_partners.py|descent-family index"

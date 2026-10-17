@@ -14,22 +14,41 @@ export function cleanCitation(citation) {
 
 export function studyMeta(citation) {
   citation = cleanCitation(citation);
-  const out = { title: null, firstAuthor: null, year: null, journal: null };
+  const out = { title: null, firstAuthor: null, year: null, journal: null, dataset: false, url: null };
   if (!citation) return out;
   const y = citation.match(/\((\d{4})[a-z]?\)/);
-  if (y) out.year = y[1];
-  const surname = citation.split(',')[0].trim();
-  if (surname && surname.length < 40) {
-    const nAuthors = (citation.split('(')[0].match(/,\s*[A-Z]\./g) || []).length;
-    out.firstAuthor = nAuthors > 1 ? `${surname} et al.` : surname;
+  if (!y) return out;
+  out.year = y[1];
+  const url = citation.match(/https?:\/\/\S+$/);
+  out.url = url ? url[0] : null;
+  // Authors: "Surname, I. I." groups before the year. Two authors are named ("Kins & Janz"), three
+  // or more are "First et al." (APA), and an institution with no initials is given as written.
+  const authors = citation.slice(0, y.index).trim();
+  const names = [...authors.matchAll(/(?:^|,\s*(?:&\s*)?|&\s*)([^,&]+?),\s+[A-Z]\.(?:[-\s]?[A-Z]\.)*/g)]
+    .map((m) => m[1].trim());
+  if (names.length >= 3 || /et al\.?|\.\.\./.test(authors)) out.firstAuthor = `${names[0] || authors.split(',')[0]} et al.`;
+  else if (names.length === 2) out.firstAuthor = `${names[0]} & ${names[1]}`;
+  else if (names.length === 1) out.firstAuthor = names[0];
+  else if (authors && authors.length < 60) out.firstAuthor = authors.replace(/\.$/, '');
+  const after = citation.slice(y.index + y[0].length).replace(/^\.\s*/, '');
+  out.dataset = /\[Data set\]/i.test(after);
+  if (out.dataset) {
+    // "Title (accession) [Data set]. Repository. URL": the repository stands where a journal would
+    const d = after.match(/^(.+?)\s*\[Data set\]\.\s*([^.]+)\./i);
+    if (d) {
+      out.title = d[1].replace(/\s*\((?:BioProject No\.|Accession No\.)?\s*[A-Z][\w-]*\d\)\s*$/, '').trim();
+      out.journal = d[2].trim();
+    }
+    return out;
   }
-  const after = y ? citation.slice(citation.indexOf(y[0]) + y[0].length).replace(/^\.\s*/, '') : '';
-  const m = after.match(/^(.+?[.?!])\s+([^.,]+?)[,.]/);
-  if (m) {
-    const t = m[1].replace(/\.$/, '');
-    // An abbreviation inside a title ("No.") cuts it short, and a cut title has open brackets.
-    if ((t.match(/\(/g) || []).length === (t.match(/\)/g) || []).length) out.title = t;
-    out.journal = m[2].trim();
+  // "Title. Journal, vol(issue), pages. URL" or "Title. Journal. URL". The title may itself hold
+  // periods ("Populus tremula x P. alba"), so the journal is the LAST period-free segment before
+  // the volume or the link, and the title is everything before it.
+  const a = after.match(/^(.*)\.\s+([^.]+?),\s*\d+(?:\(\d+\))?,\s*[^.]*\.\s*https?:/)
+    || after.match(/^(.*)\.\s+([^.]+?)\.\s*https?:/);
+  if (a) {
+    out.title = a[1].trim();
+    out.journal = a[2].trim();
   }
   return out;
 }

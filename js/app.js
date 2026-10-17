@@ -1082,6 +1082,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
     el('h1', { class: meta.title ? 'study-title' : null }, meta.title || `Study ${id}`),
     el('p', { class: 'sub' }, `Study ${id}`,
       meta.firstAuthor ? ` · ${meta.firstAuthor}${meta.year ? ' ' + meta.year : ''}` : '',
+      meta.journal ? ` · ${meta.dataset ? 'data set, ' : ''}${meta.journal}` : '',
       ` · ${fmt(mine.length)} samples · `,
       ...s.bioprojects.map((b) =>
         el('a', { href: `https://www.ebi.ac.uk/ena/browser/view/${b}`, target: '_blank', rel: 'noopener', class: 'mono' }, b)
@@ -1097,7 +1098,10 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
         factorRow('Genotype', s.genotypes), factorRow('Treatment', s.treatments),
         factorRow('Growth', s.growth_conditions), factorRow('Additional', s.additional_conditions)),
       s.citation && el('p', { class: 'muted', style: 'font-size:12.5px;margin-top:10px' }, cleanCitation(s.citation)),
-      s.doi.length ? el('p', {}, ...s.doi.map((d) => el('a', { href: d, target: '_blank', rel: 'noopener' }, d))) : null))),
+      s.doi.length ? el('p', {}, ...s.doi.map((d) => el('a', { href: d, target: '_blank', rel: 'noopener' }, d)))
+        : el('p', { class: 'muted', style: 'font-size:12.5px' },
+          'No paper is listed for this study; the reference is its deposited data set',
+          meta.url ? [' (', el('a', { href: meta.url, target: '_blank', rel: 'noopener' }, meta.journal || 'link'), ')'] : '', '.')))),
     sheetBtn, sheet,
   ));
   // The sheet button shows only on a narrow screen, and only while less than 120 px of the

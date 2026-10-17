@@ -43,6 +43,7 @@ SOURCE_GENERATORS = {
     "make_peptide_detail_source.py",
     "make_pool_frozen_source.py",
     "make_proteomics_v2_source.py",
+    "make_read_count_supplement_source.py",
     "make_structure_source.py",
     "make_td_pair_ks_source.py",
     "make_wgd_combined_call_source.py",
