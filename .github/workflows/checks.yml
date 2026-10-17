@@ -3,17 +3,30 @@ name: checks
 # The DATA build runs on Sapelo2 (its sources are cluster-local and not in this repo).
 # CI packages the same strict Pages tree that deployment uses, then validates and renders that
 # artifact. A source-tree-only pass is not a deployable-site pass.
+#
+# RUNS ONLY IN THE PUBLIC LAB REPOSITORY (2026-10-17, Chen's GitHub budget audit): in the private
+# development repository this workflow used 618 of the account's 637 Actions minutes in two weeks,
+# and its screenshot artifacts filled 4.9 GB against a 1 GB allowance. Actions minutes in a public
+# repository are free. publish_lab.py copies this file to the lab repository, so the guard has to
+# live here. Run scripts/check.mjs locally or on Sapelo2 before pushing.
 on:
   push:
     branches: [main]
+    paths-ignore: ['docs/**', '**/*.md']
   pull_request:
+    paths-ignore: ['docs/**', '**/*.md']
   workflow_dispatch:
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   SITE_DIR: _site
 
 jobs:
   render:
+    if: github.repository == 'TsailabBioinformatics/poplar-717-atlas'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,10 +75,12 @@ jobs:
           CI_CHROME="$(node -e "console.log(require('playwright-core').chromium.executablePath())")" \
             node scripts/check.mjs
 
+      # Only when something failed, and kept for 3 days: the screenshots are for diagnosing a failure.
       - name: Upload screenshots
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: render-shots
           path: shots/
           if-no-files-found: ignore
+          retention-days: 3
