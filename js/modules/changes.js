@@ -5,6 +5,7 @@ import { el } from '../core/dom.js';
 
 const RELEASES = [
   ['0.22.1', '2026-10-17', 'Study labels, read counts and expression statistics', [
+    'Pages no longer carry internal labels about how each value was produced; the Duplication page is now the Duplicated gene catalog (2026-10-20).',
     'Studies with two authors are named by both (Kins & Janz rather than Kins et al.), and every study shows its journal correctly. Five studies without a published paper now link their deposited data set instead of showing a dash.',
     'Read counts that were missing for 27 samples in two studies are filled in from the sequence archive.',
     'The Tissues view shows median, range and the number of samples and studies beside each mean, and can be ordered by the highest mean. The contrast view shows each group\u2019s mean expression and can be sorted by expression. Text in both views is larger.',

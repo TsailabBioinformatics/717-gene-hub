@@ -9,6 +9,26 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Reader-facing wording, a maintenance kit, and development moves to this repository
+
+Development now happens directly in this (the lab's) repository; the earlier private development
+repository is retired.
+
+**Wording (site).** No developer or provenance vocabulary in what a reader sees: the evidence chips
+("from the genome", "measured here", "by homology", "database-dependent") and their legend are gone
+(the tier is still recorded on each card for the page checks, and each card states its caveats in
+words); "as in the dissertation" and "the dissertation's" are rephrased throughout (About keeps one
+sentence saying the atlas is a dissertation's data supplement); "shipped", "contrasts.json", "gene
+record", "tandem union rebuild" and the About page's checksum/commit card are gone; the footer's
+link to the build check log is removed (the page still exists at `#/status`). The Duplication page
+is titled "Duplicated gene catalog". `wording:no-internal-names` now also refuses this vocabulary.
+
+**Maintenance kit (repository).** `CLAUDE.md` (instructions for Claude Code, kept short because it
+loads every session), `.claude/settings.json` (blocks reading `data/`, `sources/`, `downloads/`,
+which hold ~600 MB), `MAINTAINING.md` (for the person looking after the site: nothing / small
+changes / data rebuilds), and `scripts/check_public.py`, which refuses credentials, curation notes
+and personal machine paths before a push, and the held candidate labels when given their list.
+
 ## 0.22.1 - 2026-10-17 - Study labels, read counts, and the expression views' statistics
 
 **Read counts for studies 26 and 30 (data).** The study pages printed "–" in the Reads column for 27

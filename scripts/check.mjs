@@ -452,7 +452,7 @@ await check('module-about-numbers', '#/module/about',
              'Contact and feedback', 'Chen.Hsieh@uga.edu', 'Data are provided for research use',
              'A manuscript describing this resource will be submitted soon', 'once the manuscript is available, please cite the manuscript',
              'developed with assistance from Claude (Anthropic)',
-             'Tissue specificity is the dissertation’s', 'per-gene table of the dissertation'],
+             'One tissue-specificity value'],
     forbid: ['no rank for 50 genes', '77 leaf', 'is not in the mirror', 'v6 master', 'held on v9', 'for browsing, not quoting',
              'chenhsieh.github.io', 'Not for redistribution'] });
 {
@@ -726,25 +726,26 @@ await check('genemodel-not-testable', '#/gene/PtXaAlbH.17G050200',
 }
 
 await check('module-about', '#/module/about',
-  { expect: ['About & provenance', 'Known limitations', 'HAP2 domain annotation is thin',
-             'Tissue specificity is the dissertation’s', 'derived here, not imported', 'Sources'] });
+  { expect: ['About', 'Known limitations', 'HAP2 domain annotation is thin',
+             'One tissue-specificity value', 'Gene structure and neighbours come from the annotation', 'Citation & licence'],
+    forbid: ['About & provenance', 'checksummed at build', 'build manifest', 'dissertation’s'] });
 await check('home-dark', '#/', { expect: ['63,960', 'Start here'], theme: 'dark' });
 
 // --- v0.11: duplication layers + the copies-over-all-samples heatmap ---------------------
 // A gene whose only duplicates are its own tandem array: this produces ONE track, which an
 // earlier guard treated as "nothing to draw" and silently hid the commonest case on the site.
 await check('gene-duplayers-tandem', '#/gene/PtXaTreH.08G070600',
-  // 'three layers, kept apart' is the layers VIEW's own tag. The old expectation was the
+  // 'three layers' is the layers VIEW's own tag. The old expectation was the
   // heading 'Duplication layers', which the merge replaced with the group heading
   // 'Duplication' -- the view is now named by its tab and its tag, not by an <h2>.
-  { expect: ['three layers, kept apart', 'tandem duplication', 'ds 0.', 'array’s median ds',
+  { expect: ['three layers', 'tandem duplication', 'ds 0.', 'array’s median ds',
              'this gene + 3 array members'], wait: 1800 });
 // A gene with partners on OTHER chromosomes plus a HAP2 allele: the multi-track case, and the
 // one where the allele must be labelled as not a duplication.
 await check('gene-duplayers-wgd', '#/gene/PtXaTreH.17G070400',
   // The allele no longer gets a ROW of its own (a full track and a link crossing the figure,
   // to say a 1-to-1 thing). It is named in words beside the compare button instead.
-  { expect: ['three layers, kept apart', 'ancient whole-genome triplication (aWGT)',
+  { expect: ['three layers', 'ancient whole-genome triplication (aWGT)',
              'the same gene on the other haplotype is',
              'not a duplication'], wait: 2200 });
 // The per-PAIR tandem dS is a NEW column and is not td.ks. Assert both the column and the
@@ -1768,11 +1769,11 @@ for (const gid of ['PtXaAlbH.02G097300', 'PtXaTreH.12G041900']) {
 // non-candidate; then Browse's counts per outcome against the manifest, with a planted flip of
 // one facet row that the same comparison must catch.
 await check('gene-xc-agree', '#/gene/PtXaTreH.01G001500',
-  { expect: ['Other gene-age methods agree', 'none of the 6 independent checks', 'do not change its call'], forbid: ['disagree'] });
+  { expect: ['Other gene-age methods agree', 'none of the 6 independent checks', 'do not change the call'], forbid: ['disagree'] });
 await check('gene-xc-sensitive', '#/gene/PtXaTreH.01G018800',
   { expect: ['search-sensitive', 'MMseqs2', 'upper bound'], forbid: ['Other methods disagree'] });
 await check('gene-xc-disagree', '#/gene/PtXaTreH.10G204200',
-  { expect: ['Other methods disagree', 'Pfam', 'Foldseek', 'do not change its call', 'yes, in the final set'] });
+  { expect: ['Other methods disagree', 'Pfam', 'Foldseek', 'do not change the call', 'yes, in the final set'] });
 await check('gene-xc-hap2', '#/gene/PtXaAlbH.01G053900',
   { expect: ['search-sensitive', 'run on HAP1 only'] });
 await check('gene-xc-excluded', '#/gene/PtXaTreH.05G032500',
@@ -1832,13 +1833,13 @@ for (const [name, gid, want] of [
   ['some', 'PtXaTreH.01G000300', 'Two of three published tools call it tandem'],
   ['nearby', 'PtXaTreH.01G004300', 'a nearby copy (proximal'],
   ['none', 'PtXaTreH.01G005600', 'None of three published tandem tools'],
-  ['tools-only', 'PtXaTreH.01G017400', 'the dissertation’s curated tandem set does not include it']]) {
+  ['tools-only', 'PtXaTreH.01G017400', 'the curated tandem set does not include it']]) {
   const tp = await browser.newPage({ viewport: { width: 1180, height: 900 } });
   await tp.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
   await tp.waitForTimeout(800);
   const t = await tp.evaluate(() => { const dt = [...document.querySelectorAll('[data-card=duplication] dt')].find((d) => d.textContent === 'Published tools');
     return dt ? dt.nextElementSibling.textContent : ''; });
-  const ok = t.includes(want) && t.includes('not part of the dissertation’s call');
+  const ok = t.includes(want) && t.includes('not part of the call');
   if (!ok) failures++;
   console.log(`\n### gene-xt-${name}  ${ok ? 'OK' : 'FAIL'}`);
   if (!ok) console.log(`   !! ${gid}: "${t.slice(0, 160)}"`);
@@ -1912,6 +1913,7 @@ for (const [name, gid, want] of [
 // syntelog for any member is hemizygous, never PAV (Chen, 2026-10-05).
 {
   const INTERNAL = /(?:^|[^A-Za-z0-9])v(?:[5-9]|1[0-2])(?![0-9.])|\bmaster v?\d|\bmaster (?:duplication )?table\b|\bCJ\b|\bcj_[a-z]|\b\d{2,3}_[a-z][a-z0-9]*_[a-z0-9_]+|ms1-dup|ms2-lsg|\bMS[12]\b|\broute C\b|FACTS_|Sapelo|\bChen\b|TODO \d|\/scratch\/|TD-associated PAV|PAV \(whole array\)|Chapters? [23]\b|dissertation chapter/i;
+  const DEVTALK = /as in the dissertation|the dissertation(?:\u2019|')s|measured here|computed here|computed in the browser|\bshipped\b|\.json\b|build manifest|checksummed at build|gene record\b|\btandem union rebuild\b/i;
   const routes = ['/', '/browse', '/arrays', '/array/HAP1_U00120', '/pair/PtXaTreH.05G120200', '/map/hap1/Chr01',
     '/karyotype', '/status', '/module/about', '/module/duplication', '/module/phylostrat', '/glossary', '/downloads', '/changes',
     '/gene/PtXaTreH.08G070200', '/gene/PtXaAlbH.18G016900', '/gene/PtXaTreH.19G087400',
@@ -1934,9 +1936,13 @@ for (const [name, gid, want] of [
     // number and would otherwise read as an analysis-folder name.
     const m = INTERNAL.exec(t.replace(/Chen\.Hsieh@uga\.edu/g, '<contact>').replace(/\b717_[A-Za-z_]+\.csv\b/g, '<table>'));
     if (m) hits.push(`${r}: "${t.slice(Math.max(0, m.index - 40), m.index + 40).replace(/\n/g, ' ')}"`);
+    // Developer and provenance vocabulary (2026-10-20). The status page is the build's own check
+    // log, reachable by address but linked from nowhere, so it is exempt.
+    const d = r === '/status' ? null : DEVTALK.exec(t);
+    if (d) hits.push(`${r}: "${t.slice(Math.max(0, d.index - 40), d.index + 40).replace(/\n/g, ' ')}"`);
   }
   const control = await ip.evaluate(() => { const p = document.createElement('p'); p.textContent = 'held on master v9'; document.body.append(p); return document.body.innerText; });
-  const sees = INTERNAL.test(control);
+  const sees = INTERNAL.test(control) && DEVTALK.test('a value as in the dissertation');
   const ok = !hits.length && sees;
   if (!ok) failures++;
   console.log(`\n### wording:no-internal-names  ${ok ? 'OK' : 'FAIL'}`);
@@ -2101,7 +2107,7 @@ for (const [name, gid, want] of [
     const weak = [...pn.querySelectorAll('.lfc-fill')].map((v) => v.classList.contains('weak'));
     const host = pn.closest('.card.viewgroup');
     return {
-      total: (pn.textContent.match(/All (\d+) shipped contrasts/) || [])[1],
+      total: (pn.textContent.match(/All (\d+) contrasts scored/) || [])[1],
       median: pn.querySelector('.kv dd')?.textContent,
       top: vals[0], topN: ns[0], topLabel: pn.querySelector('.lfc-lab')?.textContent,
       second: vals[1],
@@ -2809,7 +2815,6 @@ async function copiesPanel(p) {
       pieces: [...svg.querySelectorAll('.cp-piece')].map((t) => t.textContent),
       links: [...svg.querySelectorAll('a.cp-link')].map((a) => a.getAttribute('href')),
       overlaps: n, controlFlagged: nWithProbe > n, clipped,
-      chip: (card.querySelector('.ev-chip') || {}).textContent || null,
       lede: (card.querySelector('.cp-lede') || {}).innerText || '',
       glance: (document.querySelector('.card.glance') || {}).innerText || '',
       allele: (document.querySelector('[data-card="allele"]') || {}).innerText || '',
@@ -2853,7 +2858,6 @@ for (const [label, hash, focal, width] of [
     'overlap control (stacked label) is flagged': r.controlFlagged,
     'no label runs outside the panel': !r.clipped.length,
     'the page fits its width': r.pageFits,
-    'chip says where the evidence comes from': !focal || r.chip === 'from the genome',
     'lede states HAP2 in pieces': r.lede.includes('HAP2: 3 pieces'),
     'glance row leads here': !focal || r.glance.includes('Both haplotypes'),
     // where a reader looking for the other haplotype stops: an Allele card with no allele
@@ -2879,66 +2883,41 @@ await check('copies-absent-elsewhere', '#/gene/PtXaTreH.08G070200',
 await check('copies-unknown-locus', '#/copies/nope', { expect: ['No such copy search', 'nrx1'] });
 
 // ---- evidence tiers (registry.js CARD_EVIDENCE) --------------------------------------------
-// Every top-level card carries exactly one chip whose words and tier are the ones the table
-// declares for its data-card; the tier's rule STYLE is what the CSS says it is (so the channel
-// that survives greyscale exists); chip text clears 4.5:1 on its own background in both schemes.
-// Three genes between them draw every tier: NRX1 (copies, predicted band), a chromatin gene,
-// and a presence-variation candidate with chromatin. The contrast measurement has its own
-// positive control.
-for (const scheme of ['light', 'dark']) {
-  for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G000100']) {
-    const p = await browser.newPage({ viewport: { width: 1180, height: 1000 }, colorScheme: scheme });
-    const errs = [];
-    p.on('pageerror', (e) => errs.push(e.message));
-    p.on('console', (m) => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
-    await p.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
-    await p.waitForSelector('.ev-chip', { timeout: 20000 });
-    const r = await p.evaluate(async () => {
-      const { CARD_EVIDENCE } = await import('./js/core/registry.js');
-      const rgb = (s) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
-      const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
-      const L = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-      const ratio = (el) => {
-        const a = L(rgb(getComputedStyle(el).color)), b = L(rgb(getComputedStyle(el).backgroundColor));
-        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
-      };
-      const STYLE = { 1: 'solid', 2: 'dashed', 3: 'dotted' };
-      const wrong = [], seen = {};
-      let minRatio = Infinity;
-      for (const top of document.querySelectorAll('.cards > .card, .cards > details.card-fold')) {
-        const key = top.dataset.card || (top.querySelector(':scope > .card') || {}).dataset?.card;
-        const chips = top.querySelectorAll(':scope > h2 > .ev-chip, :scope > summary > .ev-chip');
-        const want = CARD_EVIDENCE[key];
-        const tier = Number(top.dataset.evidence);
-        seen[key] = tier;
-        if (!want) { wrong.push(`${key}: not in CARD_EVIDENCE`); continue; }
-        if (chips.length !== 1) { wrong.push(`${key}: ${chips.length} chips`); continue; }
-        if (tier !== want[0] || chips[0].textContent !== want[1]) wrong.push(`${key}: shows ${tier}/${chips[0].textContent}`);
-        if (getComputedStyle(top).borderLeftStyle !== STYLE[tier]) wrong.push(`${key}: rule ${getComputedStyle(top).borderLeftStyle}`);
-        minRatio = Math.min(minRatio, ratio(chips[0]));
-      }
-      // positive control: a chip in --line-2 must measure under 4.5 in BOTH schemes. (--ink-3 was
-      // the first choice and fails only in light: it is 5.28:1 on the dark surface, so in dark
-      // mode the control could never fire.)
-      const probe = document.createElement('span');
-      probe.className = 'ev-chip';
-      probe.style.color = getComputedStyle(document.documentElement).getPropertyValue('--line-2');
-      document.querySelector('.ev-key').append(probe);
-      probe.textContent = 'probe';
-      const probeRatio = ratio(probe);
-      probe.remove();
-      return { wrong, seen, minRatio, probeRatio, key: document.querySelectorAll('.ev-key .ev-key-item').length };
-    });
-    const tiers = new Set(Object.values(r.seen));
-    const ok = !errs.length && !r.wrong.length && r.minRatio >= 4.5 && r.probeRatio < 4.5 && r.key === 3;
-    if (!ok) failures++;
-    console.log(`\n### evidence:${gid}-${scheme}  ${ok ? 'OK' : 'FAIL'}`);
-    console.log(`   ${Object.keys(r.seen).length} cards, tiers ${[...tiers].sort().join('/')}, chip contrast min `
-      + `${r.minRatio.toFixed(2)}:1 (control ${r.probeRatio.toFixed(2)}:1 must be < 4.5)`);
-    r.wrong.forEach((w) => console.log('   !! ' + w));
-    errs.forEach((e) => console.log('   !! ' + e));
-    await p.close();
-  }
+// Since 2026-10-20 the tier is recorded on every top-level card (data-evidence, for these checks)
+// and never shown: the chip words ("measured here", "from the genome", ...) were developer
+// vocabulary. Every card must carry the tier the table declares, no chip or legend may render, and
+// no chip phrase may appear in the page text. Positive control: a planted phrase must be caught.
+for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G000100']) {
+  const p = await browser.newPage({ viewport: { width: 1180, height: 1000 } });
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  p.on('console', (m) => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
+  await p.goto(`${base}/#/gene/${gid}`, { waitUntil: 'networkidle' });
+  await p.waitForSelector('.cards > [data-evidence]', { timeout: 20000 });
+  await p.waitForTimeout(800);
+  const r = await p.evaluate(async () => {
+    const { CARD_EVIDENCE } = await import('./js/core/registry.js');
+    const wrong = [], seen = {};
+    for (const top of document.querySelectorAll('.cards > .card, .cards > details.card-fold')) {
+      const key = top.dataset.card || (top.querySelector(':scope > .card') || {}).dataset?.card;
+      const want = CARD_EVIDENCE[key];
+      seen[key] = Number(top.dataset.evidence);
+      if (!want) wrong.push(`${key}: not in CARD_EVIDENCE`);
+      else if (seen[key] !== want[0]) wrong.push(`${key}: tier ${seen[key]}, table says ${want[0]}`);
+    }
+    const words = [...new Set(Object.values(CARD_EVIDENCE).map(([, w]) => w))];
+    const shown = (txt) => words.filter((w) => new RegExp(`(^|\\n)\\s*${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*($|\\n)`).test(txt));
+    const text = document.getElementById('view').innerText;
+    const control = shown(text + '\nmeasured here\n').includes('measured here');
+    return { wrong, n: Object.keys(seen).length, chips: document.querySelectorAll('.ev-chip, .ev-key').length,
+      shown: shown(text), control };
+  });
+  const ok = !errs.length && !r.wrong.length && r.n > 5 && r.chips === 0 && !r.shown.length && r.control;
+  if (!ok) failures++;
+  console.log(`\n### evidence:${gid}  ${ok ? 'OK' : 'FAIL'}  ${r.n} cards with a recorded tier; chips ${r.chips}; chip words shown ${JSON.stringify(r.shown)}; control caught ${r.control}`);
+  r.wrong.forEach((w) => console.log('   !! ' + w));
+  errs.forEach((e) => console.log('   !! ' + e));
+  await p.close();
 }
 
 // #/array/<id>, #/arrays and the deeper #/pair: member count re-derived from arrays.json here
