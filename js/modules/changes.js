@@ -9,8 +9,8 @@ const RELEASES = [
     'Read counts that were missing for 27 samples in two studies are filled in from the sequence archive.',
     'The Tissues view shows median, range and the number of samples and studies beside each mean, and can be ordered by the highest mean. The contrast view shows each group\u2019s mean expression and can be sorted by expression. Text in both views is larger.',
   ]],
-  ['0.22.0', '2026-10-15', 'The comparisons the dissertation computed on', [
-    'Study pages, the Expression card’s contrast view and the expression scrubber now use the dissertation’s 165 curated comparisons instead of an older panel of 191. The 149 treatment comparisons among them are the ones behind each gene’s stress responsiveness, which the contrast view now states.',
+  ['0.22.0', '2026-10-15', 'Curated comparisons', [
+    'Study pages, the Expression card’s contrast view and the expression scrubber now use 165 curated comparisons instead of an older panel of 191. The 149 treatment comparisons among them are the ones behind each gene’s stress responsiveness, which the contrast view now states.',
     'In the two xylem studies, every comparison now stays within developing or within mature xylem, 4 samples against 4. The older panel had pooled the two sites in six comparisons.',
     'The contrast view can be filtered by kind of comparison, tissue, treatment comparisons only, expression level and replication, and sorted five ways; each comparison links to its study (2026-10-16).',
   ]],
@@ -35,7 +35,7 @@ const RELEASES = [
     'Every gene with an Arabidopsis hit is found in search by the locus its page shows (was 39,253 of 59,534).',
   ]],
   ['0.18', '2026-10-13', 'One set of numbers', [
-    'Calls and counts follow the dissertation’s final tables throughout, with one tissue-specificity score (tau).',
+    'Calls and counts follow one set of final tables throughout, with one tissue-specificity score (tau).',
     'Gene pages link to their tandem array; About says how to cite the site. The old address forwards here.',
   ]],
   ['0.17', '2026-10-03', 'Final duplication, allele and presence-absence tables', [
@@ -66,7 +66,7 @@ export function changesView() {
   return el('div', { 'data-changes': '' },
     el('h1', {}, 'What changed'),
     el('p', { class: 'sub' },
-      'Changes a reader will notice, newest first. The version and build date of the data you are looking at are in About.'),
+      'Changes a reader will notice, newest first. The data version you are looking at is in About.'),
     el('ol', { class: 'changes' }, ...RELEASES.map(([v, date, title, notes]) =>
       el('li', { class: 'change' },
         el('div', { class: 'change-when' }, el('span', { class: 'mono' }, v), el('span', { class: 'muted' }, date)),

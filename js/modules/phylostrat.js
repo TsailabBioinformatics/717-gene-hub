@@ -93,7 +93,7 @@ function qcSummary(qc) {
           el('div', { class: 'muted' }, 'Other evidence, not QC flags:'), ...other)
       : null,
     el('div', { class: 'muted', style: 'font-size:11px;margin-top:4px' },
-      'The final LSG set is defined in the dissertation by one reassignment (PS19 to PS18) and four '
+      'The final LSG set is defined by one reassignment (PS19 to PS18) and four '
       + 'exclusion criteria applied in order: gene-model quality, homology-detection failure (abSENSE, '
       + 'PS18 only), a homolog in an outgroup syntenic window, and a split gene model. The lines '
       + 'above are the evidence for criteria 2 and 3.'));
@@ -133,7 +133,7 @@ function crossCheckLine(x, hap) {
       'Three of the six checks (the unmasked search, the more sensitive search and the structure search) '
       + 'were run on HAP1 only.') : null,
     el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-      'These are cross-checks run after the dissertation’s analysis. They do not change its call above.'));
+      'These are independent cross-checks. They do not change the call above.'));
 }
 
 function geneCard(g) {
@@ -144,7 +144,7 @@ function geneCard(g) {
 
   add('Stratum', p.name
     ? el('span', {}, p.name, p.rank != null ? el('span', { class: 'muted' }, ` · PS${p.rank} of 19 (genEra)`) : null,
-        p.fin && p.fin.u !== p.rank ? el('strong', {}, ` · used in the dissertation: PS${p.fin.u}, reassigned`) : null,
+        p.fin && p.fin.u !== p.rank ? el('strong', {}, ` · used: PS${p.fin.u}, reassigned`) : null,
         p.rank === 19
           ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px', 'data-ps19-caveat': '' },
               'PS19 means no homolog was detected outside this assembly in the species searched. '
@@ -170,7 +170,7 @@ function geneCard(g) {
           f.g !== f.u ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
             `genEra placed this gene at PS${f.g}. Its protein matches the other haplotype’s genome at the `
             + `syntenic position (tBLASTn, at least 90% of the protein at 90% identity or higher) where no gene is `
-            + `annotated, so the dissertation reassigns it to PS${f.u}.`) : null,
+            + `annotated, so it is reassigned to PS${f.u}.`) : null,
           el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
             'Candidates are the 776 HAP1 and 835 HAP2 genes at PS18 or PS19; the final set is 583 HAP1 and 621 HAP2.')));
     if (p.xc) add('Other methods', crossCheckLine(p.xc, g.id.startsWith('PtXaTreH') ? 'hap1' : 'hap2'));
@@ -302,7 +302,7 @@ function crossCheckCard(man) {
     el('p', { class: 'muted', style: 'font-size:12px;margin:8px 0 0' },
       'Six independent checks on HAP1 genes, three on HAP2 genes (the unmasked search, the more sensitive '
       + 'search and the structure search were run on HAP1 only), so the two columns are not directly '
-      + 'comparable. These are cross-checks run after the dissertation’s analysis; they do not change its set. '
+      + 'comparable. These are independent cross-checks; they do not change the set. '
       + 'Each gene page states which checks ran and what they found; Browse filters on them under '
       + '"Other gene-age methods".'));
 }
@@ -341,7 +341,7 @@ async function overview(man) {
       + 'over 19 strata from cellular organisms to this hybrid. The '
       + 'lineage-specific candidate pool is PS ≥ 18 in the genEra rerun that added Idesia polycarpa: '
       + `${fmt(pool.HAP1)} HAP1 and ${fmt(pool.HAP2)} HAP2 genes. PS17 Saliceae is flanking `
-      + 'context, not pool. The final lineage-specific gene (LSG) set of the dissertation is '
+      + 'context, not pool. The final lineage-specific gene (LSG) set is '
       + `${fmt(fin.HAP1.final)} HAP1 and ${fmt(fin.HAP2.final)} HAP2 genes: ${fmt(fin.HAP1.reassigned_PS19_to_PS18)} HAP1 and `
       + `${fmt(fin.HAP2.reassigned_PS19_to_PS18)} HAP2 PS19 candidates are reassigned to PS18, and four exclusion criteria `
       + 'are then applied in order (table below). The frozen 2026-04 genEra call, superseded as the '
@@ -359,7 +359,7 @@ async function overview(man) {
         el('div', { class: 'l' }, `unplaced by genEra: ${fmt(naH1)} HAP1 · ${fmt(naH2)} HAP2`)),
     ),
     el('div', { class: 'card', 'data-lsg-funnel': '' },
-      el('h2', {}, 'From candidates to the final LSG set', el('span', { class: 'tag' }, 'as in the dissertation')),
+      el('h2', {}, 'From candidates to the final LSG set'),
       el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
         el('thead', {}, el('tr', {}, el('th', {}, 'Step'), el('th', { class: 'num' }, 'HAP1'), el('th', { class: 'num' }, 'HAP2'))),
         el('tbody', {},

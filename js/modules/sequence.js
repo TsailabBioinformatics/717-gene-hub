@@ -29,8 +29,8 @@ function geneCard(g) {
       el('details', { class: 'seq-peek' }, el('summary', {}, 'Show the protein'),
         el('pre', { class: 'mono seq-pre' }, s.p.replace(/(.{60})/g, '$1\n'))),
       el('p', { class: 'muted', style: 'font-size:12px;margin:8px 0 0' },
-        'The primary transcript of the annotation release. The genomic span is the gene record’s '
-        + 'start to end on the assembly, so it includes the UTRs and introns but no flanking sequence; '
+        'The primary transcript of the annotation release. The genomic span runs from the gene’s '
+        + 'start to its end on the assembly, so it includes the UTRs and introns but no flanking sequence; '
         + 'for promoter or flanking sequence, take the coordinates above to a genome browser.'));
   }).catch((e) => { body.replaceChildren(el('p', { class: 'muted' }, `Could not fetch the sequences: ${e.message}`)); });
   return card;

@@ -14,7 +14,7 @@ export function glossaryView(man) {
   const TERMS = [
     ['Genome and gene models', [
       ['HAP1, HAP2', 'The two phased haplotypes of the hybrid: HAP1 is the Populus tremula haplotype (gene IDs PtXaTreH), HAP2 the P. alba haplotype (PtXaAlbH). Counts are always given per haplotype and never summed.'],
-      ['Quality-filtered genes', `Gene models that pass gene-model quality control: ${hp('quality_filtered_genes')}. The 553 models set aside (318 HAP1, 235 HAP2) are pseudogene-like tandem copies or short degenerate fragments; they have a page here, marked as flagged, and are not in any count of the dissertation.`],
+      ['Quality-filtered genes', `Gene models that pass gene-model quality control: ${hp('quality_filtered_genes')}. The 553 models set aside (318 HAP1, 235 HAP2) are pseudogene-like tandem copies or short degenerate fragments; they have a page here, marked as flagged, and are not in any count.`],
       ['Ks (dS)', 'Synonymous substitutions per synonymous site between two coding sequences, used as a measure of how long ago two copies diverged. The site writes Ks for arrays and age bins and dS in pair tables; they are the same quantity.'],
     ]],
     ['Duplication classes', [
@@ -40,7 +40,7 @@ export function glossaryView(man) {
     ]],
     ['Gene age', [
       ['Phylostratum (PS)', 'The oldest of 19 nested taxonomic levels at which a homolog of the gene is detected (genEra). PS18 is Populus; PS19 is the youngest level, with no homolog detected even in the other haplotype.'],
-      ['LSG (lineage-specific gene)', `A gene of the final lineage-specific set of the dissertation: ${fmt(lsg.HAP1.final)} HAP1 (${fmt(lsg.HAP1.final_PS18)} PS18, ${fmt(lsg.HAP1.final_PS19)} PS19) and ${fmt(lsg.HAP2.final)} HAP2 (${fmt(lsg.HAP2.final_PS18)} PS18, ${fmt(lsg.HAP2.final_PS19)} PS19).`],
+      ['LSG (lineage-specific gene)', `A gene of the final lineage-specific set: ${fmt(lsg.HAP1.final)} HAP1 (${fmt(lsg.HAP1.final_PS18)} PS18, ${fmt(lsg.HAP1.final_PS19)} PS19) and ${fmt(lsg.HAP2.final)} HAP2 (${fmt(lsg.HAP2.final_PS18)} PS18, ${fmt(lsg.HAP2.final_PS19)} PS19).`],
       ['LSG candidate', `One of the ${fmt(lsg.HAP1.candidates)} HAP1 and ${fmt(lsg.HAP2.candidates)} HAP2 genes at PS18 or PS19. A PS19 candidate whose protein matches the other haplotype’s genome at the syntenic position where no gene is annotated is reassigned to PS18 (${fmt(lsg.HAP1.reassigned_PS19_to_PS18)} HAP1, ${fmt(lsg.HAP2.reassigned_PS19_to_PS18)} HAP2). Candidates are then excluded, in this order, for: ${Object.values(LSG_REASON).join('; ')}.`],
     ]],
     ['Expression', [
@@ -53,7 +53,7 @@ export function glossaryView(man) {
   return el('div', { 'data-glossary': '' },
     el('h1', {}, 'Glossary'),
     el('p', { class: 'sub' },
-      'Terms as the dissertation defines them. Counts are read from this release’s data, per haplotype.'),
+      'Terms as used on this site. Counts are per haplotype.'),
     ...TERMS.map(([group, items]) => el('div', { class: 'card' },
       el('h2', {}, group),
       el('dl', { class: 'kv' }, ...items.flatMap(([term, def]) => [

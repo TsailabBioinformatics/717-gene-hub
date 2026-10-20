@@ -67,7 +67,7 @@ export function qcBanner(g) {
   return el('div', { class: 'warn', 'data-qc-banner': '' },
     el('strong', {}, 'Gene model flagged by quality control. '),
     'This model is one of 553 (318 HAP1, 235 HAP2) set aside as pseudogene-like tandem copies or '
-    + 'short degenerate fragments. It is not counted in the dissertation’s duplication classes, '
+    + 'short degenerate fragments. It is not counted in the duplication classes, '
     + 'tandem arrays or cross-haplotype categories, and it is not treated as a syntelog of '
     + 'another gene. Its record is shown for completeness.');
 }

@@ -794,7 +794,7 @@ function geneCard(g) {
     'data-view-group': 'duplication',
     'data-view-key': 'layers',
     'data-view-label': 'Layers',
-    'data-view-tag': 'three layers, kept apart',
+    'data-view-tag': 'three layers',
   }, el('h2', {}, 'Duplication layers',
       el('span', { class: 'tag' }, 'three layers, kept apart')));
   const stage = el('div', { style: 'margin-top:10px' });

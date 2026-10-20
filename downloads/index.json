@@ -18,7 +18,7 @@
    "bytes": 7569,
    "md5": "a1a986f33a9aafc26bee2144a429dcb2",
    "version": "2026-10-13",
-   "description": "113 numbers of the dissertation recomputed from these files, each beside the printed value."
+   "description": "113 published numbers recomputed from these files, each beside the printed value."
   },
   {
    "group": "Start here",
@@ -27,7 +27,7 @@
    "bytes": 7898,
    "md5": "dff136cbf59414a40bac0a10693817fb",
    "version": "2026-10-13",
-   "description": "What each file is, the gene basis, how each dissertation number is obtained from the tables, and known caveats."
+   "description": "What each file is, the gene basis, how each published number is obtained from the tables, and known caveats."
   },
   {
    "group": "Gene duplication and cross-haplotype tables",

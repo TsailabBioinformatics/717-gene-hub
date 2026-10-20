@@ -34,9 +34,9 @@ NO_CHAPTER = re.compile(rb"Chapters? [23]|dissertation chapter", re.I)
 # group, one line per file. A file in the bundle that is not listed here stops the run: every
 # published file gets a description a reader can act on.
 DESCRIBE = {
-    "README.md": ("Start here", "What each file is, the gene basis, how each dissertation number is obtained from the tables, and known caveats."),
+    "README.md": ("Start here", "What each file is, the gene basis, how each published number is obtained from the tables, and known caveats."),
     "DATA_DICTIONARY.csv": ("Start here", "Every column of the four tables and of Table 2.S1: type, units, allowed values, definition."),
-    "HEADLINE_NUMBERS_CHECK.csv": ("Start here", "113 numbers of the dissertation recomputed from these files, each beside the printed value."),
+    "HEADLINE_NUMBERS_CHECK.csv": ("Start here", "113 published numbers recomputed from these files, each beside the printed value."),
     "717_genes.csv": ("Gene duplication and cross-haplotype tables", "One row per gene (63,960): duplication classes, tandem array, syntelog category, strict PAV, tau and expression summaries, annotation."),
     "717_gene_pairs.csv": ("Gene duplication and cross-haplotype tables", "One row per gene pair (47,923): sWGD and aWGT anchor pairs, tandem pairs with Ks and Ka/Ks, pairings inside multi-copy syntelog groups."),
     "717_tandem_arrays.csv": ("Gene duplication and cross-haplotype tables", "One row per tandem array (4,204): size, median Ks, age bin, status compared with the other haplotype."),

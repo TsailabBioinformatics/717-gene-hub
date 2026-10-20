@@ -351,7 +351,7 @@ function geneCard(g) {
       sel.append(grp);
     }
     contrastRow.append(el('p', { class: 'muted', style: 'margin:0 0 6px;font-size:11.5px' },
-      'The dissertation\u2019s 165 curated contrasts, grouped by kind; the 149 in the first seven '
+      'The 165 curated contrasts, grouped by kind; the 149 in the first seven '
       + 'kinds are the perturbation contrasts behind each gene\u2019s responsiveness. Where two '
       + 'contrasts share a label, the factor that separates them is shown in brackets.'));
     sel.addEventListener('change', () => {

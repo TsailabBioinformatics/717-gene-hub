@@ -173,7 +173,7 @@ function wgdSection(g) {
   wrap.append(el('p', { class: 'muted', style: 'font-size:12px;margin:6px 0 0' },
     'The call combines anchor-pair Ks with the position of the two segments on the ancestral '
     + 'eudicot karyotype; a pair the karyotype places in sWGD is assigned to aWGT when its dS exceeds 1.05. '
-    + 'Each anchor pair below carries the same call (dissertation Figure 2.S2).'));
+    + 'Each anchor pair below carries the same call.'));
 
   if (pairs.length) {
     const deferred = [];
@@ -323,7 +323,7 @@ function tandemCrossCheck(d) {
   if (!x) return null;
   const t = names(x.t), p = names(x.x);
   const near = 'a nearby copy (proximal: close by on the chromosome with other genes between, which the '
-    + 'dissertation\u2019s rule counts as part of one array)';
+    + 'curated rule counts as part of one array)';
   let line;
   if (d.td) {
     if (x.t === 7) line = 'All three published tandem-duplication tools also call it tandem (DupGen_finder, MCScanX and doubletrouble).';
@@ -332,13 +332,13 @@ function tandemCrossCheck(d) {
     else if (p.length) line = `Published tools call it ${near}, not tandem (${andList(p)}).`;
     else line = 'None of three published tandem tools (DupGen_finder, MCScanX, doubletrouble) calls it tandem or a nearby copy.';
   } else if (t.length) {
-    line = `${andList(t)} call${t.length === 1 ? 's' : ''} it tandem; the dissertation\u2019s curated tandem set does not include it.`;
+    line = `${andList(t)} call${t.length === 1 ? 's' : ''} it tandem; the curated tandem set does not include it.`;
   } else {
     return null;
   }
   return el('span', { 'data-xt': '' }, line,
     el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-      'A cross-check run on the same annotation, not part of the dissertation\u2019s call.'));
+      'A cross-check run on the same annotation, not part of the call.'));
 }
 
 function geneCard(g) {
@@ -431,7 +431,7 @@ function geneCard(g) {
             el('thead', {}, el('tr', {}, el('th', {}, 'Gene'),
               partnerHeaders()[0],
               el('th', { class: 'num', title: 'synonymous divergence of THIS pair, from the '
-                + 'tandem union rebuild, not the array median above' }, 'Pair dS'),
+                + 'tandem analysis, not the array median above' }, 'Pair dS'),
               el('th', { class: 'num', title: 'Pearson r on batch-corrected log2 expression, '
                 + '652 samples' }, 'Expr r'),
               partnerHeaders()[1], partnerHeaders()[2])),
@@ -636,14 +636,14 @@ async function overview(man) {
   const t = (man.dissertation || {}).table_2_1 || { HAP1: {}, HAP2: {} };
   const qf = (man.dissertation || {}).quality_flagged_gene_models || {};
   return el('div', {},
-    el('h1', {}, 'Duplication'),
+    el('h1', {}, 'Duplicated gene catalog'),
     el('p', { class: 'sub' },
       'Duplication class of every gene, whole-genome duplication anchor pairs, tandem arrays, and a '
       + 'set of paralog pairs with synonymous divergence.'),
     el('div', { class: 'card' },
       el('h2', {}, 'Duplication class', el('span', { class: 'tag' }, 'quality-filtered genes, per haplotype')),
       el('p', { class: 'muted', style: 'font-size:12.5px;margin:0 0 12px' },
-        'Number of quality-filtered genes in each duplication class, as in the dissertation (Table 2.1, '
+        'Number of quality-filtered genes in each duplication class ('
         + `Figure 2.1). ${fmt(qf.HAP1)} HAP1 and ${fmt(qf.HAP2)} HAP2 gene models flagged by quality control `
         + 'are left out. sWGD, aWGT and tandem overlap, because a gene can carry evidence from more than '
         + 'one event, so the rows do not sum to the total. Haplotypes are reported separately.'),

@@ -19,11 +19,10 @@ function overview(man) {
   const unplaced = { hap1: (br.hap1 || {}).NA || 0, hap2: (br.hap2 || {}).NA || 0 };
   const tw = e.tissue_wt_control_n || {};
   return el('div', {},
-    el('h1', {}, 'About & provenance'),
+    el('h1', {}, 'About'),
     el('p', { class: 'sub' },
       `Data version ${man.data_version || '–'}, built ${(man.built || '').slice(0, 10)}. ${GENOME}. `
-      + 'Duplication classes, whole-genome duplication pairs, relationship categories, tissue specificity and the '
-      + 'lineage-specific gene set are those of the accompanying dissertation.'),
+),
 
     el('div', { class: 'card', 'data-contact': '' },
       el('h2', {}, 'Contact and feedback'),
@@ -32,7 +31,7 @@ function overview(man) {
         ' (Tsai lab, University of Georgia). Site code and released data: ',
         el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, REPO_URL.replace('https://', '')),
         '. Terms are defined in the ', el('a', { href: '#/glossary' }, 'glossary'),
-        '; the tables behind the dissertation are under ', el('a', { href: '#/downloads' }, 'Downloads'), '.')),
+        '; the tables behind the site are under ', el('a', { href: '#/downloads' }, 'Downloads'), '.')),
 
     el('div', { class: 'card' },
       el('h2', {}, 'What this is'),
@@ -116,15 +115,14 @@ function overview(man) {
           + `profile is a separate, opt-in view on the gene page, for the `
           + `${fmt((man.expression || {}).combat_eligible_genes)} genes that passed the upstream `
           + 'low-count filter; tissue values and τ are always computed on raw TPM.'),
-        el('li', {}, el('strong', {}, 'Curation notes are summarised, not quoted. '),
+        el('li', {}, el('strong', {}, 'Tandem-array curation is summarised. '),
           'Tandem-array genes carry a curation flag (hand-rejected, pseudogene-like, or '
-          + 'disagreeing with the automatic filter). The curator\'s identity and verbatim wording '
-          + 'are deliberately not published.'),
-        el('li', { 'data-one-tau': '' }, el('strong', {}, 'Tissue specificity is the dissertation\u2019s. '),
+          + 'disagreeing with the automatic filter).'),
+        el('li', { 'data-one-tau': '' }, el('strong', {}, 'One tissue-specificity value. '),
           `The τ and peak tissue on every page, in Browse, on the genome map and in every export: ${PAPER_TAU_HOW}. `
           + 'No other tissue-specificity value is shown.'),
         el('li', {}, el('strong', {}, 'The lineage-specific gene set is the final one. '),
-          'Gene pages, Browse and the counts use the dissertation’s final set, 583 HAP1 and 621 HAP2 genes. '
+          'Gene pages, Browse and the counts use the final set, 583 HAP1 and 621 HAP2 genes. '
           + 'The 776 HAP1 and 835 HAP2 candidates at PS18 or PS19 stay visible, and an excluded candidate says why it was excluded.'),
         el('li', {}, el('strong', {}, 'Presence/absence is the strict, protein-level set. '),
           'A gene is Strict PAV when it is hemizygous, is not a tandem duplicate, has no protein-level '
@@ -140,13 +138,12 @@ function overview(man) {
           + 'was measured on 717. Peptide matches come from five public Populus mass-spec '
           + 'datasets, including P. tomentosa and P. × canescens; most matches rest on peptides '
           + 'shared with other genes or species, often a single spectrum.'),
-        el('li', {}, el('strong', {}, 'Three layers are derived here, not imported. '),
-          'Exon/intron counts and TE distance are computed from the v5.1 GFF3 and repeatmasked '
-          + 'annotation that ship with the genome, and genomic order from the atlas\'s own '
-          + 'coordinates, because no reviewed upstream table offered them.'),
-        el('li', {}, el('strong', {}, 'Duplication and relationship calls match the dissertation. '),
+        el('li', {}, el('strong', {}, 'Gene structure and neighbours come from the annotation. '),
+          'Exon/intron counts and TE distance are taken from the v5.1 GFF3 and repeat-masked '
+          + 'annotation of the genome, and genomic order from the gene coordinates.'),
+        el('li', {}, el('strong', {}, 'Duplication and relationship calls. '),
           'The per-gene duplication class, the allele (syntelog) partners, strict PAV and the '
-          + 'relationship categories are the same tables the dissertation uses. The tandem '
+          + 'relationship categories come from one set of curated tables. The tandem '
           + 'component is the curated union set. Whole-genome-duplication assignments are '
           + 'inferences from synteny and Ks, not observations.'),
         // Read from the manifest: the hand-typed "77 leaf" was the pooled count from before the
@@ -156,27 +153,6 @@ function overview(man) {
           + `young-leaf and ${fmt(tw.leaf_old)} old-leaf) and ${fmt(tw.xylem)} xylem WT-control `
           + `samples but only ${fmt(tw.bud)} bud, ${fmt(tw.catkin)} catkin, ${fmt(tw.stem)} stem `
           + `and ${fmt(tw.callus)} callus. Every column carries its n. τ and peak tissue do not use these medians.`))),
-
-    el('div', { class: 'card' },
-      el('h2', {}, 'Sources', el('span', { class: 'tag' }, 'checksummed at build')),
-      el('p', { style: 'margin:0;font-size:13.5px' },
-        `${fmt(Object.keys(man.sources || {}).length)} source files went into this build. Each is recorded `
-        + 'with its size, sha256 and date in the ',
-        el('a', { href: 'data/meta/manifest.json' }, 'build manifest'),
-        ', and each data layer ships a provenance record in the build files.'),
-      el('p', { style: 'margin:10px 0 0;font-size:13px' },
-        'The duplication, relationship, tissue-specificity and LSG layers come from the dissertation\u2019s tables '
-        + `(analysis repository commit ${((man.dissertation || {}).analysis_repository_commit) || '–'}):`),
-      el('ul', { class: 'mono', style: 'margin:4px 0 0;padding-left:18px;font-size:11.5px', 'data-source-tables': '' },
-        ...Object.entries((man.dissertation || {}).source_tables || {}).map(([f, h]) =>
-          el('li', {}, `${SOURCE_LABEL.find(([k]) => f.startsWith(k))?.[1] || 'analysis table'}  sha256 ${h.slice(0, 16)}…`))),
-      el('p', { class: 'muted', style: 'margin:10px 0 0;font-size:12px' },
-        'The master tables, their data dictionary and the dissertation\u2019s supplementary tables are under ',
-        el('a', { href: '#/downloads' }, 'Downloads'), '. The raw expression matrix is not distributed with the site.'),
-      // The page claims the data is validated; this is where the claim can be checked.
-      el('p', { style: 'margin:10px 0 0;font-size:13px' },
-        el('a', { href: '#/status' }, 'See the consistency checks run on this data →'))),
-
 
     el('div', { class: 'card' },
       el('h2', {}, 'Citation & licence'),

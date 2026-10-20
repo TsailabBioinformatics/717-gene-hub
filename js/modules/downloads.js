@@ -14,7 +14,7 @@ export async function downloadsView(man) {
   } catch { /* shown below */ }
   const head = [el('h1', {}, 'Downloads'),
     el('p', { class: 'sub' },
-      'Gene duplication and cross-haplotype tables, lineage-specific gene tables and the dissertation\u2019s supplementary tables, as versioned files with checksums. '
+      'Gene duplication and cross-haplotype tables, lineage-specific gene tables and supplementary tables, as versioned files with checksums. '
       + `Site data version ${man.data_version}.`)];
   if (!idx || !(idx.files || []).length) {
     return el('div', { 'data-downloads': 'empty' }, ...head,

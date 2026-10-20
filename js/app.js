@@ -11,8 +11,7 @@ import { downloadsView } from './modules/downloads.js';
 import { linkHub, brush } from './core/designmap.js';
 import { designOf, designDrawing, contrastList, studyContrasts, sampleSelection } from './core/studydesign.js';
 import { FACTOR_LABEL, sampleTissue } from './core/studydesigns.js';
-import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE,
-         EVIDENCE_TIERS } from './core/registry.js';
+import { MODULES, byId, GENE_SECTIONS, geneSectionModules, CARD_EVIDENCE } from './core/registry.js';
 import { dupTypeLabel } from './modules/duplication.js';
 import { classBadge } from './modules/synteny.js';
 import { route, start, navigate, query } from './core/router.js';
@@ -223,12 +222,12 @@ route(/^\/$/, async (navigation) => {
   const EXPLORE = [
     ['#/browse', 'Browse', 'Filter every gene across every layer; export or save the set.'],
     ['#/map', 'Genome map', 'Both haplotypes chromosome by chromosome, down to single genes.'],
-    ['#/karyotype', 'Ancestral karyotype', 'Each gene placed on the ancestral eudicot karyotype (dissertation Figure 2.S2).'],
+    ['#/karyotype', 'Ancestral karyotype', 'Each gene placed on the ancestral eudicot karyotype.'],
     ['#/module/expression', 'Expression', `${fmt(e.n_samples)} samples from ${e.n_studies} curated studies.`],
     ['#/module/duplication', 'Duplication', 'Tandem arrays and whole-genome duplication partners.'],
     ['#/module/phylostrat', 'Gene age', 'Phylostrata and the lineage-specific gene set.'],
     ['#/arrays', 'Tandem arrays', 'Every curated array, per haplotype, with divergence and expression.'],
-    ['#/glossary', 'Glossary', 'The terms used on this site, as the dissertation defines them.'],
+    ['#/glossary', 'Glossary', 'The terms used on this site, defined.'],
     ['#/downloads', 'Downloads', 'The master tables, data dictionary and supplementary tables, with checksums.'],
   ];
 
@@ -408,7 +407,7 @@ function glanceCard(g, man) {
   if (g.resp && g.resp.v != null) {
     bits.push(['Responsiveness', el('span', {},
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} of the dissertation’s curated perturbation contrasts` : ''}`))]);
+      el('span', { class: 'muted' }, ` median |log2FC|${g.resp.n ? ` over ${g.resp.n} curated treatment comparisons` : ''}`))]);
   }
   if (g.allele && g.allele.id) {
     bits.push(['Allele', el('span', {},
@@ -628,10 +627,10 @@ function sectionNav(bands) {
   return nav;
 }
 
-/** Stamp every top-level card with its evidence tier (registry.js CARD_EVIDENCE): a class
- *  that draws the left rule, and a chip that says it in words. A folded card carries both on
- *  the fold, whose summary is what a reader sees. A card with no entry is a console error --
- *  which fails the render checks -- rather than a card that silently reads as tier 1. */
+/** Record every top-level card's evidence tier (registry.js CARD_EVIDENCE) as data-evidence,
+ *  for the page's own checks. Nothing is drawn: the tier labels were developer vocabulary
+ *  ("measured here", "from the genome") and each card states its own caveats in words. A card
+ *  with no entry is still a console error, which fails the render checks. */
 function applyEvidence(cards) {
   const missing = [];
   for (const top of [...cards.children]) {
@@ -640,28 +639,12 @@ function applyEvidence(cards) {
     const key = card && card.dataset.card;
     const ev = key && CARD_EVIDENCE[key];
     if (!ev) { missing.push(key || '(unstamped card)'); continue; }
-    const [tier, words] = ev;
-    top.classList.add(`ev-${tier}`);
-    top.dataset.evidence = String(tier);
-    const head = top.matches('details') ? top.querySelector(':scope > summary')
-      : top.querySelector(':scope > h2');
-    (head || top).append(el('span', { class: `ev-chip ev-chip-${tier}`, title: EVIDENCE_TIERS[tier] }, words));
+    top.dataset.evidence = String(ev[0]);
   }
   if (missing.length) {
     console.error(`evidence: no tier declared for card(s) ${missing.join(', ')} -- add them to `
       + 'CARD_EVIDENCE in js/core/registry.js');
   }
-}
-
-/** One line under the section nav decoding the three rule styles. The words come from the same
- *  table the chips do, so the key cannot list a label no card carries. */
-function evidenceKey() {
-  const words = (t) => [...new Set(Object.values(CARD_EVIDENCE).filter(([k]) => k === t).map(([, w]) => w))];
-  return el('p', { class: 'ev-key' },
-    el('span', { class: 'ev-key-item' }, el('i', { class: 'ev-sw ev-1' }), words(1).join(' or ')),
-    el('span', { class: 'ev-key-item' }, el('i', { class: 'ev-sw ev-2' }), words(2).join(' or ')),
-    el('span', { class: 'ev-key-item' }, el('i', { class: 'ev-sw ev-3' }), words(3).join(', ')),
-    el('span', { class: 'ev-key-note' }, 'Cards run from the strongest evidence to the weakest.'));
 }
 
 /** The specimen label at the top of a gene page: what it is, where it is, and where to go
@@ -679,7 +662,7 @@ function geneHeader(g, kb) {
   const lsg = lsgStatus(g);
   if (lsg) facts.push(el('span', { class: 'gh-fact', 'data-lsg-chip': lsg.final ? 'final' : 'excluded' }, lsg.text));
   if (isQcFlagged(g)) facts.push(el('span', { class: 'gh-fact', 'data-qc-chip': '' },
-    'gene model flagged by quality control, not in the dissertation\u2019s counts'));
+    'gene model flagged by quality control, left out of the gene counts'));
   if (g.syn && g.syn.cls) facts.push(el('span', { class: 'gh-fact' }, g.syn.cls.replace(/_/g, ' ')));
   // Same form as the allele chip: the label, then the ID as a link. Every gene of a counted
   // tandem array gets it (genes of hemizygous TD arrays included); the size is the number of
@@ -854,7 +837,6 @@ route(/^\/gene\/(.+)$/, async (rawId, navigation) => {
       ord.n ? el('a', { href: `#/gene/${ord.n}`, class: 'mono' }, ord.n + ' →') : null) : null,
     glance,
     sectionNav(bands),
-    evidenceKey(),
     cards));
   markNav();
 });
@@ -1197,10 +1179,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
         ' · ', el('a', { href: '#/glossary' }, 'glossary'),
         ' · ', el('a', { href: `mailto:${CONTACT}?subject=Poplar%20717%20gene%20atlas` }, 'contact / report a problem'),
         ' · ', el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, 'repository'),
-        ' · ', el('a', { href: '#/module/about' }, 'provenance'),
-        // The footer already states which build you are reading; the gates that build passed
-        // belong next to it, not two clicks away inside another page.
-        ' · ', el('a', { href: '#/status' }, 'data checks')));
+        ' · ', el('a', { href: '#/module/about' }, 'about')));
     }
     // A cached script against fresh data is the dangerous combination: every column this code
     // reads by name still resolves, just to the wrong thing, so the page renders a confident

@@ -52,7 +52,7 @@ function rowsTable(page, byId, ann, whyOf) {
       el('th', {}, 'Gene'), el('th', {}, 'Description'), el('th', {}, 'Hap'),
       el('th', {}, 'Synteny class'), el('th', {}, 'Dup.'), el('th', {}, 'Chr'),
       el('th', { class: 'num' }, 'PS'), el('th', { title: 'tissue group with the highest mean TPM, 222-sample reference panel' }, 'Peak tissue'),
-      el('th', { class: 'num', title: 'tissue specificity as in the dissertation' }, 'τ'))),
+      el('th', { class: 'num', title: 'tissue specificity' }, 'τ'))),
     el('tbody', {}, ...body)));
 }
 

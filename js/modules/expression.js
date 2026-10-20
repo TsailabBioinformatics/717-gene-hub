@@ -55,7 +55,6 @@ function contrastCard(g) {
     // Deliberately NOT 'Response by contrast': the scrubber card has a button labelled
     // 'By contrast', and any substring selector for one then matches the other.
     'data-view-label': 'Contrasts',
-    'data-view-tag': 'computed in the browser',
   }, el('h2', {}, 'Response by contrast'));
   const body = el('div', {});
   const status = el('p', { class: 'muted', style: 'font-size:13px;margin:6px 0 0' },
@@ -167,7 +166,7 @@ function contrastCard(g) {
       const abs = list.map((r) => Math.abs(r.lfc)).sort((a, b) => a - b);
       const m = abs.length ? (abs.length % 2 ? abs[(abs.length - 1) / 2] : (abs[abs.length / 2 - 1] + abs[abs.length / 2]) / 2) : null;
       summary.replaceChildren(...(!filtered
-        ? [`All ${rows.length} shipped contrasts scored for this gene; the ${shown.length} ${st.sort === 'abs' ? 'largest' : SORTS[st.sort][0].toLowerCase()} shown. Every bar carries its sample counts.`]
+        ? [`All ${rows.length} contrasts scored for this gene; the ${shown.length} ${st.sort === 'abs' ? 'largest' : SORTS[st.sort][0].toLowerCase()} shown. Every bar carries its sample counts.`]
         : list.length
           ? [`${list.length} of ${rows.length} contrasts match; ${shown.length} shown, ${SORTS[st.sort][0].toLowerCase()} first. `,
             'Median |log2FC| of these ', el('span', { class: 'mono', 'data-cv-median': m.toFixed(3) }, m.toFixed(3)), '.']
@@ -195,7 +194,7 @@ function contrastCard(g) {
         el('dd', {}, !resp
           ? el('span', { class: 'muted' }, 'not reached 5 TPM in any perturbation contrast')
           : [el('span', { class: 'mono', 'data-resp': resp.v.toFixed(3) }, resp.v.toFixed(3)),
-            el('span', { class: 'muted' }, `, median |log2FC| over the ${fmt(resp.n)} of 149 perturbation contrasts where the gene reaches 5 TPM (the dissertation\u2019s measure)`)])),
+            el('span', { class: 'muted' }, `, median |log2FC| over the ${fmt(resp.n)} of 149 treatment contrasts where the gene reaches 5 TPM`)])),
       lowN ? el('p', { class: 'warn-n-note' },
         el('strong', {}, `${lowN} of these ${rows.length} contrasts have a single sample on one side. `),
         'A fold change from one sample against one sample has no dispersion estimate and cannot '
@@ -203,7 +202,7 @@ function contrastCard(g) {
         + 'put them beside a real result.') : null,
       el('p', { class: 'muted', style: 'font-size:12.5px;margin:9px 0 0' },
         'Fold change is mean(perturbation)+1 over mean(control)+1 on the raw TPM vector, using '
-        + 'the control and perturbation sample indices shipped in contrasts.json. It is a '
+        + 'the samples of each comparison\u2019s two groups. It is a '
         + 'descriptive ratio, not a differential-expression test: no dispersion model, no '
         + 'multiple-testing correction, and study is not accounted for. The median above is over '
         + 'every contrast; responsiveness keeps only the perturbation contrasts where the gene is '
@@ -263,7 +262,7 @@ function paperBlock(g, man) {
         el('th', { class: 'num' }, 'Samples'), el('th', { class: 'num' }, 'Studies'), el('th', { class: 'pt-barcell' }, ''))),
       tbody)),
     el('p', { class: 'muted pt-note' },
-      `As in the dissertation: ${PAPER_TAU_HOW}. Leaf ages are kept as separate groups. Median and range `
+      `Tissue specificity: ${PAPER_TAU_HOW}. Leaf ages are kept as separate groups. Median and range `
       + '(lowest to highest sample) are over the same reference-panel samples as the mean.'));
 }
 
@@ -291,7 +290,7 @@ function geneCard(g, man) {
       el('strong', {}, 'Responsiveness: '),
       'median |log2 fold-change| across perturbation contrasts is ',
       el('span', { class: 'mono' }, g.resp.v.toFixed(3)),
-      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible contrasts among the dissertation’s curated perturbation contrasts`) : null,
+      g.resp.n ? el('span', { class: 'muted' }, ` over ${g.resp.n} eligible curated treatment contrasts`) : null,
       el('span', { class: 'muted' }, '. A descriptive number pooled across studies, not a '
         + 'differential-expression test.')) : null,
     g.nb && g.nb.k5 != null ? el('p', { style: 'font-size:12.5px;margin:9px 0 0' },
@@ -566,7 +565,7 @@ async function overview(man) {
       const t = ((man.dissertation || {}).tau || {}).per_haplotype;
       if (!t) return null;
       return el('div', { class: 'card', 'data-paper-tau-card': '' },
-        el('h2', {}, 'Tissue specificity', el('span', { class: 'tag' }, 'as in the dissertation')),
+        el('h2', {}, 'Tissue specificity'),
         el('div', { class: 'stat-row' }, ...['HAP1', 'HAP2'].map((h) => el('a', {
           class: 'stat', style: 'text-decoration:none;color:inherit',
           href: browseHref({ hap: h.toLowerCase(), tau_min: '0.85', tok: 'yes', qc: 'no' }) },

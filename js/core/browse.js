@@ -131,7 +131,7 @@ export const FILTERS = [
 // URL parameters and saved links depend on them; only the label follows the dissertation's
 // names for the two whole-genome events (aWGT, sWGD).
 const OPTION_LABEL = { search_sensitive: 'search-sensitive', all_three: 'all three call it tandem', some: 'one or two call it tandem',
-  nearby_copy_only: 'a nearby copy only (proximal)', none: 'none calls it tandem or nearby', tools_only: 'tools tandem, not in the dissertation\u2019s set', salicoid: 'sWGD', gamma: 'aWGT', aWGD_era: 'aWGT era', not_classified: 'not classified (quality-flagged)',
+  nearby_copy_only: 'a nearby copy only (proximal)', none: 'none calls it tandem or nearby', tools_only: 'tools call it tandem, not in the curated set', salicoid: 'sWGD', gamma: 'aWGT', aWGD_era: 'aWGT era', not_classified: 'not classified (quality-flagged)',
   final_set: 'in the final LSG set', candidate_excluded: 'candidate, excluded from the final set', not_a_candidate: 'not a candidate',
   C: 'C (singleton)', D: 'D (dispersed only)',
   ...Object.fromEntries(Object.entries(CATEGORY).map(([k, c]) => [k, c.name])) };
@@ -150,15 +150,15 @@ export const FILTER_GROUPS = [
 const HINTS = {
   hap: 'HAP1 is the tremula haplotype, HAP2 alba',
   cls: 'GENESPACE class across the 12-genome panel, which lacks P. alba',
-  lsg: 'the dissertation\u2019s final set, 583 HAP1 / 621 HAP2, out of 776 / 835 candidates',
-  xage: 'cross-checks on candidates, run after the dissertation\u2019s analysis; they never change its set',
-  xtandem: 'DupGen_finder, MCScanX and doubletrouble on the same annotation; a cross-check, not part of the dissertation\u2019s tandem set',
-  qc: 'gene models set aside as pseudogene-like or degenerate; choose "no" to match the dissertation\u2019s counts',
+  lsg: 'the final set, 583 HAP1 / 621 HAP2, out of 776 / 835 candidates',
+  xage: 'independent cross-checks on the candidates; they never change the set',
+  xtandem: 'DupGen_finder, MCScanX and doubletrouble on the same annotation; a cross-check, not part of the curated tandem set',
+  qc: 'gene models set aside as pseudogene-like or degenerate; choose "no" to match the published counts',
   dup: 'S sWGD, A aWGT, T tandem, D dispersed, C singleton',
-  tok: 'the dissertation counts tissue-specific genes among these only',
+  tok: 'tissue-specific genes are counted among these only',
   ps_min: '18 and 19 are the lineage-specific candidate strata; PS19 genes reassigned to PS18 count as 18',
   ps: 'one stratum exactly',
-  tau_min: 'tissue specificity as in the dissertation: 222-sample reference panel, 9 tissue groups; 0.85 is its cutoff',
+  tau_min: 'tissue specificity over the 222-sample reference panel, 9 tissue groups; 0.85 is the cutoff',
   top: 'tissue group with the highest mean TPM in the reference panel',
   xin: 'a different statistic: median above 1 TPM over the wild-type control samples of that tissue',
   allele: 'a syntenic partner on the other haplotype',
@@ -247,8 +247,8 @@ const COLUMNS = [
   { id: 'chr', label: 'Chr', key: (r) => r.chr },
   { id: 'dup', label: 'Class', key: (r) => r.dup, title: 'duplication class code: S sWGD, A aWGT, T tandem, D dispersed, C singleton' },
   { id: 'cls', label: 'Synteny class', key: (r) => r.cls },
-  { id: 'ps', label: 'PS', num: true, key: (r) => r.ps, title: 'phylostratum as used in the dissertation (genEra rank; PS19 genes reassigned to PS18 count as 18)' },
-  { id: 'tau', label: '\u03c4', num: true, greek: true, key: (r) => r.tau, title: 'tissue specificity as in the dissertation (222-sample reference panel, 9 tissue groups)' },
+  { id: 'ps', label: 'PS', num: true, key: (r) => r.ps, title: 'phylostratum (genEra rank; PS19 genes reassigned to PS18 count as 18)' },
+  { id: 'tau', label: '\u03c4', num: true, greek: true, key: (r) => r.tau, title: 'tissue specificity (222-sample reference panel, 9 tissue groups)' },
   { id: 'top', label: 'Peak tissue', key: (r) => r.top },
   { id: 'npres', label: 'Genomes', num: true, key: (r) => r.npres || null,
     title: 'genomes in the orthogroup, of 12 (the panel lacks P. alba)' },
@@ -343,10 +343,10 @@ function exportTSV(state) {
                 'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy'];
   const lines = [
     `# Poplar 717 gene atlas, data v${dataVersion()}, exported ${new Date().toISOString().slice(0, 10)}`,
-    '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology), as in the dissertation',
+    '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology)',
     '# tau and peak tissue: mean TPM in 9 tissue groups of the 222-sample reference panel; empty where no group mean reaches 5 TPM',
-    '# The dissertation counts quality-filtered genes only: keep quality_flagged = no to reproduce its numbers',
-    '# other_gene_age_methods: independent cross-checks on candidates, run after the dissertation’s analysis; never part of its call',
+    '# Published counts use quality-filtered genes only: keep quality_flagged = no to reproduce them',
+    '# other_gene_age_methods: independent cross-checks on candidates; never part of the call',
     head.join('\t')];
   const LSG = ['not_a_candidate', 'final_set', 'candidate_excluded'];
   for (const i of state.matches) {

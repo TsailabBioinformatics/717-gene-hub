@@ -68,7 +68,7 @@ export const QUESTIONS = [
   {
     id: 'lsg-final',
     q: 'Which genes are in the final lineage-specific gene set?',
-    sub: 'PS18 or PS19 candidates that pass the four exclusion criteria of the dissertation',
+    sub: 'PS18 or PS19 candidates that pass all four exclusion criteria',
     params: { lsg: 'final_set' },
     byHap: true,
   },

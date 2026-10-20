@@ -84,16 +84,16 @@ function divergenceCard(genes) {
     el('h2', {}, 'Divergence among members', el('span', { class: 'tag' }, `${out.length} member pairs`)),
     el('p', { class: 'arr-note' },
       `${withKs} of the ${out.length} pairs among ${n} members have a Ks estimate from the tandem `
-      + `union rebuild; ${out.length - withKs} have none, because only detected tandem edges were `
+      + `analysis; ${out.length - withKs} have none, because only detected tandem edges were `
       + `scored. A missing value means "not scored", never "identical". ${withW} pair${withW === 1 ? '' : 's'} `
       + 'also appear in the paralog-pair table with Ka and ω; that table is a separate source and '
-      + 'its Ks can differ from the tandem rebuild.'),
+      + 'its Ks can differ from the tandem analysis.'),
     n > 2 ? el('div', { class: 'scroll-x' }, matrix) : null,
     n > 2 ? el('p', { class: 'arr-note' }, `Matrix: Ks per pair (upper triangle), shaded in five equal bins `
       + `of this array's maximum Ks (${maxKs.toFixed(3)}); a dot is a pair with no estimate.`) : null,
     el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
       el('thead', {}, el('tr', {}, el('th', {}, 'Pair'),
-        el('th', { class: 'num', title: 'tandem union rebuild, per detected edge' }, 'Ks (tandem)'),
+        el('th', { class: 'num', title: 'from the tandem analysis, per detected tandem pair' }, 'Ks (tandem)'),
         el('th', { class: 'num', title: 'paralog-pair table' }, 'Ks (paralog)'),
         el('th', { class: 'num' }, 'Ka'), el('th', { class: 'num' }, 'ω'),
         el('th', { class: 'num', title: 'Pearson r, batch-corrected log2 expression, 652 samples' }, 'Expr r'))),
@@ -115,7 +115,7 @@ function exprCard(genes) {
     el('thead', {}, el('tr', {}, el('th', {}, 'Member'),
       ...tissues.map((t) => el('th', {}, el('div', {}, t.replace(/_/g, ' ')),
         el('div', { class: 'arr-n' }, n[t] == null ? 'n –' : `n ${n[t]}`))),
-      el('th', { title: 'tissue specificity as in the dissertation: mean TPM in 9 tissue groups of the 222-sample reference panel' }, 'τ'))),
+      el('th', { title: 'tissue specificity: mean TPM in 9 tissue groups of the 222-sample reference panel' }, 'τ'))),
     el('tbody', {}, ...genes.map((g) => el('tr', { 'data-arr-heat-row': g.id },
       el('th', {}, el('a', { href: `#/gene/${g.id}`, class: 'mono' }, short(g.id))),
       ...tissues.map((t) => {
