@@ -332,7 +332,7 @@ function safeFileStem(name) {
   return stem || '717atlas_gene_set';
 }
 
-function exportTSV(state) {
+async function exportTSV(state, onStatus = () => {}) {
   // Columns carry the adopted calls only, under the names the pages use. The first lines are
   // comments (#) stating the release, so a file found later can be traced to its version.
   const head = ['gene_id', 'haplotype', 'chr', 'description', 'duplication_class_code', 'sWGD', 'aWGT',
@@ -340,15 +340,31 @@ function exportTSV(state) {
                 'phylostratum_used', 'phylostratum_genEra', 'LSG_status', 'other_gene_age_methods',
                 'tau_reference_panel', 'peak_tissue_reference_panel', 'mean_TPM_ge_5_reference_panel',
                 'synteny_class_GENESPACE', 'genomes_in_orthogroup', 'omega_vs_ptrichocarpa',
-                'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy'];
+                'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy',
+                'allele_gene_id', 'allele_chr', 'duplicate_partner_ids'];
   const lines = [
     `# Poplar 717 gene atlas, data v${dataVersion()}, exported ${new Date().toISOString().slice(0, 10)}`,
     '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology)',
     '# tau and peak tissue: mean TPM in 9 tissue groups of the 222-sample reference panel; empty where no group mean reaches 5 TPM',
     '# Published counts use quality-filtered genes only: keep quality_flagged = no to reproduce them',
     '# other_gene_age_methods: independent cross-checks on candidates; never part of the call',
+    '# allele_gene_id / allele_chr: the 1:1 syntelog on the other haplotype, empty where none is called',
+    '# duplicate_partner_ids: paralog partners (sWGD, aWGT, tandem and others) within the same haplotype, separated by ;',
     head.join('\t')];
   const LSG = ['not_a_candidate', 'final_set', 'candidate_excluded'];
+  // Partner IDs live in the gene records, not the filter index: read each record once (the
+  // loader keeps shards, so genes sharing a shard cost one request).
+  const rec = new Map();
+  const todo = state.matches.map((i) => state.ids[i]);
+  let next = 0;
+  const worker = async () => {
+    while (next < todo.length) {
+      const id = todo[next++];
+      try { rec.set(id, await getGene(id)); } catch { /* left empty */ }
+      if (next % 2000 === 0) onStatus(`Reading partner genes: ${fmt(next)} of ${fmt(todo.length)}`);
+    }
+  };
+  await Promise.all(Array.from({ length: 6 }, worker));
   for (const i of state.matches) {
     const r = state.rows[i];
     // named states rather than blanks: "not placed" and "no copy assigned" are results
@@ -365,7 +381,14 @@ function exportTSV(state) {
       r.w >= 0 ? (r.w / 1000).toFixed(4) : (r.w === -1 ? 'no_ortholog' : 'not_estimable'),
       r.ms >= 0 ? r.ms : '',
       r.aek >= 0 ? `AEK${Math.floor(r.aek / 100)}` : 'not_placed',
-      copy(Math.floor(r.aek / 10) % 10), copy(r.aek % 10)].join('\t'));
+      copy(Math.floor(r.aek / 10) % 10), copy(r.aek % 10),
+      ...(() => {
+        const g = rec.get(state.ids[i]);
+        const a = g && g.allele ? g.allele.id : '';
+        const ai = a ? state.idIndex.get(a) : undefined;
+        return [a, ai === undefined ? '' : (state.rows[ai].chr ?? ''),
+          ((g && g.para) || []).map((q) => q.id).join(';')];
+      })()].join('\t'));
   }
   download(`717atlas_v${dataVersion()}_selection_${state.matches.length}genes.tsv`, lines.join('\n') + '\n');
 }
@@ -744,7 +767,13 @@ export async function browseView(navigation) {
     el('button', {
       type: 'button',
       class: 'btn primary',
-      onclick: () => exportTSV(state),
+      onclick: async (ev) => {
+        const b = ev.currentTarget;
+        b.disabled = true;
+        try { await exportTSV(state, (t) => { actStatus.textContent = t; }); actStatus.textContent = `Exported ${fmt(state.matches.length)} genes with their other-haplotype partner.`; }
+        catch (e) { actStatus.textContent = e?.message || 'Could not export this selection.'; }
+        b.disabled = false;
+      },
     }, 'Export TSV'),
     el('button', {
       type: 'button',
@@ -858,6 +887,10 @@ export async function browseView(navigation) {
     el('div', { class: 'bz-main' },
       el('div', { class: 'bz-bar' }, summary, actions),
       chipRow,
+      el('p', { class: 'muted bz-exporthint', style: 'font-size:12.5px;margin:4px 0 0', 'data-export-hint': '' },
+        'The export lists each gene’s partner on the other haplotype and its duplicate partners. '
+        + 'Pair-by-pair tables with Ks and Ka/Ks for the whole genome are on the ',
+        el('a', { href: '#/downloads' }, 'Downloads'), ' page (717_gene_pairs.csv, 717_genes.csv).'),
       actStatus,
       el('div', { class: 'card bz-results' }, tableHolder, pager),
       notes,

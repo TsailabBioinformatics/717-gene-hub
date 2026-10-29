@@ -9,6 +9,12 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Browse export names each gene's partner
+
+The Browse TSV gains `allele_gene_id`, `allele_chr` and `duplicate_partner_ids`, read from the gene records for the
+selected genes, and a line beside the button points to the pair tables on the Downloads page. New check:
+`browse:export-partners`. No change to `data/`.
+
 ## Reader-facing wording, a maintenance kit, and development moves to this repository
 
 Development now happens directly in this (the lab's) repository; the earlier private development

@@ -5,6 +5,7 @@ import { el } from '../core/dom.js';
 
 const RELEASES = [
   ['0.22.1', '2026-10-17', 'Study labels, read counts and expression statistics', [
+    'The Browse export now lists, for every gene, its partner on the other haplotype (with that partner\u2019s chromosome) and its duplicate partners, and says where the full pair tables are on the Downloads page (2026-10-29).',
     'Pages no longer carry internal labels about how each value was produced; the Duplication page is now the Duplicated gene catalog (2026-10-20).',
     'Studies with two authors are named by both (Kins & Janz rather than Kins et al.), and every study shows its journal correctly. Five studies without a published paper now link their deposited data set instead of showing a dash.',
     'Read counts that were missing for 27 samples in two studies are filled in from the sequence archive.',

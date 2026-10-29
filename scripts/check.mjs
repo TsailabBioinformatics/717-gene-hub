@@ -3122,6 +3122,44 @@ for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G0001
   await ctx.close();
 }
 
+// Browse TSV export carries the other-haplotype partner and the duplicate partners, taken from
+// the gene records, and points to the Downloads pair tables next to the button.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1180, height: 900 }, acceptDownloads: true });
+  const p = await ctx.newPage();
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto(base + '/#/browse', { waitUntil: 'networkidle' });
+  await p.waitForSelector('#view .stat .n');
+  const hint = await p.$eval('[data-export-hint] a', (a) => a.getAttribute('href'));
+  await p.evaluate(() => { document.querySelector('[data-group="ids"]').open = true; });
+  await p.fill('label[data-filter="ids"] textarea', 'PtXaTreH.05G120200 PtXaTreH.01G000200 PtXaAlbH.05G122300');
+  await p.click('[data-group="ids"] button:has-text("Apply list")');
+  await p.waitForTimeout(300);
+  const want = await p.evaluate(async () => {
+    const d = await import('./js/core/data.js');
+    const out = {};
+    for (const id of ['PtXaTreH.05G120200', 'PtXaTreH.01G000200', 'PtXaAlbH.05G122300']) {
+      const g = await d.getGene(id);
+      out[id] = [g.allele ? g.allele.id : '', (g.para || []).map((q) => q.id).join(';')];
+    }
+    return out;
+  });
+  const [dl] = await Promise.all([p.waitForEvent('download', { timeout: 30000 }), p.click('button:has-text("Export TSV")')]);
+  const text = await (await import('fs')).promises.readFile(await dl.path(), 'utf8');
+  const rows = text.split('\n').filter((l) => l && !l.startsWith('#')).map((l) => l.split('\t'));
+  const col = (n) => rows[0].indexOf(n);
+  const [ca, cp] = [col('allele_gene_id'), col('duplicate_partner_ids')];
+  const body = rows.slice(1);
+  const ok = !errs.length && hint === '#/downloads' && ca > 0 && cp > 0 && body.length === 3
+    && body.every((r) => r[ca] === want[r[0]][0] && r[cp] === want[r[0]][1])
+    && body.some((r) => r[ca]);
+  if (!ok) failures++;
+  console.log(`\n### browse:export-partners  ${ok ? 'OK' : 'FAIL'}  rows=${body.length}  alleles=${body.map((r) => r[ca]).join(',')}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await ctx.close();
+}
+
 // A tandem gene with no syntelog of its own reaches the other haplotype through its array
 // (CJ's tandem rule, ms1-dup master v11 `td_array_associated`). Expected pairs are copied from
 // master_per_gene_v11.csv `syntelog_partner_gene_id` -- an INDEPENDENT source, not the atlas's
