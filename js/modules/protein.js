@@ -413,7 +413,7 @@ function geneCard(g) {
         el('p', { class: 'muted', style: 'font-size:11.5px;margin:8px 0 0' },
           'A shared peptide is not a failed measurement. It is consistent with some member of '
           + 'the protein family being translated, but it cannot single out this gene as the source. Across the '
-          + 'whole atlas that is the common case: 94% of peptides matching a 717 gene are also '
+          + 'whole 717 Gene Hub that is the common case: 94% of peptides matching a 717 gene are also '
           + 'in the P. trichocarpa proteome, and only 12% match exactly one 717 gene.')));
   }
 
@@ -502,7 +502,7 @@ async function overview(man) {
           + 'model was uncertain, not that the protein is disordered.'),
         el('li', {}, el('strong', {}, 'Aggregate helix is safe; helix RUN LENGTH is not. '),
           'The source analysis states that long-run helix content is exactly what the '
-          + 'low-confidence artifact inflates and should not be read as biology. This atlas '
+          + 'low-confidence artifact inflates and should not be read as biology. This site '
           + 'therefore serves helix_frac only, never max_helix_run.'),
         el('li', {}, el('strong', {}, 'These are predicted structures. '),
           'No claim here is independent of ESMFold.'),

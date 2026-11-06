@@ -14,7 +14,7 @@ export function fastaRecord(g, kind, seq) {
   const k = KINDS.find((x) => x[0] === kind);
   const where = `${g.chr}:${g.start}-${g.end}(${g.strand || '?'})`;
   return `>${g.id} ${k[1].toLowerCase()} len=${seq.length} ${hapLabel(g.hap)} ${where} `
-    + `Phytozome v5.1, 717 atlas v${dataVersion()}\n${seq.replace(/(.{60})/g, '$1\n').replace(/\n$/, '')}\n`;
+    + `Phytozome v5.1, 717 Gene Hub v${dataVersion()}\n${seq.replace(/(.{60})/g, '$1\n').replace(/\n$/, '')}\n`;
 }
 
 export function downloadText(name, text) {

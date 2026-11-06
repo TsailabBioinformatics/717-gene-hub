@@ -1,11 +1,11 @@
 cff-version: 1.2.0
 message: "A manuscript describing this resource will be submitted soon. Until it is published, please cite this website as below, with the version and your access date; once the manuscript is available, please cite the manuscript. Also cite the underlying studies listed on each study page."
-title: "717 Atlas: a haplotype-resolved gene atlas for Populus tremula x alba clone INRA 717-1B4"
+title: "717 Gene Hub: gene pages and tables for the haplotype-resolved Populus tremula x alba clone INRA 717-1B4"
 abstract: >-
-  A static, browsable atlas of the 63,960 gene models in the two phased haplotypes of hybrid
+  A static, browsable collection of the 63,960 gene models in the two phased haplotypes of hybrid
   poplar clone 717, integrating GENESPACE synteny across a 12-genome panel, genEra
   phylostratigraphy, Phytozome v5.1 functional annotation, HAP1/HAP2 syntelog pairs with Ka/Ks,
-  and a 652-sample RNA-seq expression atlas drawn from 28 curated studies. Duplication classes,
+  and a 652-sample RNA-seq expression compendium drawn from 28 curated studies. Duplication classes,
   whole-genome duplication anchor pairs, cross-haplotype relationship categories and tissue
   specificity are those of the accompanying dissertation, and its master tables are offered for
   download. It adds tandem-array and paralog duplication context (inferred calls), predicted
@@ -22,8 +22,8 @@ authors:
   - family-names: Hsieh
     given-names: Chen
     affiliation: "Tsai Lab, University of Georgia"
-repository-code: "https://github.com/TsailabBioinformatics/poplar-717-atlas"
-url: "https://tsailabbioinformatics.github.io/poplar-717-atlas/"
+repository-code: "https://github.com/TsailabBioinformatics/717-gene-hub"
+url: "https://tsailabbioinformatics.github.io/717-gene-hub/"
 keywords:
   - Populus
   - hybrid poplar
@@ -31,7 +31,7 @@ keywords:
   - synteny
   - phylostratigraphy
   - lineage-specific genes
-  - expression atlas
-license-url: "https://github.com/TsailabBioinformatics/poplar-717-atlas/blob/main/LICENSE"
+  - expression data
+license-url: "https://github.com/TsailabBioinformatics/717-gene-hub/blob/main/LICENSE"
 version: "0.22.1"
 date-released: "2026-10-17"

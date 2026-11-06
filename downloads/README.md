@@ -3,7 +3,7 @@
 Gene duplication and cross-haplotype tables and lineage-specific gene tables for hybrid poplar 717,
 from Chen Hsieh's dissertation (University of Georgia, 2026), with its supplementary tables.
 A manuscript describing this resource will be submitted soon. Until it is published, please cite the
-atlas website (version and access date); once the manuscript is available, please cite the manuscript.
+717 Gene Hub website (version and access date); once the manuscript is available, please cite the manuscript.
 Built by `data/138_dissertation_release_20261013/build_release.py`
 (66 checks before this file was written; 113 dissertation numbers recomputed from these files alone, all equal: see
 `HEADLINE_NUMBERS_CHECK.csv`).
@@ -66,7 +66,7 @@ Figure 2.6 (tau by duplication class) further excludes genes whose reads cannot 
 (Table 2.S2 gives the rule and counts) and splits tandem genes by array age; its per-row values are
 therefore not the pooled values of `tandem_gene`. Analyses that need the expression matrix itself
 (pair co-expression, perturbation contrasts; Figures 2.7 and 2.9 to 2.12) are not reproducible from
-this bundle alone; expression values per gene and sample are on the atlas gene pages.
+this bundle alone; expression values per gene and sample are on the 717 Gene Hub gene pages.
 
 ## Known caveats
 
@@ -99,5 +99,5 @@ this bundle alone; expression values per gene and sample are on the atlas gene p
 
 ## Availability
 
-Gene pages and these tables: https://tsailabbioinformatics.github.io/poplar-717-atlas/ .
+Gene pages and these tables: https://tsailabbioinformatics.github.io/717-gene-hub/ .
 Analysis code is available from the author on request and will be released on publication.

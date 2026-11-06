@@ -46,7 +46,7 @@ jobs:
     # Lab repository only (2026-10-17 budget audit). The development repository's old address is
     # served by its gh-pages branch, a static redirect that needs no build.
     if: >-
-      github.repository == 'TsailabBioinformatics/poplar-717-atlas' &&
+      github.repository_owner == 'TsailabBioinformatics' &&
       vars.PAGES_SITE_ONLY == 'true' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     env:
@@ -109,7 +109,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.repository == 'TsailabBioinformatics/poplar-717-atlas'
+    if: github.repository_owner == 'TsailabBioinformatics'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

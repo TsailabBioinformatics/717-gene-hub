@@ -1,8 +1,8 @@
-# Poplar 717 gene atlas: instructions for Claude Code
+# 717 Gene Hub: instructions for Claude Code
 
 A static website (no server, no framework, no build step for the site itself) published by GitHub
 Pages from this repository's `main` branch. Live at
-https://tsailabbioinformatics.github.io/poplar-717-atlas/. **This repository is public**, and so is
+https://tsailabbioinformatics.github.io/717-gene-hub/. **This repository is public**, and so is
 its history: anything committed is published.
 
 ## Save tokens: what NOT to read

@@ -448,7 +448,7 @@ await check('module-about-numbers', '#/module/about',
   { expect: ['no rank for 27 HAP1 and 18 HAP2 genes in the current call',
              '55 leaf (plus 11 young-leaf and 11 old-leaf)',
              'ComBat-seq', 'the strict, protein-level set', '528 HAP1 and 605 HAP2',
-             'Hsieh et al., unpublished. Poplar 717 gene atlas, version', 'https://tsailabbioinformatics.github.io/poplar-717-atlas/',
+             'Hsieh et al., unpublished. 717 Gene Hub, version', 'https://tsailabbioinformatics.github.io/717-gene-hub/',
              'Contact and feedback', 'Chen.Hsieh@uga.edu', 'Data are provided for research use',
              'A manuscript describing this resource will be submitted soon', 'once the manuscript is available, please cite the manuscript',
              'developed with assistance from Claude (Anthropic)',
@@ -3291,11 +3291,11 @@ for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G0001
   const overflow = await p.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   await p.screenshot({ path: `${outdir}/changes-phone.png` });
   const parts = {
-    homeTitle: homeTitle === '717 gene atlas' || / · 717 gene atlas$/.test(homeTitle),
+    homeTitle: homeTitle === '717 Gene Hub' || / · 717 Gene Hub$/.test(homeTitle),
     noFocusStealOnLoad: firstFocus, skipFirst: /\bskip\b/.test(firstTab), skipLands: afterSkip,
-    glossaryTitle: g.t === 'Glossary · 717 gene atlas', glossaryFocus: g.f === 'H1:Glossary',
+    glossaryTitle: g.t === 'Glossary · 717 Gene Hub', glossaryFocus: g.f === 'H1:Glossary',
     geneTitle: geneTitle.startsWith('PtXaTreH.05G120200'), sectionFocus: /^sec-/.test(secFocus),
-    changes: ch.t === 'What changed · 717 gene atlas' && ch.n >= 8 && /^0\.\d+/.test(ch.first), phoneFits: !overflow,
+    changes: ch.t === 'What changed · 717 Gene Hub' && ch.n >= 8 && /^0\.\d+/.test(ch.first), phoneFits: !overflow,
   };
   const ok = !errs.length && Object.values(parts).every(Boolean);
   if (!ok) failures++;

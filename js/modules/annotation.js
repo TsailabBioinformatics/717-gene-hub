@@ -115,7 +115,7 @@ function annotationCard(g) {
         one ? el('span', { class: 'muted' }, '  reciprocal 1:1')
             : el('span', { class: 'muted' }, `  ambiguous, ${g.ptri.n ? `${g.ptri.n} syntenic hits` : 'not reciprocal'}`),
         el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-          one ? 'Syntenic ortholog from this atlas’s own GENESPACE run. Use it to look the gene up in PopGenIE or Phytozome.'
+          one ? 'Syntenic ortholog from the 717 Gene Hub’s own GENESPACE run. Use it to look the gene up in PopGenIE or Phytozome.'
               : 'Shown for orientation only, the syntenic relationship is not one-to-one, so this is not an ortholog call.')));
   } else if (g.ptri) {
     kv.append(el('dt', {}, 'P. trichocarpa ortholog'),
@@ -256,7 +256,7 @@ function selectionCard(g) {
       target: '_blank', rel: 'noopener', class: 'mono' }, k.id),
       k.ag === 0
         ? el('div', { class: 'muted', style: 'font-size:12px;margin-top:2px' },
-            'This best-hit ortholog is not the one this atlas\u2019s syntenic map names. The two '
+            'This best-hit ortholog is not the one the 717 Gene Hub\u2019s syntenic map names. The two '
             + 'methods agree for 98.7% of genes; read this row with that in mind.')
         : null));
   if (k.n != null) {

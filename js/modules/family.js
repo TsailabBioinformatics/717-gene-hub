@@ -100,7 +100,7 @@ export async function familyView(geneId) {
         el('p', { style: 'margin:0;font-size:13.5px' },
           '3,348 genes are in this state, and it is a real one: a gene with no homology edge '
           + 'is not in a family. It is deliberately not given a family of one, because that '
-          + 'would make "this gene has a family" true of every gene in the atlas.'),
+          + 'would make "this gene has a family" true of every gene in the 717 Gene Hub.'),
         el('p', { style: 'margin:10px 0 0' },
           el('a', { href: `#/gene/${focal.id}` }, 'Open the gene page →'))));
   }

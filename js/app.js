@@ -234,7 +234,7 @@ route(/^\/$/, async (navigation) => {
   setView(el('div', { class: 'home' },
     el('section', { class: 'hero' },
       el('div', { class: 'kicker' }, 'Clone INRA 717-1B4 · assembly v5.1 · two phased haplotypes'),
-      el('h1', {}, 'Hybrid poplar 717 gene atlas'),
+      el('h1', {}, '717 Gene Hub'),
       el('p', { class: 'lede' },
         `${fmt(man.n_genes)} gene models across the two phased haplotypes of `,
         el('em', {}, 'Populus tremula'), ' × ', el('em', {}, 'P. alba'),
@@ -1177,7 +1177,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
         releaseLine(man),
         ' · ', el('a', { href: '#/downloads' }, 'downloads'),
         ' · ', el('a', { href: '#/glossary' }, 'glossary'),
-        ' · ', el('a', { href: `mailto:${CONTACT}?subject=Poplar%20717%20gene%20atlas` }, 'contact / report a problem'),
+        ' · ', el('a', { href: `mailto:${CONTACT}?subject=717%20Gene%20Hub` }, 'contact / report a problem'),
         ' · ', el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, 'repository'),
         ' · ', el('a', { href: '#/module/about' }, 'about')));
     }

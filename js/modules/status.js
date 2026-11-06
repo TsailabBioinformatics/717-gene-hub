@@ -107,7 +107,7 @@ export async function statusView() {
         'Each check tests the published data against itself: that a gene ID resolves to its '
         + 'record, that a link is not dangling, that a count matches the set it claims. None of '
         + 'them can tell you an upstream measurement or inference was correct, only that the '
-        + 'atlas did not corrupt or contradict it.'),
+        + '717 Gene Hub did not corrupt or contradict it.'),
       el('p', { class: 'muted', style: 'font-size:12.5px;margin:10px 0 0' },
         'A check that passes over zero rows proves nothing, and this project has shipped exactly '
         + 'that once: "every pointer resolves" passed while iterating over an empty set. Where a '

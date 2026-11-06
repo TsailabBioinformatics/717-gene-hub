@@ -263,7 +263,7 @@ async function alleleCorrelation(a, b, holder) {
         + 'correlation is driven by noise. This is raw TPM on a combined-transcriptome '
         + 'quantification, NOT allele-specific expression: reads that map equally well to '
         + 'both alleles are not resolved here, so a high correlation partly reflects that. '
-        + 'Read-level ASE is not in this atlas.'));
+        + 'Read-level ASE is not in the 717 Gene Hub.'));
   } catch (e) {
     holder.textContent = `Correlation unavailable: ${e.message}`;
   }

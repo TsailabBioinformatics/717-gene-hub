@@ -288,7 +288,7 @@ export async function arrayView(aid) {
       el('div', { class: 'stat' }, el('div', { class: 'n' }, genes[0].td && genes[0].td.ks != null ? genes[0].td.ks : '–'), el('div', { class: 'l' }, 'array median Ks')),
       el('div', { class: 'stat' }, el('div', { class: 'n' }, (genes[0].td && genes[0].td.age ? ageBinName(genes[0].td.age) : '–')), el('div', { class: 'l' }, 'age bin'))),
     el('div', { class: 'arr-actions' },
-      el('a', { class: 'btn', href: '#', 'data-arr-tsv': '', onclick: (e) => { e.preventDefault(); download(`717atlas_${aid}_members.tsv`, tsv(genes)); } }, 'Download members (TSV)'),
+      el('a', { class: 'btn', href: '#', 'data-arr-tsv': '', onclick: (e) => { e.preventDefault(); download(`717genehub_${aid}_members.tsv`, tsv(genes)); } }, 'Download members (TSV)'),
       saveBtn,
       el('a', { class: 'btn ghost', href: browseHref({ hap, chr, tandem: 'yes' }) }, `Tandem genes on ${chr} in Browse`),
       el('a', { class: 'btn ghost', href: '#/arrays' }, 'All arrays')),

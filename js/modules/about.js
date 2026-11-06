@@ -27,7 +27,7 @@ function overview(man) {
     el('div', { class: 'card', 'data-contact': '' },
       el('h2', {}, 'Contact and feedback'),
       el('p', { style: 'margin:0;font-size:13.5px' },
-        'Questions, corrections and requests: ', el('a', { href: `mailto:${CONTACT}?subject=Poplar%20717%20gene%20atlas` }, CONTACT),
+        'Questions, corrections and requests: ', el('a', { href: `mailto:${CONTACT}?subject=717%20Gene%20Hub` }, CONTACT),
         ' (Tsai lab, University of Georgia). Site code and released data: ',
         el('a', { href: REPO_URL, target: '_blank', rel: 'noopener' }, REPO_URL.replace('https://', '')),
         '. Terms are defined in the ', el('a', { href: '#/glossary' }, 'glossary'),
@@ -36,7 +36,7 @@ function overview(man) {
     el('div', { class: 'card' },
       el('h2', {}, 'What this is'),
       el('p', { style: 'margin:0 0 10px;font-size:14px;color:var(--ink-2)' },
-        'A browsable atlas of the 63,960 gene models in the two phased haplotypes of hybrid '
+        'The 717 Gene Hub is a browsable collection of the 63,960 gene models in the two phased haplotypes of hybrid '
         + 'poplar clone INRA 717-1B4 (Populus tremula × P. alba), genome and annotation v5.1 (Phytozome). '
         + 'HAP1 is the maternal P. tremula haplotype and HAP2 the paternal P. alba haplotype. It is the '
         + 'data supplement of a dissertation on gene duplication and lineage-specific genes in this clone, '
@@ -108,7 +108,7 @@ function overview(man) {
           + '41% of genes called private have a detectable P. alba homolog, against 98.8% of core '
           + 'genes, so the call is conditional on the panel.'),
         el('li', {}, el('strong', {}, 'ω is undefined for 785 syntelog pairs '),
-          'whose Ks is 0. The aligner reports 99.0 there; the atlas shows "identical at '
+          'whose Ks is 0. The aligner reports 99.0 there; the 717 Gene Hub shows "identical at '
           + 'synonymous sites" instead, never a selection claim.'),
         el('li', {}, el('strong', {}, 'Expression is raw TPM by default. '),
           'Use it for tissue specificity and per-gene magnitude. A ComBat-seq batch-corrected '
@@ -157,9 +157,9 @@ function overview(man) {
     el('div', { class: 'card' },
       el('h2', {}, 'Citation & licence'),
       el('p', { style: 'margin:0 0 8px;font-size:13.5px', 'data-cite-note': '' }, CITE_NOTE),
-      el('p', { style: 'margin:0 0 6px;font-size:13.5px' }, 'Until then, cite this atlas as:'),
+      el('p', { style: 'margin:0 0 6px;font-size:13.5px' }, 'Until then, cite the 717 Gene Hub as:'),
       el('p', { class: 'cite-line', 'data-cite': '', style: 'margin:0 0 10px;font-size:13.5px;padding:8px 10px;border-left:3px solid var(--accent)' },
-        `Hsieh et al., unpublished. Poplar 717 gene atlas, version ${man.data_version || ''}. `,
+        `Hsieh et al., unpublished. 717 Gene Hub, version ${man.data_version || ''}. `,
         el('a', { href: SITE_URL }, SITE_URL),
         `. Accessed ${new Date().toISOString().slice(0, 10)}.`),
       el('p', { style: 'margin:0 0 8px;font-size:13px;color:var(--ink-2)' },
@@ -167,7 +167,7 @@ function overview(man) {
         + 'A machine-readable record is in ', el('a', { href: 'CITATION.cff' }, 'CITATION.cff'), '.'),
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
         'Code is MIT (', el('a', { href: `${REPO_URL}/blob/main/LICENSE`, target: '_blank', rel: 'noopener' }, 'LICENSE'),
-        '). Data are provided for research use; please cite the atlas as above. A formal open data licence '
+        '). Data are provided for research use; please cite the 717 Gene Hub as above. A formal open data licence '
         + 'has not been set yet; CC BY 4.0 is intended at publication.'),
       el('p', { class: 'muted', style: 'margin:8px 0 0;font-size:12.5px', 'data-ai-ack': '' }, AI_ACK)),
   );

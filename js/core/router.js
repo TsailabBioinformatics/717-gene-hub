@@ -14,7 +14,7 @@ let activeScope = null;
 // Each page names itself in the tab title, and after a navigation keyboard focus moves to the
 // page heading, so a screen reader announces the new page instead of staying silent. Pages
 // build their heading after data arrives, so the heading is picked up when it appears.
-const SITE = '717 gene atlas';
+const SITE = '717 Gene Hub';
 let headingWanted = null;     // { generation, focus } until this render's heading shows up
 let firstRender = true;
 
@@ -84,7 +84,7 @@ function routeError(path, error, retry) {
   const title = document.createElement('h2');
   title.textContent = 'Could not load this page';
   const explanation = document.createElement('p');
-  explanation.textContent = 'The atlas data could not be loaded. Check your connection and try again.';
+  explanation.textContent = 'The data could not be loaded. Check your connection and try again.';
   const button = document.createElement('button');
   button.type = 'button';
   button.textContent = 'Try again';

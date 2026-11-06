@@ -329,7 +329,7 @@ function download(name, text, type = 'text/tab-separated-values;charset=utf-8') 
 
 function safeFileStem(name) {
   const stem = name.replace(/[^A-Za-z0-9._-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 80);
-  return stem || '717atlas_gene_set';
+  return stem || '717genehub_gene_set';
 }
 
 async function exportTSV(state, onStatus = () => {}) {
@@ -343,7 +343,7 @@ async function exportTSV(state, onStatus = () => {}) {
                 'ms_datasets_detected_of_5', 'ancestral_chromosome', 'aWGT_copy', 'sWGD_copy',
                 'allele_gene_id', 'allele_chr', 'duplicate_partner_ids'];
   const lines = [
-    `# Poplar 717 gene atlas, data v${dataVersion()}, exported ${new Date().toISOString().slice(0, 10)}`,
+    `# 717 Gene Hub, data v${dataVersion()}, exported ${new Date().toISOString().slice(0, 10)}`,
     '# sWGD / aWGT: the adopted whole-genome duplication call (anchor-pair Ks and karyotype topology)',
     '# tau and peak tissue: mean TPM in 9 tissue groups of the 222-sample reference panel; empty where no group mean reaches 5 TPM',
     '# Published counts use quality-filtered genes only: keep quality_flagged = no to reproduce them',
@@ -390,7 +390,7 @@ async function exportTSV(state, onStatus = () => {}) {
           ((g && g.para) || []).map((q) => q.id).join(';')];
       })()].join('\t'));
   }
-  download(`717atlas_v${dataVersion()}_selection_${state.matches.length}genes.tsv`, lines.join('\n') + '\n');
+  download(`717genehub_v${dataVersion()}_selection_${state.matches.length}genes.tsv`, lines.join('\n') + '\n');
 }
 
 /** Build a Browse URL with filters pre-applied, for an overview chart to link to.
@@ -756,7 +756,7 @@ export async function browseView(navigation) {
     await Promise.all(Array.from({ length: 8 }, worker));
     const text = ids.filter((id) => out.has(id)).map((id) => out.get(id)).join('')
       + (missing.length ? `; no sequence for ${missing.length} gene(s): ${missing.join(' ')}\n` : '');
-    download(`717atlas_selection_${out.size}_${name.toLowerCase()}.${kind === 'p' ? 'faa' : 'fna'}`, text, 'text/plain;charset=utf-8');
+    download(`717genehub_selection_${out.size}_${name.toLowerCase()}.${kind === 'p' ? 'faa' : 'fna'}`, text, 'text/plain;charset=utf-8');
     actStatus.textContent = (`Downloaded ${fmt(out.size)} ${kind === 'c' ? 'CDS' : name.toLowerCase()} sequences`
       + (missing.length ? `; ${fmt(missing.length)} could not be fetched and are listed at the end of the file.` : '.'));
     faBtn.textContent = 'FASTA';
@@ -844,7 +844,7 @@ export async function browseView(navigation) {
   el('button', {
     type: 'button',
     onclick: () => {
-      download('717atlas_saved_sets.json', `${JSON.stringify(exportSets({ data_version: dataVersion() }), null, 2)}\n`,
+      download('717genehub_saved_sets.json', `${JSON.stringify(exportSets({ data_version: dataVersion() }), null, 2)}\n`,
         'application/json;charset=utf-8');
       setSavedSetStatus(`Downloaded ${allSets().length} saved set${allSets().length === 1 ? '' : 's'} as JSON.`);
     },

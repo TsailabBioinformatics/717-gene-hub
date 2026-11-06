@@ -33,7 +33,7 @@ export async function downloadsView(man) {
         ' on macOS), or all of them against ', el('a', { href: 'downloads/MD5SUMS.txt' }, 'MD5SUMS.txt'), '.'),
       el('p', { style: 'margin:0 0 6px;font-size:13px', 'data-cite-note': '' }, CITE_NOTE),
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
-        'Data are provided for research use; please cite the atlas (see ', el('a', { href: '#/module/about' }, 'About'),
+        'Data are provided for research use; please cite the 717 Gene Hub (see ', el('a', { href: '#/module/about' }, 'About'),
         ') and the underlying study for any expression data. The raw expression matrix is not distributed here; '
         + 'each study’s reads are public under the accessions in the RNA-seq library table.')),
     ...groups.map((g) => el('div', { class: 'card' },

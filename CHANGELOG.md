@@ -9,6 +9,16 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Renamed to 717 Gene Hub
+
+The site, its page titles, citation text, README, `CITATION.cff` and download README now use the name
+717 Gene Hub, and the repository is `TsailabBioinformatics/717-gene-hub` (site address
+`https://tsailabbioinformatics.github.io/717-gene-hub/`). Exported file names begin `717genehub_`.
+The browser-storage key and the saved-sets file marker keep their old values so saved sets survive.
+The workflow guards test the repository owner rather than its name. `downloads/README.md` changed, so
+its checksum in `index.json` and `MD5SUMS.txt` changed with it. The old address keeps a small page that
+forwards to the new one.
+
 ## Browse export names each gene's partner
 
 The Browse TSV gains `allele_gene_id`, `allele_chr` and `duplicate_partner_ids`, read from the gene records for the

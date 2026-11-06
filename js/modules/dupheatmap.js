@@ -218,7 +218,7 @@ function geneCard(g) {
   const load = el('button', { class: 'btn' }, 'Load the heatmap →');
   body.append(
     el('p', { class: 'muted', style: 'font-size:12px;margin:0 0 10px' },
-      `This gene and ${p.rows.length - 1} of its duplicates over every sample in the atlas, `
+      `This gene and ${p.rows.length - 1} of its duplicates over every sample in the 717 Gene Hub, `
       + 'tandem copies, the other haplotype’s allele, and the sWGD and aWGT partners. '
       + `Each row is one full 652-value profile, fetched on demand (${p.rows.length} requests).`),
     load);

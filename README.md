@@ -1,28 +1,28 @@
-# Poplar 717 gene atlas
+# 717 Gene Hub
 
-A browsable atlas of the 63,960 gene models in the two phased haplotypes of hybrid poplar clone
+A browsable collection of the 63,960 gene models in the two phased haplotypes of hybrid poplar clone
 INRA 717-1B4 (*Populus tremula* × *P. alba*), genome v5.1. Each gene has one page bringing
 together its duplication history, its relationship to the other haplotype, gene age
 (phylostratum), promoter motifs, a predicted protein model, and expression across 652 public
 RNA-seq samples.
 
-**Open the atlas:** <https://tsailabbioinformatics.github.io/poplar-717-atlas/>
+**Open the 717 Gene Hub:** <https://tsailabbioinformatics.github.io/717-gene-hub/>
 
-Tsai lab, University of Georgia. The atlas is the data supplement of Chen Hsieh's dissertation:
+Tsai lab, University of Georgia. The 717 Gene Hub is the data supplement of Chen Hsieh's dissertation:
 its duplication classes, whole-genome duplication pairs, cross-haplotype relationship categories,
 tissue specificity and lineage-specific gene set are the dissertation's, and the master tables
-behind them are on the atlas's Downloads page (`downloads/` here).
+behind them are on its Downloads page (`downloads/` here).
 
 Questions and corrections: Chen.Hsieh@uga.edu.
 
 ## How to cite
 
-> Hsieh et al., unpublished. Poplar 717 gene atlas, version X.Y.Z.
-> https://tsailabbioinformatics.github.io/poplar-717-atlas/. Accessed YYYY-MM-DD.
+> Hsieh et al., unpublished. 717 Gene Hub, version X.Y.Z.
+> https://tsailabbioinformatics.github.io/717-gene-hub/. Accessed YYYY-MM-DD.
 
 A manuscript describing this resource will be submitted soon. Until it is published, please cite this website (version and access date); once the manuscript is available, please cite the manuscript.
 
-Use the version shown on the atlas's About page. Also cite the underlying study for any expression
+Use the version shown on the About page. Also cite the underlying study for any expression
 data you use; each study page carries its own DOI. A machine-readable record is in
 [`CITATION.cff`](CITATION.cff).
 
@@ -59,5 +59,5 @@ Analysis and site code were developed with assistance from Claude (Anthropic); t
 
 ## License
 
-Code: MIT (see [`LICENSE`](LICENSE)). Data are provided for research use; please cite the atlas
+Code: MIT (see [`LICENSE`](LICENSE)). Data are provided for research use; please cite the 717 Gene Hub
 as above. A formal open data licence has not been set yet; CC BY 4.0 is intended at publication.
