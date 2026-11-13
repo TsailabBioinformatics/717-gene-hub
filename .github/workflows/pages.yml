@@ -117,3 +117,8 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # The default is 10 minutes. On 2026-11-06 two deploys of the ~400 MB site sat in
+          # Pages' own queue (status deployment_queued) past that and failed, though the same
+          # artifact deployed in 20 s the next day. 30 minutes rides out a slow queue.
+          timeout: 1800000
