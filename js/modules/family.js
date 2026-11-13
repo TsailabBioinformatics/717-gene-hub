@@ -187,7 +187,7 @@ export async function familyView(geneId) {
         + 'assumes that position in a scientific figure means something. Graph distance is what '
         + 'the data supports, and it is exact.'),
       el('p', { class: 'muted', style: 'font-size:12px;margin:10px 0 0' },
-        'The ', el('a', { href: `#/gene/${focal.id}` }, 'Duplication layers'),
+        'The ', el('a', { href: `#/gene/${focal.id}` }, 'Duplication origins'),
         ' card on the gene page does draw the geometry, for the one hop where every link has a '
         + 'real dS and a real genomic position.')));
 }

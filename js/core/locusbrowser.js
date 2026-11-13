@@ -285,17 +285,46 @@ function drawChrView(ctx, view, M) {
       }
       const rowId = g.d < 0 ? 'minus' : 'plus';
       const r = L.rows[rowId];
-      const boxY = geneLevel ? r.y + r.h - 10 : r.y + 3;
-      const boxH = geneLevel ? 8 : r.h - 6;
+      const boxY = geneLevel ? r.y + r.h - 12 : r.y + 3;
+      const boxH = geneLevel ? 10 : r.h - 6;
       ctx.fillStyle = hov ? T.ink : marked ? T.accent : T.ink2;
       if (geneLevel && tile && tile.f && gw > 16) {
         // exon structure: thin intron line, UTR half-height, CDS full height
-        ctx.fillRect(x0, boxY + boxH / 2 - 0.5, gw, 1);
-        for (const [off, len, cds] of tile.f) {
+        const midY = boxY + boxH / 2;
+        ctx.fillRect(x0, midY - 0.5, gw, 1);
+        const sorted = [...tile.f].sort((a, b) => a[0] - b[0]);
+        // Strand chevrons along each intron, as JBrowse and the UCSC browser draw them: a small
+        // ">" on the plus strand, "<" on the minus strand, every 9 px where the intron is long enough.
+        ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 1;
+        const dir = g.d < 0 ? -1 : 1;
+        for (let k = 0; k + 1 < sorted.length; k++) {
+          const a = Math.max(GUTTER, xOf(win, g.s + sorted[k][0] + sorted[k][1]));
+          const b = Math.min(GUTTER + plotW, xOf(win, g.s + sorted[k + 1][0]));
+          if (b - a < 8) continue;
+          for (let cx = a + 4.5; cx < b - 2; cx += 9) {
+            ctx.beginPath();
+            ctx.moveTo(cx - dir * 1.5, midY - 2.5);
+            ctx.lineTo(cx + dir * 1.5, midY);
+            ctx.lineTo(cx - dir * 1.5, midY + 2.5);
+            ctx.stroke();
+          }
+        }
+        for (const [off, len, cds] of sorted) {
           const ex0 = Math.max(GUTTER, xOf(win, g.s + off)), ex1 = Math.min(GUTTER + plotW, xOf(win, g.s + off + len));
           if (ex1 <= ex0) continue;
-          const eh = cds ? boxH : boxH / 2;
+          // coding parts full height, untranslated parts clearly thinner
+          const eh = cds ? boxH : Math.max(2, boxH * 0.45);
           ctx.fillRect(ex0, boxY + (boxH - eh) / 2, Math.max(1, ex1 - ex0), eh);
+        }
+        // Direction arrow at the 3' end of the gene (right end on the plus strand, left on the minus).
+        const tipX = dir > 0 ? x1 : x0;
+        if ((dir > 0 && x1 < GUTTER + plotW - 5) || (dir < 0 && x0 > GUTTER + 5)) {
+          ctx.beginPath();
+          ctx.moveTo(tipX + dir * 5, midY);
+          ctx.lineTo(tipX, midY - 3.5);
+          ctx.lineTo(tipX, midY + 3.5);
+          ctx.closePath();
+          ctx.fill();
         }
       } else {
         ctx.fillRect(x0, boxY, gw, boxH);

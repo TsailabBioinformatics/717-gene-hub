@@ -5,6 +5,10 @@ import { el } from '../core/dom.js';
 
 const RELEASES = [
   ['0.22.1', '2026-10-17', 'Study labels, read counts and expression statistics', [
+    'On a gene page, every study in the \u201cWhere the samples come from\u201d grid is now listed with a link to its own study page (2026-11-13).',
+    'The word \u201clayer\u201d is now \u201cdata type\u201d in the menu, About page and Browse. On the gene page, the three kinds of duplication are now called origins (2026-11-13).',
+    'The gene map draws gene structure the way genome browsers do: coding exons as thick boxes, untranslated parts thinner, introns as thin lines with small arrowheads showing the strand, and an arrow at the end of each gene (2026-11-13).',
+    'Gall samples (6 samples, all from one study) are now counted as root wherever samples are grouped by tissue (2026-11-13).',
     'The site is now called 717 Gene Hub, at tsailabbioinformatics.github.io/717-gene-hub. The old address forwards to it, and file names exported from the site begin 717genehub_ (2026-11-06).',
     'The Browse export now lists, for every gene, its partner on the other haplotype (with that partner\u2019s chromosome) and its duplicate partners, and says where the full pair tables are on the Downloads page (2026-10-29).',
     'Pages no longer carry internal labels about how each value was produced; the Duplication page is now the Duplicated gene catalog (2026-10-20).',

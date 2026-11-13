@@ -162,6 +162,15 @@ export function designGrid(samples, studies, hub, vecs = [], geneId = '') {
       el('span', { class: 'dmap-key' }), ' treatments or transgenic lines only. A selected cell is outlined; a '
       + 'dashed outline means only some of its samples are in the selection.'),
     el('div', { class: 'dmap-scroll' }, grid),
+    // The column numbers select samples; this list opens each study's own page (what it is, its
+    // samples and conditions, its accession).
+    el('p', { class: 'dmap-studies', 'data-dmap-studies': '' }, 'Studies: ',
+      ...sids.flatMap((sid, k) => {
+        const lab = studyLabel(studies, sid);
+        const a = el('a', { href: `#/study/${sid}${geneId ? '?gene=' + geneId : ''}`, class: 'dmap-study-link' },
+          `${sid}${lab ? ' ' + lab : ''}`);
+        return k ? ['; ', a] : [a];
+      })),
     el('div', { class: 'dmap-foot' }, readout, studyLink, clearBtn));
 
   hub.on((sel, pinned) => {

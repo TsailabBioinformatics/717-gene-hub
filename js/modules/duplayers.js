@@ -314,7 +314,7 @@ function drawDiagram(g, built, width) {
   const inner = Math.max(120, width - PAD_X * 2);
   const svg = svgEl('svg', {
     viewBox: `0 0 ${width} ${height}`, width: '100%', height,
-    role: 'group', 'aria-label': `Duplication layers for ${g.id}; each partner gene is a link`,
+    role: 'group', 'aria-label': `Duplication origins for ${g.id}; each partner gene is a link`,
     style: 'display:block;overflow:visible',
   });
 
@@ -793,10 +793,10 @@ function geneCard(g) {
     class: 'card',
     'data-view-group': 'duplication',
     'data-view-key': 'layers',
-    'data-view-label': 'Layers',
-    'data-view-tag': 'three layers',
-  }, el('h2', {}, 'Duplication layers',
-      el('span', { class: 'tag' }, 'three layers, kept apart')));
+    'data-view-label': 'Origins',
+    'data-view-tag': 'three origins',
+  }, el('h2', {}, 'Duplication origins',
+      el('span', { class: 'tag' }, 'three origins, kept apart')));
   const stage = el('div', { style: 'margin-top:10px' });
   const status = el('p', { class: 'muted', style: 'font-size:11.5px;margin:8px 0 0' },
     'Resolving partners…');
@@ -923,9 +923,9 @@ function geneCard(g) {
           : 'this gene has no 1-to-1 allele; the other locus shown is a heuristic stand-in from its family'));
       reset.after(modeWrap, stage2wrap);
     }
-  })().catch((e) => { status.textContent = `Duplication layers unavailable: ${e.message}`; });
+  })().catch((e) => { status.textContent = `Duplication origins unavailable: ${e.message}`; });
 
   return card;
 }
 
-export default { id: 'duplayers', label: 'Duplication layers', geneCard };
+export default { id: 'duplayers', label: 'Duplication origins', geneCard };

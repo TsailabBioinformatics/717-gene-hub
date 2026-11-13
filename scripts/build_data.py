@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build static JSON shards for the poplar 717 gene atlas.
+Build static JSON shards for the 717 Gene Hub.
 
 DESIGN: the gene ID encodes its own shard, so the client needs NO index file.
     PtXaTreH.05G120200  -> hap1 / Chr05

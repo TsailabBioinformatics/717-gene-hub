@@ -9,6 +9,10 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Study links, data-type wording, gene structure on the map, gall merged into root
+
+Site only. The sample grid on the gene page lists each study with a link to its study page. "Layer" is now "data type" on reader surfaces (menu, About, Browse); the duplication card, whose "layers" are tandem, salicoid and gamma events, is now "Duplication origins". The gene map draws coding exons as thick boxes, UTRs thinner, introns as thin lines with strand chevrons, and an arrow at the 3' end. Gall samples (6 samples, study 20; none is in the 222-sample reference panel) are counted as root when the sample table loads (`loadExprSamples`, original kept in `tissue_original`), so per-gene tissue means and tau are unchanged; only sample counts in the sample grid and study lists change (root 76 to 82 samples). Remaining old-name references (MAINTAINING, TODO, build script docstring, redirect page, two Saved-sets messages) now say 717 Gene Hub.
+
 ## Renamed to 717 Gene Hub
 
 The site, its page titles, citation text, README, `CITATION.cff` and download README now use the name

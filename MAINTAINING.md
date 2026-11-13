@@ -1,4 +1,4 @@
-# Maintaining the Poplar 717 gene atlas
+# Maintaining the 717 Gene Hub
 
 For whoever looks after the site in the Tsai lab. You do not need to be a programmer for most of it,
 and most of the time nothing needs doing at all.

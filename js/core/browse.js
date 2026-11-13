@@ -411,7 +411,7 @@ export async function browseView(navigation) {
       el('div', { class: 'kicker' }, 'Query builder'),
       el('h1', {}, 'Browse'),
       el('p', { class: 'sub' },
-        'Filter all 63,960 genes across every layer at once, then export the selection or keep '
+        'Filter all 63,960 genes across every data type at once, then export the selection or keep '
         + 'it as a named set. Each option shows how many genes it would leave.')));
   navigation?.track?.(root);
 

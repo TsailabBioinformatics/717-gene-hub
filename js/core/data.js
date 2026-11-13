@@ -213,8 +213,25 @@ export async function loadAllShards(onProgress) {
 }
 
 /* ---------- expression ---------- */
-export const loadExprSamples = () => fetchJSON('data/expr/samples.json');
-export const loadExprStudies = () => fetchJSON('data/expr/studies.json');
+// Gall samples are counted as root everywhere the site groups samples by tissue (lab rule, 2026-11).
+// The original label stays in `tissue_original`. Done once, in place, so every view agrees.
+export const loadExprSamples = () => fetchJSON('data/expr/samples.json').then((rows) => {
+  for (const s of rows) {
+    if (s.tissue_analysis === 'gall' || s.tissue === 'gall') {
+      s.tissue_original = 'gall';
+      if (s.tissue === 'gall') s.tissue = 'root';
+      if (s.tissue_analysis === 'gall') s.tissue_analysis = 'root';
+      if (s.tissue_full === 'gall') s.tissue_full = 'root';
+    }
+  }
+  return rows;
+});
+export const loadExprStudies = () => fetchJSON('data/expr/studies.json').then((st) => {
+  for (const s of Object.values(st)) {
+    if (Array.isArray(s.tissues) && s.tissues.includes('gall')) s.tissues = [...new Set(s.tissues.map((t) => (t === 'gall' ? 'root' : t)))];
+  }
+  return st;
+});
 /** One gene's own bytes out of a concatenated blob of per-gene gzip members.
  *
  *  GitHub Pages answers a Range request with a real 206 and serves the range

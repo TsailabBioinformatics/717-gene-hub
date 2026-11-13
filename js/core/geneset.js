@@ -92,14 +92,14 @@ function normaliseName(name) {
 
 function normaliseIds(ids) {
   if (!ids || typeof ids === 'string' || typeof ids[Symbol.iterator] !== 'function') {
-    throw geneSetError('A saved set needs a list of atlas gene IDs.');
+    throw geneSetError('A saved set needs a list of 717 Gene Hub gene IDs.');
   }
   const seen = new Set();
   const out = [];
   for (const raw of ids) {
     if (typeof raw !== 'string') throw geneSetError('Every saved-set entry must be a text gene ID.');
     const id = raw.trim();
-    if (!GENE_ID_RE.test(id)) throw geneSetError(`"${id || raw}" is not a 717 atlas gene ID.`);
+    if (!GENE_ID_RE.test(id)) throw geneSetError(`"${id || raw}" is not a 717 Gene Hub gene ID.`);
     if (seen.has(id)) continue;
     seen.add(id);
     out.push(id);
@@ -162,7 +162,7 @@ function normaliseDocument(value) {
     throw geneSetError('The selected JSON belongs to a different kind of document.');
   }
   if (value.schema_version == null) {
-    throw geneSetError('The selected file is not a saved-sets export from this atlas (use “Export sets JSON” to make one).');
+    throw geneSetError('The selected file is not a saved-sets export from 717 Gene Hub (use “Export sets JSON” to make one).');
   }
   if (value.schema_version !== SCHEMA_VERSION) {
     throw geneSetError(`This file uses saved-set schema ${String(value.schema_version)}; version ${SCHEMA_VERSION} is required.`);

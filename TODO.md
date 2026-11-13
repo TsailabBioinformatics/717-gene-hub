@@ -1,6 +1,6 @@
 # Enhancements
 
-Planned or wished-for improvements to the Poplar 717 gene atlas. Suggestions are welcome: open
+Planned or wished-for improvements to 717 Gene Hub. Suggestions are welcome: open
 an issue, or tell the Tsai lab.
 
 ## Pages and figures
@@ -16,6 +16,6 @@ an issue, or tell the Tsai lab.
 - [ ] Extra evidence for the youngest genes (phylostratum 19), such as protein-coding potential scores.
 
 ## Housekeeping
-- [ ] When the atlas paper is on bioRxiv, replace the "Hsieh et al., unpublished" citation (About page, README, CITATION.cff) with the preprint and its DOI.
+- [ ] When the 717 Gene Hub paper is on bioRxiv, replace the "Hsieh et al., unpublished" citation (About page, README, CITATION.cff) with the preprint and its DOI.
 - [ ] Tidy the formatting of two study citations on the study pages.
-- [ ] Keep the public copy of the atlas in step with each release.
+- [ ] Keep the public copy of 717 Gene Hub in step with each release.

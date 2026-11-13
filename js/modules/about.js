@@ -52,16 +52,16 @@ function overview(man) {
 
     // TODO 45: the structured home for genome-wide numbers. Chen's review asked whether the
     // stat-only module pages should fold in here. They earned their place instead, by becoming
-    // launchers into Browse -- so this is the one place that states every layer's COVERAGE,
+    // launchers into Browse -- so this is the one place that states every data type's COVERAGE,
     // which is the number a reader actually needs and which no single module page showed.
     el('div', { class: 'card' },
-      el('h2', {}, 'What each layer covers', el('span', { class: 'tag' }, 'genome-wide')),
+      el('h2', {}, 'What each data type covers', el('span', { class: 'tag' }, 'genome-wide')),
       el('p', { class: 'muted', style: 'font-size:12.5px;margin:0 0 10px' },
-        'Coverage is not uniform, and an absent value usually means a layer does not reach '
+        'Coverage is not uniform, and an absent value usually means a data type does not reach '
         + 'that gene rather than that the gene lacks the property. Every figure below is out '
         + 'of ' + fmt(man.n_genes) + ' genes.'),
       el('div', { class: 'scroll-x' }, el('table', { class: 'data' },
-        el('thead', {}, el('tr', {}, el('th', {}, 'Layer'), el('th', { class: 'num' }, 'Genes'),
+        el('thead', {}, el('tr', {}, el('th', {}, 'Data type'), el('th', { class: 'num' }, 'Genes'),
           el('th', { class: 'num' }, 'Share'), el('th', {}, 'What absence means'))),
         el('tbody', {}, ...[
           ['Synteny class', man.n_genes, 'Every gene is classified.'],

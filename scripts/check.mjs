@@ -738,14 +738,14 @@ await check('gene-duplayers-tandem', '#/gene/PtXaTreH.08G070600',
   // 'three layers' is the layers VIEW's own tag. The old expectation was the
   // heading 'Duplication layers', which the merge replaced with the group heading
   // 'Duplication' -- the view is now named by its tab and its tag, not by an <h2>.
-  { expect: ['three layers', 'tandem duplication', 'ds 0.', 'array’s median ds',
+  { expect: ['three origins', 'tandem duplication', 'ds 0.', 'array’s median ds',
              'this gene + 3 array members'], wait: 1800 });
 // A gene with partners on OTHER chromosomes plus a HAP2 allele: the multi-track case, and the
 // one where the allele must be labelled as not a duplication.
 await check('gene-duplayers-wgd', '#/gene/PtXaTreH.17G070400',
   // The allele no longer gets a ROW of its own (a full track and a link crossing the figure,
   // to say a 1-to-1 thing). It is named in words beside the compare button instead.
-  { expect: ['three layers', 'ancient whole-genome triplication (aWGT)',
+  { expect: ['three origins', 'ancient whole-genome triplication (aWGT)',
              'the same gene on the other haplotype is',
              'not a duplication'], wait: 2200 });
 // The per-PAIR tandem dS is a NEW column and is not td.ks. Assert both the column and the
@@ -3156,6 +3156,34 @@ for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G0001
     && body.some((r) => r[ca]);
   if (!ok) failures++;
   console.log(`\n### browse:export-partners  ${ok ? 'OK' : 'FAIL'}  rows=${body.length}  alleles=${body.map((r) => r[ca]).join(',')}`);
+  errs.forEach((e) => console.log('   !! ' + e));
+  await ctx.close();
+}
+
+// Gene page, expression card: every study in the sample grid links to its own study page, and
+// gall samples are counted as root (lab rule), so no "gall" tissue group appears anywhere.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1180, height: 1000 } });
+  const p = await ctx.newPage();
+  const errs = [];
+  p.on('pageerror', (e) => errs.push(e.message));
+  await p.goto(base + '/#/gene/PtXaTreH.05G120200', { waitUntil: 'networkidle' });
+  await p.waitForSelector('[data-dmap-studies] a', { timeout: 20000 });
+  const r = await p.evaluate(async () => {
+    const links = [...document.querySelectorAll('[data-dmap-studies] a')].map((a) => a.getAttribute('href'));
+    const cols = [...document.querySelectorAll('.dmap-col')].map((b) => b.textContent.trim());
+    const rows = [...document.querySelectorAll('.dmap-row')].map((b) => b.textContent.trim());
+    const d = await import('./js/core/data.js');
+    const s = await d.loadExprSamples();
+    const st = await d.loadExprStudies();
+    return { links, cols, rows, gall: s.filter((x) => x.tissue_analysis === 'gall' || x.tissue === 'gall').length,
+      kept: s.filter((x) => x.tissue_original === 'gall').length, studyGall: JSON.stringify(st).includes('"gall"') };
+  });
+  const ok = !errs.length && r.links.length === r.cols.length && r.links.length > 5
+    && r.links.every((h) => /^#\/study\/\d+/.test(h)) && !r.rows.includes('gall')
+    && r.gall === 0 && r.kept === 6 && !r.studyGall;
+  if (!ok) failures++;
+  console.log(`\n### expression:study-links-and-gall  ${ok ? 'OK' : 'FAIL'}  links=${r.links.length} cols=${r.cols.length} gallLeft=${r.gall} kept=${r.kept}`);
   errs.forEach((e) => console.log('   !! ' + e));
   await ctx.close();
 }

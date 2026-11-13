@@ -220,7 +220,7 @@ route(/^\/$/, async (navigation) => {
 
   // Where to go next, as places rather than as the module list: each tile is a page.
   const EXPLORE = [
-    ['#/browse', 'Browse', 'Filter every gene across every layer; export or save the set.'],
+    ['#/browse', 'Browse', 'Filter every gene across every data type; export or save the set.'],
     ['#/map', 'Genome map', 'Both haplotypes chromosome by chromosome, down to single genes.'],
     ['#/karyotype', 'Ancestral karyotype', 'Each gene placed on the ancestral eudicot karyotype.'],
     ['#/module/expression', 'Expression', `${fmt(e.n_samples)} samples from ${e.n_studies} curated studies.`],
@@ -239,7 +239,7 @@ route(/^\/$/, async (navigation) => {
         `${fmt(man.n_genes)} gene models across the two phased haplotypes of `,
         el('em', {}, 'Populus tremula'), ' × ', el('em', {}, 'P. alba'),
         '. Each gene page draws on synteny across a 12-genome panel, a phylostratum, functional '
-        + 'annotation, its allele, and an expression profile. Coverage varies by layer; the ',
+        + 'annotation, its allele, and an expression profile. Coverage varies by data type; the ',
         el('a', { href: '#/module/about' }, 'About page'), ' gives it for each.'),
       heroSearch,
       el('p', { class: 'hero-eg' }, 'Try ',
@@ -288,7 +288,7 @@ route(/^\/$/, async (navigation) => {
       el('div', { class: 'card' },
         el('h2', {}, 'Modules'),
         el('p', { class: 'muted', style: 'margin:0 0 10px;font-size:13px' },
-          'Each gene page is built from these layers.'),
+          'Each gene page is built from these data types.'),
         el('div', { class: 'kv' }, ...MODULES.filter((m) => MODULE_BLURB[m.id]).flatMap((m) => [
           el('dt', {}, m.overview
             ? el('a', { href: `#/module/${m.id}` }, m.label)
@@ -483,7 +483,7 @@ function mergeViewGroups(cards) {
   groups.forEach((members) => {
     if (members.length < 2) return;            // nothing to merge; leave the card alone
     const titleText = (members[0].querySelector('h2')?.childNodes[0]?.textContent || '').trim()
-      .replace(/\s+layers$/i, '');             // "Duplication layers" -> "Duplication"
+      .replace(/\s+(?:layers|origins)$/i, '');             // "Duplication layers" -> "Duplication"
     const tagSpan = el('span', { class: 'tag' }, members[0].getAttribute('data-view-tag') || '');
     const tabs = el('div', { class: 'viewtabs', role: 'tablist' });
     const host = el('div', {
@@ -1141,7 +1141,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
   if (layers.length) {
     const panel = el('div', { class: 'navmenu-panel' },
       ...layers.map((m) => el('a', { href: `#/module/${m.id}` }, m.label)));
-    const menu = el('details', { class: 'navmenu' }, el('summary', {}, 'Layers'), panel);
+    const menu = el('details', { class: 'navmenu' }, el('summary', {}, 'Data type'), panel);
     // Close after a choice, and on Escape or a click elsewhere -- a <details> menu that
     // stays open over the page is worse than the flat row it replaced.
     panel.addEventListener('click', () => { menu.open = false; });
