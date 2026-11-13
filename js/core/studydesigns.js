@@ -86,5 +86,5 @@ export function sampleTissue(s) {
     const site = String(s.label || '').split('_')[1];
     if (site) return site;
   }
-  return s.tissue_analysis || s.tissue_full || s.tissue;
+  return s.tissue_original || s.tissue_analysis || s.tissue_full || s.tissue;
 }
