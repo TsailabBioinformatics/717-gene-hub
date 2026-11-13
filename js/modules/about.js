@@ -5,11 +5,11 @@ import { SITE_URL, REPO_URL, CONTACT, GENOME, PAPER_TAU_HOW, CITE_NOTE, AI_ACK }
 
 // What each upstream table is, in a reader's words; the file names are in the build manifest.
 const SOURCE_LABEL = [
-  ['master_per_gene', 'per-gene table of the dissertation (under Downloads)'],
+  ['master_per_gene', 'per-gene master table (under Downloads)'],
   ['wgd_pair_classes', 'whole-genome duplication anchor-pair calls'],
   ['v4_panel', 'sample list of the 222-sample reference panel'],
   ['combined_tpm', 'TPM matrix, 652 samples'],
-  ['Table_3', 'lineage-specific gene table (dissertation Tables 3.S1 to 3.S3)'],
+  ['Table_3', 'lineage-specific gene tables'],
 ];
 
 function overview(man) {
@@ -38,9 +38,9 @@ function overview(man) {
       el('p', { style: 'margin:0 0 10px;font-size:14px;color:var(--ink-2)' },
         'The 717 Gene Hub is a browsable collection of the 63,960 gene models in the two phased haplotypes of hybrid '
         + 'poplar clone INRA 717-1B4 (Populus tremula × P. alba), genome and annotation v5.1 (Phytozome). '
-        + 'HAP1 is the maternal P. tremula haplotype and HAP2 the paternal P. alba haplotype. It is the '
-        + 'data supplement of a dissertation on gene duplication and lineage-specific genes in this clone, '
-        + 'and a general-purpose resource for anyone working in it.'),
+        + 'HAP1 is the maternal P. tremula haplotype and HAP2 the paternal P. alba haplotype. It covers '
+        + 'gene duplication and lineage-specific genes in this clone, '
+        + 'and is meant for anyone working in it.'),
       el('dl', { class: 'kv' },
         el('dt', {}, 'Genes'), el('dd', {}, `${fmt(man.n_genes)}: HAP1 32,137 (PtXaTreH), HAP2 31,823 (PtXaAlbH)`),
         el('dt', {}, 'Synteny'), el('dd', {}, 'GENESPACE over a 12-genome panel (10 syntenic + O. sativa / P. patens as orthogroup-only outgroups)'),

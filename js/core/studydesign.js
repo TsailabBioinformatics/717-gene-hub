@@ -81,8 +81,9 @@ function timeAxis(t, cols, colKeys, ids, samples, problems) {
 export function designOf(studyId, samples) {
   const spec = DESIGNS[studyId] || {};
   // the tissue factor reads the sampling site where the metadata lost it (studydesigns.js)
-  // Study pages keep a gall sample's own tissue (`tissue_original`): the curated comparisons of study 20 are
-  // defined on it, and pooling it with root would merge two groups a comparison keeps apart.
+  // Study pages keep a sample's own tissue (`tissue_original`) where the site merges groups (gall into
+  // root, young and old leaf into leaf): the curated comparisons of study 20 (gall vs root) and study 1
+  // (young vs old leaf) are defined on it, and pooling would merge groups a comparison keeps apart.
   const lev = (s, f) => (f === 'tissue_analysis' && spec.siteFromLabel ? sampleTissue(s) : f === 'tissue_analysis' && s.tissue_original ? s.tissue_original : levOf(s, f));
   const ids = samples.map((s, i) => (s.study === studyId ? i : -1)).filter((i) => i >= 0);
   const levels = Object.fromEntries(FACTORS.map((f) => [f, new Set(ids.map((i) => lev(samples[i], f)))]));

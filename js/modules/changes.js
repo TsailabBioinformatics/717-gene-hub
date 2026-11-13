@@ -5,7 +5,10 @@ import { el } from '../core/dom.js';
 
 const RELEASES = [
   ['0.22.1', '2026-10-17', 'Study labels, read counts and expression statistics', [
-    'On a gene page, every study in the \u201cWhere the samples come from\u201d grid is now listed with a link to its own study page (2026-11-13).',
+    'On a gene page, hovering a study number in the \u201cWhere the samples come from\u201d grid shows a small card with the study name, author, year and key facts; clicking keeps it open, and its link opens the study page. The long list under the grid is gone (2026-11-13).',
+    'Young leaf, old leaf and whole-leaf samples are now grouped as one leaf wherever samples are grouped by tissue. Study pages keep the original labels (2026-11-13).',
+    'On the gene map, genes too small to show exons are drawn as arrow-shaped blocks, so the strand shows at most zooms. Dragging with the mouse or swiping sideways now moves along the chromosome; hold Shift while dragging to zoom (2026-11-13).',
+    'The Download page no longer lists the supplementary tables, and the header reads \u201c717 gene hub\u201d (2026-11-13).',
     'The word \u201clayer\u201d is now \u201cdata type\u201d in the menu, About page and Browse. On the gene page, the three kinds of duplication are now called origins (2026-11-13).',
     'The gene map draws gene structure the way genome browsers do: coding exons as thick boxes, untranslated parts thinner, introns as thin lines with small arrowheads showing the strand, and an arrow at the end of each gene (2026-11-13).',
     'Gall samples (6 samples, all from one study) are now counted as root wherever samples are grouped by tissue; study 20\u2019s own page still names them, because its comparisons set gall against root (2026-11-13).',

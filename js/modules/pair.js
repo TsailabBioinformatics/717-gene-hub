@@ -367,7 +367,7 @@ export async function pairView(id) {
       models),
 
     el('div', { class: 'card' },
-      el('h2', {}, 'The locus on both haplotypes', el('span', { class: 'tag' }, 'drag to zoom')),
+      el('h2', {}, 'The locus on both haplotypes', el('span', { class: 'tag' }, 'drag to move')),
       locus),
 
     el('div', { class: 'card' },

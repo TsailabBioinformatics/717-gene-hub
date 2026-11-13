@@ -4,6 +4,11 @@
 import { el, fmt } from '../core/dom.js';
 import { SITE_URL, CONTACT, CITE_NOTE } from '../core/paper.js';
 
+// Groups in the release bundle that are not shown to readers. The supplementary tables belong
+// to the maintainer's dissertation; the files stay on disk, only the listing hides them. Delete
+// this set (and the filter below) to list them again.
+const HIDDEN_GROUPS = new Set(['Supplementary tables']);
+
 const size = (b) => (b >= 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1e3))} kB`);
 
 export async function downloadsView(man) {
@@ -12,9 +17,10 @@ export async function downloadsView(man) {
     const r = await fetch('downloads/index.json', { cache: 'no-cache' });
     if (r.ok) idx = await r.json();
   } catch { /* shown below */ }
+  if (idx && Array.isArray(idx.files)) idx = { ...idx, files: idx.files.filter((f) => !HIDDEN_GROUPS.has(f.group)) };
   const head = [el('h1', {}, 'Downloads'),
     el('p', { class: 'sub' },
-      'Gene duplication and cross-haplotype tables, lineage-specific gene tables and supplementary tables, as versioned files with checksums. '
+      'Gene duplication and cross-haplotype tables and lineage-specific gene tables, as versioned files with checksums. '
       + `Site data version ${man.data_version}.`)];
   if (!idx || !(idx.files || []).length) {
     return el('div', { 'data-downloads': 'empty' }, ...head,
@@ -35,7 +41,7 @@ export async function downloadsView(man) {
       el('p', { class: 'muted', style: 'margin:0;font-size:12.5px' },
         'Data are provided for research use; please cite the 717 Gene Hub (see ', el('a', { href: '#/module/about' }, 'About'),
         ') and the underlying study for any expression data. The raw expression matrix is not distributed here; '
-        + 'each study’s reads are public under the accessions in the RNA-seq library table.')),
+        + 'each study’s reads are public under that study’s own accessions.')),
     ...groups.map((g) => el('div', { class: 'card' },
       el('h2', {}, g),
       el('div', { class: 'scroll-x' }, el('table', { class: 'data', 'data-download-table': '' },

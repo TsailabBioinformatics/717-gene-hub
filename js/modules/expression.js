@@ -391,7 +391,7 @@ function geneCard(g, man) {
       table.classList.add('dmap-linked');
       table.querySelectorAll('tbody tr[data-tissue]').forEach((tr) => {
         const t = tr.dataset.tissue;
-        const ids = samples.map((s, i) => (s.ref222 && s.tissue_analysis === t ? i : -1)).filter((i) => i >= 0);
+        const ids = samples.map((s, i) => (s.ref222 && (s.tissue_original || s.tissue_analysis) === t ? i : -1)).filter((i) => i >= 0);
         if (!ids.length) return;
         const vals = vec ? ids.map((i) => vec[i]) : [];
         const mean = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;

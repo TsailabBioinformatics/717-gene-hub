@@ -13,11 +13,11 @@
 // A selection is { key, label, ids: Set<sample index> }. A hub holds one pinned selection (a
 // tap or Enter) and one preview (hover or focus); the preview wins while it lasts. Every view
 // subscribes and paints itself from the current selection, so views never talk to each other.
-import { el, fmt } from './dom.js';
+import { el, fmt, clear } from './dom.js';
 import { studyMeta } from './cite.js';
 
-export const TISSUE_ORDER = ['leaf_young', 'leaf', 'leaf_old', 'xylem', 'bark', 'root', 'stem',
-  'bud', 'catkin', 'gall', 'callus'];
+// Merged groups (young and old leaf, gall) never reach here: loadExprSamples folds them in.
+export const TISSUE_ORDER = ['leaf', 'xylem', 'bark', 'root', 'stem', 'bud', 'catkin', 'callus'];
 // Same tissue codes as the bars and the rest of the site; a plain-name pass is site-wide work.
 export const tissueName = (t) => t;
 export const tissueOf = (s) => s.tissue_analysis || s.tissue;
@@ -56,10 +56,12 @@ export function brush(node, hub, sel) {
   return node;
 }
 
-/** Selection: the wild-type control samples behind one per-tissue median. */
+/** Selection: the wild-type control samples behind one per-tissue median. The medians were
+ *  computed before the site merged tissue groups (young and old leaf into leaf, gall into root),
+ *  so a median's samples are found by their original tissue. */
 export function baselineSel(samples, t) {
   const ids = new Set();
-  samples.forEach((s, i) => { if (tissueOf(s) === t && isBaseline(s)) ids.add(i); });
+  samples.forEach((s, i) => { if ((s.tissue_original || tissueOf(s)) === t && isBaseline(s)) ids.add(i); });
   return { key: `base:${t}`, label: `${tissueName(t)}, wild-type controls`, ids };
 }
 
@@ -92,6 +94,162 @@ export function describe(sel, samples, studies, vecs) {
   return [head, vals.length ? vals.join('; ') + '.' : null].filter(Boolean).join(' ');
 }
 
+/** "a, b, c and 4 more": keeps a fact to one or two lines. */
+const shortList = (a, k = 4) => (a.length <= k ? a.join(', ') : `${a.slice(0, k).join(', ')} and ${a.length - k} more`);
+const plainGenotype = (g) => (g === 'WT' ? 'wild type' : g);
+let popSeq = 0;
+
+/**
+ * The study card behind each column number of the grid. Pointing at, tabbing to or tapping a
+ * number shows what the study is; clicking it (or Enter, or a second tap) keeps the card open.
+ * The column number itself never navigates: the card's own link opens the study page.
+ * One card per grid, positioned against the viewport and kept inside it.
+ */
+function studyPopover(samples, studies, hub, colSel, geneId) {
+  const id = `dmap-pop-${++popSeq}`;
+  const node = el('div', { class: 'dmap-pop', id, role: 'tooltip', hidden: '', 'data-dmap-pop': '' });
+  let shown = null, pinned = null, anchor = null, hideT = 0, lastPointer = 'mouse', hubPinned = null, quiet = false;
+  const heads = new Map();                                   // sid -> header button
+  hub.on((_, p) => { hubPinned = p; });
+
+  const fill = (sid) => {
+    const st = studies[sid] || {};
+    const m = studyMeta(st.citation || '');
+    const mine = samples.filter((s) => s.study === sid);
+    const base = mine.filter(isBaseline).length;
+    const facts = [
+      ['Samples', `${fmt(mine.length)}${base ? `, ${fmt(base)} of them wild-type controls` : ', none of them wild-type controls'}`],
+      ['Tissues', shortList(st.tissues || [...new Set(mine.map(tissueOf))])],
+      ['Treatments', (st.treatments || []).length ? shortList(st.treatments) : null],
+      ['Genotypes', (st.genotypes || []).length ? shortList(st.genotypes.map(plainGenotype)) : null],
+      ['Accession', (st.bioprojects || []).length ? shortList(st.bioprojects, 2) : null],
+    ].filter(([, v]) => v);
+    const who = m.firstAuthor ? `${m.firstAuthor}${m.year ? ' ' + m.year : ''}` : '';
+    clear(node).append(
+      el('p', { class: 'dmap-pop-head' }, el('strong', {}, `Study ${sid}`), who ? ` · ${who}` : ''),
+      m.title ? el('p', { class: 'dmap-pop-title' }, m.title) : null,
+      m.journal ? el('p', { class: 'dmap-pop-pub' }, m.dataset ? `Data set, ${m.journal}` : m.journal) : null,
+      el('dl', { class: 'dmap-pop-facts' }, ...facts.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v)])),
+      el('a', { class: 'dmap-pop-link', href: `#/study/${sid}${geneId ? '?gene=' + geneId : ''}` }, 'Open study page'));
+  };
+
+  const place = () => {
+    if (!anchor || node.hidden) return;
+    const r = anchor.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    // The number scrolled out of sight (page or grid): hide until it comes back.
+    const sc = anchor.closest('.dmap-scroll');
+    const box = sc ? sc.getBoundingClientRect() : { left: 0, right: vw };
+    const off = r.bottom < 0 || r.top > vh || r.right < Math.max(0, box.left) || r.left > Math.min(vw, box.right);
+    node.style.visibility = off ? 'hidden' : '';
+    const w = node.offsetWidth, h = node.offsetHeight, gap = 6, pad = 8;
+    let top = r.bottom + gap;
+    if (top + h > vh - pad && r.top - gap - h >= pad) top = r.top - gap - h;   // flip above
+    top = Math.max(pad, Math.min(top, vh - h - pad));
+    const left = Math.max(pad, Math.min(r.left + r.width / 2 - w / 2, vw - w - pad));
+    node.style.top = `${Math.round(top)}px`;
+    node.style.left = `${Math.round(left)}px`;
+  };
+
+  const onScroll = () => { if (!node.isConnected) return close(); place(); };
+  const onDown = (e) => {
+    if (!node.isConnected) return close();
+    if (node.contains(e.target) || (e.target.closest && e.target.closest('.dmap-col') && [...heads.values()].includes(e.target.closest('.dmap-col')))) return;
+    close();
+  };
+  const onKey = (e) => {
+    if (e.key !== 'Escape' || node.hidden) return;
+    const back = node.contains(document.activeElement) ? anchor : null;
+    close();
+    if (back) { quiet = true; back.focus(); quiet = false; }   // returning focus must not reopen it
+  };
+  const listen = (on) => {
+    const f = on ? 'addEventListener' : 'removeEventListener';
+    window[f]('scroll', onScroll, true);
+    window[f]('resize', onScroll);
+    window[f]('hashchange', close);
+    document[f]('pointerdown', onDown, true);
+    document[f]('keydown', onKey);
+  };
+
+  function show(sid, pin) {
+    clearTimeout(hideT);
+    if (pin) pinned = sid;
+    const wasHidden = node.hidden;
+    if (shown !== sid) { fill(sid); shown = sid; }
+    for (const [s, b] of heads) {
+      b.setAttribute('aria-expanded', String(s === pinned));
+      if (s === sid) b.setAttribute('aria-describedby', id); else b.removeAttribute('aria-describedby');
+    }
+    anchor = heads.get(sid);
+    node.dataset.pinned = pinned === sid ? 'true' : 'false';
+    // Kept open, it is a small dialog the reader can tab into; otherwise a tooltip.
+    node.setAttribute('role', pinned === sid ? 'dialog' : 'tooltip');
+    if (pinned === sid) node.setAttribute('aria-label', `Study ${sid}`); else node.removeAttribute('aria-label');
+    node.hidden = false;
+    if (wasHidden) listen(true);
+    place();
+  }
+  function close() {
+    clearTimeout(hideT);
+    if (pinned != null && heads.get(pinned)) heads.get(pinned).setAttribute('aria-expanded', 'false');
+    shown = null; pinned = null; anchor = null;
+    if (!node.hidden) { node.hidden = true; listen(false); }
+    for (const b of heads.values()) b.removeAttribute('aria-describedby');
+  }
+  // Leaving a number: fall back to the card kept open, if any, after a moment (so the pointer
+  // can travel into the card to reach its link).
+  const leave = () => {
+    clearTimeout(hideT);
+    hideT = setTimeout(() => {
+      if (node.matches(':hover') || node.contains(document.activeElement)) return;
+      if (pinned != null) show(pinned); else close();
+    }, 220);
+  };
+  node.addEventListener('pointerenter', () => clearTimeout(hideT));
+  node.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') leave(); });
+  node.addEventListener('focusout', (e) => { if (!node.contains(e.relatedTarget) && pinned == null) leave(); });
+
+  function wire(b, sid) {
+    heads.set(sid, b);
+    b.setAttribute('aria-expanded', 'false');
+    const sel = () => colSel(sid);
+    b.addEventListener('pointerdown', (e) => { lastPointer = e.pointerType || 'mouse'; });
+    b.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { hub.preview(sel()); show(sid); } });
+    b.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { hub.end(sel()); leave(); } });
+    b.addEventListener('focus', () => { hub.preview(sel()); if (lastPointer !== 'touch' && !quiet) show(sid); });
+    b.addEventListener('blur', (e) => { hub.end(sel()); if (!node.contains(e.relatedTarget)) leave(); });
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      const keyboard = e.detail === 0;
+      const touch = !keyboard && lastPointer !== 'mouse';
+      lastPointer = 'mouse';
+      const key = sel().key;
+      if (touch) {
+        // First tap: light the study and show its card; a second tap keeps the card (and the
+        // selection) as they are rather than switching them off.
+        if (!hubPinned || hubPinned.key !== key) hub.toggle(sel());
+        show(sid, shown === sid);
+        return;
+      }
+      if (pinned === sid) {                        // second click: let go of both
+        if (hubPinned && hubPinned.key === key) hub.toggle(sel());
+        pinned = null; show(sid);
+        return;
+      }
+      if (!hubPinned || hubPinned.key !== key) hub.toggle(sel());
+      show(sid, true);
+      if (keyboard) { const a = node.querySelector('a'); if (a) a.focus(); }
+    });
+    b.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      if (!node.hidden) close(); else hub.clear();
+    });
+  }
+  return { node, wire, close };
+}
+
 /**
  * The grid. `vecs` = [{ name, vec }] (one per haplotype on the pair page), used for the readout
  * only. Returns the element; it subscribes itself to `hub`.
@@ -122,10 +280,12 @@ export function designGrid(samples, studies, hub, vecs = [], geneId = '') {
     style: `grid-template-columns:auto repeat(${sids.length}, var(--dmap-cell))` });
   grid.append(el('span', { class: 'dmap-corner' }, 'study'));
   const painted = [];                             // [node, ids[]]
+  const pop = studyPopover(samples, studies, hub, colSel, geneId);
   for (const sid of sids) {
     const ids = [...colSel(sid).ids];
-    const b = brush(el('button', { type: 'button', class: 'dmap-col',
-      'aria-label': `Study ${sid} ${studyLabel(studies, sid)}, ${ids.length} samples` }, String(sid)), hub, () => colSel(sid));
+    const b = el('button', { type: 'button', class: 'dmap-col', 'data-sid': String(sid),
+      'aria-label': `Study ${sid} ${studyLabel(studies, sid)}, ${ids.length} samples` }, String(sid));
+    pop.wire(b, sid);
     painted.push([b, ids]);
     grid.append(b);
   }
@@ -153,7 +313,7 @@ export function designGrid(samples, studies, hub, vecs = [], geneId = '') {
   // A selection inside one study offers that study's own design page, carrying the gene.
   const studyLink = el('a', { class: 'dmap-study', hidden: '' });
   const idle = 'Point at, tap or tab to a cell, a tissue or a study number to light up the same '
-    + 'samples everywhere on this card.';
+    + 'samples everywhere on this card. A study number also shows what that study is.';
   const wrap = el('div', { class: 'dmap', 'data-dmap': '' },
     el('h3', { class: 'dmap-title' }, 'Where the samples come from'),
     el('p', { class: 'dmap-sub' },
@@ -162,16 +322,8 @@ export function designGrid(samples, studies, hub, vecs = [], geneId = '') {
       el('span', { class: 'dmap-key' }), ' treatments or transgenic lines only. A selected cell is outlined; a '
       + 'dashed outline means only some of its samples are in the selection.'),
     el('div', { class: 'dmap-scroll' }, grid),
-    // The column numbers select samples; this list opens each study's own page (what it is, its
-    // samples and conditions, its accession).
-    el('p', { class: 'dmap-studies', 'data-dmap-studies': '' }, 'Studies: ',
-      ...sids.flatMap((sid, k) => {
-        const lab = studyLabel(studies, sid);
-        const a = el('a', { href: `#/study/${sid}${geneId ? '?gene=' + geneId : ''}`, class: 'dmap-study-link' },
-          `${sid}${lab ? ' ' + lab : ''}`);
-        return k ? ['; ', a] : [a];
-      })),
-    el('div', { class: 'dmap-foot' }, readout, studyLink, clearBtn));
+    el('div', { class: 'dmap-foot' }, readout, studyLink, clearBtn),
+    pop.node);
 
   hub.on((sel, pinned) => {
     wrap.toggleAttribute('data-sel', !!sel);

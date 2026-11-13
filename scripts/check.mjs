@@ -2437,12 +2437,15 @@ await check('map-hap2', '#/map/hap2',
   const nZoom = await mp.$eval('.map-stage', (s) => +s.dataset.genesInView);
   const url = mp.url();
   const urlOk = /\?start=\d+&end=\d+/.test(url);
-  // brush: drag across part of the tracks with the mouse, the window must shrink again
+  // brush: Shift + drag across part of the tracks with the mouse, the window must shrink again
+  // (a plain drag pans since 2026-11-13; see locus:drag-pan below)
   const box = await (await mp.$('.map-canvas')).boundingBox();
+  await mp.keyboard.down('Shift');
   await mp.mouse.move(box.x + 300, box.y + 120);
   await mp.mouse.down();
   await mp.mouse.move(box.x + 500, box.y + 120, { steps: 5 });
   await mp.mouse.up();
+  await mp.keyboard.up('Shift');
   await mp.waitForTimeout(300);
   const nBrush = await mp.$eval('.map-stage', (s) => +s.dataset.genesInView);
   // shared URL restores the window
@@ -2463,6 +2466,62 @@ await check('map-hap2', '#/map/hap2',
     + ` links=${linksWhole} urlOk=${urlOk} opened ${probe.g}=${opened}`);
   errs.forEach((e) => console.log('   !! ' + e));
   await mp.close();
+}
+// Locus drag and swipe (2026-11-13): on the gene page's both-haplotypes view, a mouse drag and a
+// touch swipe each move the window by about the distance dragged, keep its width, and do not
+// open a gene; a plain click and a plain tap still open the probed gene (positive control).
+{
+  const winOf = (p) => p.$eval('[data-locus-browser="embed"]', (s) => [+s.dataset.winStart, +s.dataset.winEnd]);
+  const probeOf = (p) => p.$eval('[data-locus-browser="embed"]',
+    (s) => ({ x: +s.dataset.probeX, y: +s.dataset.probeY, g: s.dataset.probeGene }));
+  const gene = 'PtXaTreH.01G000600';
+  const lerrs = [];
+  const res = {};
+  for (const kind of ['mouse', 'touch']) {
+    const ctx = await browser.newContext(kind === 'touch'
+      ? { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }
+      : { viewport: { width: 1100, height: 900 } });
+    const p = await ctx.newPage();
+    p.on('pageerror', (e) => lerrs.push(e.message));
+    await p.goto(`${base}/#/gene/${gene}`, { waitUntil: 'networkidle' });
+    await p.waitForSelector('[data-locus-browser="embed"][data-tiles="ready"]', { timeout: 15000 });
+    const cv = p.locator('[data-locus-browser="embed"] canvas');
+    await cv.scrollIntoViewIfNeeded();
+    await p.waitForTimeout(200);
+    const bb = await cv.boundingBox();
+    const y = bb.y + 150, x = bb.x + bb.width * 0.7, dx = Math.round(bb.width * 0.3);
+    const w0 = await winOf(p);
+    if (kind === 'mouse') {
+      await p.mouse.move(x, y); await p.mouse.down();
+      await p.mouse.move(x - dx, y, { steps: 8 }); await p.mouse.up();
+    } else {
+      const cdp = await ctx.newCDPSession(p);
+      const t = (type, px) => cdp.send('Input.dispatchTouchEvent',
+        { type, touchPoints: type === 'touchEnd' ? [] : [{ x: px, y }] });
+      await t('touchStart', x);
+      for (let i = 1; i <= 8; i++) { await t('touchMove', x - (dx * i) / 8); await p.waitForTimeout(16); }
+      await t('touchEnd', x - dx);
+    }
+    await p.waitForTimeout(300);
+    const w1 = await winOf(p);
+    const stayed = p.url().endsWith(`#/gene/${gene}`);
+    await cv.scrollIntoViewIfNeeded();
+    await p.waitForTimeout(150);
+    const pr = await probeOf(p);
+    const bb2 = await cv.boundingBox();
+    if (kind === 'mouse') await p.mouse.click(bb2.x + pr.x, bb2.y + pr.y);
+    else await p.touchscreen.tap(bb2.x + pr.x, bb2.y + pr.y);
+    await p.waitForTimeout(400);
+    res[kind] = { moved: w1[0] - w0[0], sameWidth: w1[1] - w1[0] === w0[1] - w0[0], stayed,
+      opened: p.url().endsWith(`#/gene/${pr.g}`) };
+    await ctx.close();
+  }
+  const ok = ['mouse', 'touch'].every((k) => res[k].moved > 0 && res[k].sameWidth && res[k].stayed && res[k].opened)
+    && !lerrs.length;
+  if (!ok) failures++;
+  console.log(`\n### locus:drag-pan  ${ok ? 'OK' : 'FAIL'}`);
+  console.log(`   ${JSON.stringify(res)}`);
+  lerrs.forEach((e) => console.log('   !! ' + e));
 }
 for (const hash of ['#/map', '#/map/hap2/Chr19?start=1000000&end=1200000']) {
   const pp = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
@@ -3160,30 +3219,63 @@ for (const gid of ['PtXaTreH.10G047000', 'PtXaTreH.01G000700', 'PtXaTreH.01G0001
   await ctx.close();
 }
 
-// Gene page, expression card: every study in the sample grid links to its own study page, and
-// gall samples are counted as root (lab rule), so no "gall" tissue group appears anywhere.
+// Gene page, expression card. (1) Each study number in the sample grid shows a study card on
+// hover; clicking the number keeps the card open and does NOT navigate; the card's link opens
+// that study's page with the gene; Escape closes it. The old list of study links is gone.
+// (2) Merged tissue groups (lab rules, 2026-11): gall counts as root and young and old leaf count
+// as leaf, so the loaded tables carry no gall/leaf_young/leaf_old, the originals stay in
+// tissue_original, the 222-sample reference panel has 7 tissue groups, and all 652 samples have 8
+// (callus is a single sample outside the panel).
 {
   const ctx = await browser.newContext({ viewport: { width: 1180, height: 1000 } });
   const p = await ctx.newPage();
   const errs = [];
   p.on('pageerror', (e) => errs.push(e.message));
-  await p.goto(base + '/#/gene/PtXaTreH.05G120200', { waitUntil: 'networkidle' });
-  await p.waitForSelector('[data-dmap-studies] a', { timeout: 20000 });
+  const gid = 'PtXaTreH.05G120200';
+  await p.goto(base + `/#/gene/${gid}`, { waitUntil: 'networkidle' });
+  await p.waitForSelector('[data-dmap] .dmap-col', { timeout: 20000 });
+  const cols = await p.$$eval('[data-dmap] .dmap-col', (bs) => bs.map((b) => b.dataset.sid));
+  const old = await p.$$('[data-dmap-studies]');
+  await p.hover(`[data-dmap] .dmap-col[data-sid="${cols[2]}"]`);
+  const hov = await p.evaluate(() => { const c = document.querySelector('[data-dmap-pop]');
+    return { vis: !c.hidden, role: c.getAttribute('role'), head: c.querySelector('.dmap-pop-head').textContent,
+      href: c.querySelector('a').getAttribute('href') }; });
+  await p.hover(`[data-dmap] .dmap-col[data-sid="${cols[3]}"]`);
+  const swapped = await p.$eval('[data-dmap-pop] .dmap-pop-head', (h) => h.textContent);
+  const hashBefore = await p.evaluate(() => location.hash);
+  await p.click(`[data-dmap] .dmap-col[data-sid="${cols[3]}"]`);
+  await p.mouse.move(5, 5);
+  await p.waitForTimeout(400);
+  const pinned = await p.evaluate(() => { const c = document.querySelector('[data-dmap-pop]');
+    const r = c.getBoundingClientRect();
+    return { vis: !c.hidden, role: c.getAttribute('role'), hash: location.hash,
+      inside: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight }; });
+  await p.keyboard.press('Escape');
+  const closed = await p.$eval('[data-dmap-pop]', (c) => c.hidden);
   const r = await p.evaluate(async () => {
-    const links = [...document.querySelectorAll('[data-dmap-studies] a')].map((a) => a.getAttribute('href'));
-    const cols = [...document.querySelectorAll('.dmap-col')].map((b) => b.textContent.trim());
-    const rows = [...document.querySelectorAll('.dmap-row')].map((b) => b.textContent.trim());
     const d = await import('./js/core/data.js');
     const s = await d.loadExprSamples();
     const st = await d.loadExprStudies();
-    return { links, cols, rows, gall: s.filter((x) => x.tissue_analysis === 'gall' || x.tissue === 'gall').length,
-      kept: s.filter((x) => x.tissue_original === 'gall').length, studyGall: JSON.stringify(st).includes('"gall"') };
+    const merged = ['gall', 'leaf_young', 'leaf_old'];
+    const left = s.filter((x) => merged.includes(x.tissue_analysis) || merged.includes(x.tissue) || merged.includes(x.tissue_full)).length;
+    const kept = {}; s.forEach((x) => { if (x.tissue_original) kept[x.tissue_original] = (kept[x.tissue_original] || 0) + 1; });
+    const studyLeft = Object.values(st).filter((x) => (x.tissues || []).some((t) => merged.includes(t))).length;
+    const all = [...new Set(s.map((x) => x.tissue_analysis))].sort();
+    const panel = [...new Set(s.filter((x) => x.ref222).map((x) => x.tissue_analysis))].sort();
+    return { left, kept, studyLeft, all, panel };
   });
-  const ok = !errs.length && r.links.length === r.cols.length && r.links.length > 5
-    && r.links.every((h) => /^#\/study\/\d+/.test(h)) && !r.rows.includes('gall')
-    && r.gall === 0 && r.kept === 6 && !r.studyGall;
+  const rows = await p.$$eval('[data-dmap] .dmap-row', (bs) => bs.map((b) => b.textContent.trim()));
+  const ok = !errs.length && !old.length && cols.length > 5
+    && hov.vis && hov.role === 'tooltip' && hov.head.startsWith(`Study ${cols[2]}`)
+    && hov.href === `#/study/${cols[2]}?gene=${gid}` && swapped.startsWith(`Study ${cols[3]}`)
+    && pinned.vis && pinned.role === 'dialog' && pinned.hash === hashBefore && pinned.inside && closed
+    && r.left === 0 && r.studyLeft === 0 && r.kept.gall === 6 && r.kept.leaf_young === 23 && r.kept.leaf_old === 23
+    && r.panel.length === 7 && r.all.length === 8 && r.all.includes('callus') && !r.panel.includes('callus')
+    && !rows.some((t) => ['gall', 'leaf_young', 'leaf_old'].includes(t));
   if (!ok) failures++;
-  console.log(`\n### expression:study-links-and-gall  ${ok ? 'OK' : 'FAIL'}  links=${r.links.length} cols=${r.cols.length} gallLeft=${r.gall} kept=${r.kept}`);
+  console.log(`\n### expression:study-card-and-merged-tissues  ${ok ? 'OK' : 'FAIL'}  cols=${cols.length} hover=${hov.vis}/${hov.role} `
+    + `pinned=${pinned.vis}/${pinned.role} stayed=${pinned.hash === hashBefore} closed=${closed}; panel tissues ${r.panel.join(',')}; `
+    + `all ${r.all.length}; merged labels left ${r.left}; kept ${JSON.stringify(r.kept)}`);
   errs.forEach((e) => console.log('   !! ' + e));
   await ctx.close();
 }

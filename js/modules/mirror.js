@@ -19,7 +19,7 @@ function geneCard(g) {
   const holder = el('div', {}, el('p', { class: 'muted' }, 'Loading the locus on both haplotypes…'));
   const caption = el('p', { class: 'arr-note', style: 'margin:0 0 8px' });
   const card = el('div', { class: 'card' },
-    el('h2', {}, `This locus on ${otherShort} too`, el('span', { class: 'tag' }, 'both haplotypes, drag to zoom')),
+    el('h2', {}, `This locus on ${otherShort} too`, el('span', { class: 'tag' }, 'both haplotypes, drag to move')),
     caption, holder);
 
   (async () => {

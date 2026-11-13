@@ -213,22 +213,28 @@ export async function loadAllShards(onProgress) {
 }
 
 /* ---------- expression ---------- */
-// Gall samples are counted as root everywhere the site groups samples by tissue (lab rule, 2026-11).
-// The original label stays in `tissue_original`. Done once, in place, so every view agrees.
+// Tissue groups the site merges wherever it groups samples by tissue (lab rules, 2026-11):
+// gall is counted as root, and young and old leaf are counted as leaf (the leaf samples are a
+// mixture of ages that cannot be told apart reliably). The original label stays in
+// `tissue_original`, which study pages use so each study's own comparisons stay as designed.
+// Done once, in place, so every view agrees. Per-gene tissue means and tau are NOT recomputed
+// here: they come precomputed from the 222-sample reference panel, with leaf ages separate.
+export const TISSUE_MERGE = { gall: 'root', leaf_young: 'leaf', leaf_old: 'leaf' };
 export const loadExprSamples = () => fetchJSON('data/expr/samples.json').then((rows) => {
   for (const s of rows) {
-    if (s.tissue_analysis === 'gall' || s.tissue === 'gall') {
-      s.tissue_original = 'gall';
-      if (s.tissue === 'gall') s.tissue = 'root';
-      if (s.tissue_analysis === 'gall') s.tissue_analysis = 'root';
-      if (s.tissue_full === 'gall') s.tissue_full = 'root';
-    }
+    const orig = TISSUE_MERGE[s.tissue_analysis] ? s.tissue_analysis : TISSUE_MERGE[s.tissue] ? s.tissue : null;
+    if (!orig) continue;
+    s.tissue_original = orig;
+    for (const f of ['tissue', 'tissue_analysis', 'tissue_full']) if (TISSUE_MERGE[s[f]]) s[f] = TISSUE_MERGE[s[f]];
   }
   return rows;
 });
 export const loadExprStudies = () => fetchJSON('data/expr/studies.json').then((st) => {
   for (const s of Object.values(st)) {
-    if (Array.isArray(s.tissues) && s.tissues.includes('gall')) s.tissues = [...new Set(s.tissues.map((t) => (t === 'gall' ? 'root' : t)))];
+    if (Array.isArray(s.tissues) && s.tissues.some((t) => TISSUE_MERGE[t])) {
+      s.tissues_original = s.tissues;
+      s.tissues = [...new Set(s.tissues.map((t) => TISSUE_MERGE[t] || t))];
+    }
   }
   return st;
 });

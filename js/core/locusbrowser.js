@@ -1,6 +1,7 @@
 // Shared two-haplotype locus browser. The genome map's chromosome view, the array page, the
 // pair page and the gene page all draw a locus with THIS component, so they look and handle
-// the same way: drag to zoom (mouse) or pan (touch), buttons for both, and the same tracks.
+// the same way: drag or swipe to pan, Shift + drag to zoom, buttons and arrow keys for both,
+// and the same tracks.
 // What differs is only the window, and resolution follows from it: zoomed in far enough,
 // each gene shows its exon structure and its ID.
 //
@@ -133,8 +134,9 @@ const SYN = [
 ];
 
 const TRACKS = [
-  { id: 'plus', label: 'genes +', h: 24 },
-  { id: 'minus', label: 'genes −', h: 24 },
+  // the arrow in the label says which way the row reads, even where genes are too dense to point
+  { id: 'plus', label: 'genes + →', h: 24 },
+  { id: 'minus', label: 'genes − ←', h: 24 },
   { id: 'dup', label: 'duplication', h: 12 },
   { id: 'syn', label: 'synteny', h: 12 },
   { id: 'tau', label: 'τ', h: 20 },
@@ -169,6 +171,48 @@ function blockLayout(top, dir) {
   for (const t of order) { rows[t.id] = { y, h: t.h, label: t.label }; y += t.h + TRACK_GAP; }
   const ruler = y, head = y + RULER_H;
   return { head, ruler, rows, y0: top, y1: head + HEAD_H };
+}
+
+// Smallest drawn gene, in CSS px. Below this a gene is widened about its centre so the
+// pointed end still reads; the true size is in the hover readout and on the gene's page.
+const MIN_ARROW_W = 6;
+
+/** One gene as a block with a pointed 3' end (the usual genome-browser arrow): a pentagon,
+ *  a plain triangle when the gene is shorter than the point, and a flat end on the side that
+ *  is cut off by the edge of the view. Long blocks also carry light chevrons inside, so a
+ *  gene that fills the view, with both ends cut off, still shows its direction. */
+function arrowGene(ctx, x0, x1, y, h, dir, cutL, cutR, chevronCol) {
+  if (x1 - x0 < MIN_ARROW_W) {
+    const c = (x0 + x1) / 2;
+    x0 = c - MIN_ARROW_W / 2; x1 = c + MIN_ARROW_W / 2;
+  }
+  const w = x1 - x0, mid = y + h / 2;
+  const pointed = dir > 0 ? !cutR : !cutL;
+  const head = pointed ? Math.min(w, Math.max(5, Math.min(8, h * 0.45))) : 0;
+  ctx.beginPath();
+  if (dir > 0) {
+    ctx.moveTo(x0, y); ctx.lineTo(x1 - head, y); ctx.lineTo(x1, mid);
+    ctx.lineTo(x1 - head, y + h); ctx.lineTo(x0, y + h);
+  } else {
+    ctx.moveTo(x1, y); ctx.lineTo(x0 + head, y); ctx.lineTo(x0, mid);
+    ctx.lineTo(x0 + head, y + h); ctx.lineTo(x1, y + h);
+  }
+  ctx.closePath();
+  ctx.fill();
+  const body0 = dir > 0 ? x0 : x0 + head, body1 = dir > 0 ? x1 - head : x1;
+  if (body1 - body0 >= 18 && h >= 8) {
+    const fill = ctx.fillStyle;
+    ctx.strokeStyle = chevronCol; ctx.lineWidth = 1.2;
+    const a = Math.min(3, h * 0.25);
+    for (let cx = body0 + 7; cx < body1 - 4; cx += 11) {
+      ctx.beginPath();
+      ctx.moveTo(cx - dir * a * 0.6, mid - a);
+      ctx.lineTo(cx + dir * a * 0.6, mid);
+      ctx.lineTo(cx - dir * a * 0.6, mid + a);
+      ctx.stroke();
+    }
+    ctx.fillStyle = fill;
+  }
 }
 
 function drawChrView(ctx, view, M) {
@@ -258,6 +302,9 @@ function drawChrView(ctx, view, M) {
 
     // genes
     const lastLabelEnd = { plus: -Infinity, minus: -Infinity };
+    // fewer than ~2.5 px of row per gene: too crowded for one arrow per gene
+    const nPlus = genes.reduce((n, g) => n + (g.d < 0 ? 0 : 1), 0);
+    const crowded = { plus: plotW / Math.max(1, nPlus) < 2.5, minus: plotW / Math.max(1, genes.length - nPlus) < 2.5 };
     for (const g of genes) {
       const x0 = Math.max(GUTTER, xOf(win, g.s)), x1 = Math.min(GUTTER + plotW, xOf(win, g.e));
       const gw = Math.max(1.2, x1 - x0);
@@ -327,7 +374,15 @@ function drawChrView(ctx, view, M) {
           ctx.fill();
         }
       } else {
-        ctx.fillRect(x0, boxY, gw, boxH);
+        // No room for exons: an arrow-shaped block pointing the way the gene is read, so
+        // the strand shows at every zoom. A flat end means the gene runs on past the edge.
+        // When a row holds more genes than it has room for (a whole chromosome: about one
+        // pixel per gene), widened arrows would fuse into one jagged band and hide the gaps,
+        // so genes are drawn at true width and the row label's arrow carries the direction.
+        const xs = xOf(win, g.s), xe = xOf(win, g.e);
+        if (crowded[rowId]) ctx.fillRect(x0, boxY, gw, boxH);
+        else arrowGene(ctx, x0, x0 + gw, boxY, boxH, g.d < 0 ? -1 : 1,
+          xs < GUTTER, xe > GUTTER + plotW, T.panel2);
       }
       if (geneLevel) {
         const full = g.g, short = g.g.split('.')[1] || g.g;
@@ -482,6 +537,8 @@ export async function chromosomeBrowser(opts) {
     s.stage.dataset.linksAnchor = String(M.links.filter((L) => !focus.has(L.a.g) && anchors.has(L.a.g)).length);
     s.stage.dataset.linksOther = String(M.links.filter((L) => !focus.has(L.a.g) && !anchors.has(L.a.g)).length);
     ensureTiles();
+    s.stage.dataset.winStart = String(Math.round(a));
+    s.stage.dataset.winEnd = String(Math.round(b));
     const allWhole = M.win.start === 0 && M.win.end === len[hap];
     regionLabel.textContent = `${chr}:${fmtMb(a)}–${fmtMb(b)} Mb`;
     if (mapLink) mapLink.href = `#/map/${hap}/${chr}?start=${Math.round(a)}&end=${Math.round(b)}`;
@@ -596,20 +653,28 @@ export async function chromosomeBrowser(opts) {
     }
     return bd <= 6 ? best : null;
   };
+  // Dragging sideways (mouse) or swiping (touch) moves along the chromosome; Shift + drag with
+  // the mouse marks a stretch to zoom into. The plot surface keeps touch-action: pan-y, so an
+  // upright swipe still scrolls the page. Any press that travels more than 6 px is a drag and
+  // never opens a gene.
   s.canvas.addEventListener('pointerdown', (ev) => {
+    if (ev.pointerType === 'mouse' && ev.button !== 0) return;
     const p = s.pointIn(ev.clientX, ev.clientY);
-    drag = { x: p.x, y: p.y, type: ev.pointerType, win: { ...M.win }, moved: false };
+    drag = { x: p.x, y: p.y, type: ev.pointerType, win: { ...M.win }, moved: false, travelled: false,
+      brush: ev.pointerType === 'mouse' && ev.shiftKey };
     try { s.canvas.setPointerCapture(ev.pointerId); } catch { /* synthetic events */ }
   });
   s.canvas.addEventListener('pointermove', (ev) => {
     const p = s.pointIn(ev.clientX, ev.clientY);
     if (drag) {
+      if (Math.hypot(p.x - drag.x, p.y - drag.y) > 6) drag.travelled = true;
       if (Math.abs(p.x - drag.x) > 6) drag.moved = true;
       if (!drag.moved) return;
-      if (drag.type === 'mouse') {
+      if (drag.brush) {
         M.brush = { x0: Math.max(GUTTER, drag.x), x1: Math.max(GUTTER, Math.min(p.x, s.cssW - PAD_R)) };
         s.redraw();
       } else {
+        s.canvas.style.cursor = 'grabbing';
         const bpPerPx = (drag.win.end - drag.win.start) / (s.cssW - GUTTER - PAD_R);
         const d = (drag.x - p.x) * bpPerPx;
         M.win = clampWin(drag.win.start + d, drag.win.end + d);
@@ -619,7 +684,7 @@ export async function chromosomeBrowser(opts) {
     }
     if (ev.pointerType !== 'mouse') return;
     const hit = pick(p.x, p.y);
-    s.canvas.style.cursor = hit ? 'pointer' : (p.x > GUTTER ? 'crosshair' : 'default');
+    s.canvas.style.cursor = hit ? 'pointer' : (p.x > GUTTER ? (ev.shiftKey ? 'crosshair' : 'grab') : 'default');
     if (hit) {
       const g = hit.rec, t = tiles[hit.hap].get(g.g) || {};
       const d = dupOf(g.c), sy = SYN.find((x) => x.k === t.y);
@@ -629,7 +694,7 @@ export async function chromosomeBrowser(opts) {
         + `${g.l ? ' · LSG pool' : ''}${t.al ? ' · allele ' + t.al : ''}`;
     } else {
       readout.textContent = p.x > GUTTER
-        ? `${chr} ${(Math.max(0, xToBp(p.x)) / 1e6).toFixed(3)} Mb (${HAP_LABEL[hap]}) · drag to zoom` : ' ';
+        ? `${chr} ${(Math.max(0, xToBp(p.x)) / 1e6).toFixed(3)} Mb (${HAP_LABEL[hap]}) · drag to move, Shift + drag to zoom` : ' ';
     }
     const next = hit ? hit.g : null;
     if (next !== M.hover) { M.hover = next; s.redraw(); }
@@ -639,13 +704,14 @@ export async function chromosomeBrowser(opts) {
     const p = s.pointIn(ev.clientX, ev.clientY);
     const d = drag;
     drag = null;
-    if (d.moved && d.type === 'mouse' && M.brush) {
+    if (d.type === 'mouse') s.canvas.style.cursor = 'grab';
+    if (d.moved && d.brush && M.brush) {
       const a = xToBp(Math.min(M.brush.x0, M.brush.x1)), b = xToBp(Math.max(M.brush.x0, M.brush.x1));
       M.brush = null;
       setWin(a, b);
     } else if (d.moved) {
       setWin(M.win.start, M.win.end);
-    } else if (ev.type === 'pointerup') {
+    } else if (ev.type === 'pointerup' && !d.travelled) {
       const hit = pick(p.x, p.y);
       if (hit) location.hash = `#/gene/${hit.g}`;
     }
@@ -654,6 +720,21 @@ export async function chromosomeBrowser(opts) {
   s.canvas.addEventListener('pointercancel', (ev) => { M.brush = null; endDrag(ev); s.redraw(); });
   s.canvas.addEventListener('pointerleave', () => {
     if (M.hover && !drag) { M.hover = null; readout.textContent = ' '; s.redraw(); }
+  });
+  // Keyboard: the drawing takes focus; left and right arrows move along the chromosome
+  // (Shift for a whole screen), + and - zoom.
+  s.stage.tabIndex = 0;
+  s.stage.setAttribute('aria-label',
+    'Genome map. Left and right arrow keys move along the chromosome, plus and minus zoom.');
+  s.stage.addEventListener('keydown', (ev) => {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    const step = ev.shiftKey ? 1 : 0.25;
+    if (ev.key === 'ArrowLeft') panBy(-step);
+    else if (ev.key === 'ArrowRight') panBy(step);
+    else if (ev.key === '+' || ev.key === '=') zoomBy(0.5);
+    else if (ev.key === '-' || ev.key === '_') zoomBy(2);
+    else return;
+    ev.preventDefault();
   });
 
   let tilesReady = false;
@@ -690,7 +771,8 @@ export async function chromosomeBrowser(opts) {
         M.outline.size ? el('span', { class: 'lb-key' }, el('i', { class: 'lb-box', 'aria-hidden': 'true' }), opts.outlineLabel || 'outlined on the lower haplotype') : null,
         key('lb-other', 'other allele pairs in view')),
       el('p', { class: 'muted map-note' },
-        'Drag across the tracks to zoom (on a phone, drag to pan); the buttons pan and zoom too. '
+        'Drag sideways (or swipe on a phone) to move along the chromosome; hold Shift and drag to zoom into a stretch. '
+        + 'The buttons and the arrow keys work too. Each gene points the way it is read. '
         + 'Zoomed in, genes show their exons and IDs. Click a gene to open it. ', mapLink));
   }
   return el('div', { class: 'map-chr', 'data-map-view': 'chromosome' },
@@ -700,7 +782,9 @@ export async function chromosomeBrowser(opts) {
     readout,
     legend,
     el('p', { class: 'muted map-note' },
-      'Drag across the tracks to zoom (on a phone, drag to pan and use the buttons to zoom). '
+      'Drag sideways (or swipe on a phone) to move along the chromosome; hold Shift and drag to zoom into a stretch. '
+      + 'The buttons and the arrow keys work too. Each gene points the way it is read; on a whole chromosome, '
+      + 'where genes are too crowded to point, the arrow beside each gene row gives the direction. '
       + 'Zoomed in far enough, each gene shows its exons (coding parts taller) and its ID; click or tap a gene to open '
       + 'its page. The lower haplotype is shifted by the median allele offset of the genes in '
       + 'view, because the two haplotypes are coordinated independently.'));

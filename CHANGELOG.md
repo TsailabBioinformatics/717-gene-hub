@@ -9,6 +9,17 @@ lives in the `VERSION` file, which `build_data.py` stamps into the manifest and
 `scripts/check_version.py` holds equal to `CITATION.cff` and to the newest versioned
 heading here. Unversioned headings are skipped by that check by design.
 
+## Study cards, merged leaf, arrow-shaped genes, drag to pan, header title
+
+Site only. The study list under the gene-page sample grid is replaced by a card shown on hover
+(kept open by click, with a link to the study page). Young leaf, old leaf and whole-leaf are merged
+into leaf at sample-table load, as gall was merged into root (`TISSUE_MERGE` in `data.js`; the
+original label stays in `tissue_original`, and study pages use it). Stored per-gene tissue means and
+tau are unchanged: they come from the 222-sample panel and still use nine groups. On the gene map,
+genes without drawn exons are arrow-shaped blocks, a plain drag now pans (Shift-drag zooms), and the
+plot takes touch swipes and arrow keys. The Download page hides the supplementary tables. The
+header wordmark and About page wording no longer name the site as an atlas or tie it to a dissertation.
+
 ## Study links, data-type wording, gene structure on the map, gall merged into root
 
 Site only. The sample grid on the gene page lists each study with a link to its study page. "Layer" is now "data type" on reader surfaces (menu, About, Browse); the duplication card, whose "layers" are tandem, salicoid and gamma events, is now "Duplication origins". The gene map draws coding exons as thick boxes, UTRs thinner, introns as thin lines with strand chevrons, and an arrow at the 3' end. Gall samples (6 samples, study 20; none is in the 222-sample reference panel) are counted as root when the sample table loads (`loadExprSamples`, original kept in `tissue_original`), so per-gene tissue means and tau are unchanged (study 20's own page and comparisons keep the gall label, because they compare gall with root); only sample counts in the sample grid and study lists change (root 76 to 82 samples). Remaining old-name references (MAINTAINING, TODO, build script docstring, redirect page, two Saved-sets messages) now say 717 Gene Hub.

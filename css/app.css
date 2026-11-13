@@ -554,7 +554,23 @@ h2.sect:first-child { margin-top: 2px; }
 .dmap { margin: 14px 0 4px; --dmap-cell: 26px; }
 .dmap-title { font-size: 14px; margin: 0 0 4px; }
 .dmap-sub { font-size: 12.5px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; max-width: 68ch; }
-.dmap-studies { font-size: 12.5px; color: var(--ink-2); margin: 8px 0 0; line-height: 1.6; max-width: 80ch; }
+/* Study card shown from a column number of the design grid (designmap.js studyPopover). */
+.dmap-pop { position: fixed; z-index: 40; top: 0; left: 0; width: min(320px, calc(100vw - 16px));
+  box-sizing: border-box; padding: 10px 12px 11px; background: var(--panel); color: var(--ink);
+  border: 1px solid var(--line-2); border-radius: 6px; box-shadow: 0 6px 22px rgba(0,0,0,.14);
+  font-size: 12.5px; line-height: 1.45; }
+.dmap-pop[hidden] { display: none; }
+.dmap-pop[data-pinned="true"] { border-color: var(--ink-3); }
+.dmap-pop p { margin: 0 0 4px; }
+.dmap-pop-head { font-size: 13px; }
+.dmap-pop-title { color: var(--ink); }
+.dmap-pop-pub { color: var(--ink-2); font-style: italic; }
+.dmap-pop-facts { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 6px 0 8px;
+  padding-top: 6px; border-top: 1px solid var(--line); }
+.dmap-pop-facts dt { color: var(--ink-3); }
+.dmap-pop-facts dd { margin: 0; overflow-wrap: anywhere; }
+.dmap-pop-link { font-weight: 600; }
+.dmap-col[aria-expanded="true"] { box-shadow: inset 0 -2px 0 var(--ink); }
 .dmap-key { display: inline-block; width: 14px; height: 12px; vertical-align: -1px; border-radius: 2px;
   border: 1.5px dashed var(--line-2); background: transparent; }
 .dmap-key.base { border: 1.5px solid var(--accent); background: var(--accent-soft); }

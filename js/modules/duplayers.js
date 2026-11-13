@@ -232,7 +232,8 @@ async function buildRows(g, opts = {}) {
       for (const t of tile.slice(Math.max(0, i - CONTEXT), i + CONTEXT + 1)) {
         if (have.has(t.g)) continue;
         have.add(t.g);
-        extra.push({ id: t.g, hap: r.hap, chr: r.chr, start: t.s, end: t.e, layer: 'X' });
+        extra.push({ id: t.g, hap: r.hap, chr: r.chr, start: t.s, end: t.e, layer: 'X',
+          strand: t.d < 0 ? '-' : t.d > 0 ? '+' : null });
       }
     }
     r.genes.push(...extra);
@@ -396,9 +397,18 @@ function drawDiagram(g, built, width) {
       // bar keeps the gene's TRUE width so the drawing does not lie about size.
       a.append(svgEl('rect', { x: cx - 12, y: y - 12, width: 24, height: 24,
         fill: 'transparent' }));
-      a.append(svgEl('rect', {
-        x: x0, y: y - (gene.layer === 'X' ? 7 : GENE_H) / 2,
-        width: x1 - x0, height: gene.layer === 'X' ? 7 : GENE_H, rx: 2,
+      // The bar points the way the gene is read (the usual genome-browser arrow), so the
+      // strand shows even on a 4 px gene; a gene shorter than the point is a plain triangle.
+      const bh = gene.layer === 'X' ? 7 : GENE_H, top = y - bh / 2;
+      const dir = gene.strand === '-' ? -1 : gene.strand === '+' ? 1 : 0;
+      const head = dir ? Math.min(x1 - x0, Math.max(4, bh * 0.4)) : 0;
+      const d = dir > 0
+        ? `M ${x0} ${top} H ${x1 - head} L ${x1} ${y} L ${x1 - head} ${top + bh} H ${x0} Z`
+        : dir < 0
+          ? `M ${x1} ${top} H ${x0 + head} L ${x0} ${y} L ${x0 + head} ${top + bh} H ${x1} Z`
+          : `M ${x0} ${top} H ${x1} V ${top + bh} H ${x0} Z`;
+      a.append(svgEl('path', {
+        d, 'stroke-linejoin': 'round',
         fill: COLOUR[gene.layer] || P.ink3,
         stroke: gene.focal ? P.ink : 'none', 'stroke-width': gene.focal ? 1.6 : 0,
       }));

@@ -228,7 +228,7 @@ route(/^\/$/, async (navigation) => {
     ['#/module/phylostrat', 'Gene age', 'Phylostrata and the lineage-specific gene set.'],
     ['#/arrays', 'Tandem arrays', 'Every curated array, per haplotype, with divergence and expression.'],
     ['#/glossary', 'Glossary', 'The terms used on this site, defined.'],
-    ['#/downloads', 'Downloads', 'The master tables, data dictionary and supplementary tables, with checksums.'],
+    ['#/downloads', 'Downloads', 'The master tables and data dictionary, with checksums.'],
   ];
 
   setView(el('div', { class: 'home' },
@@ -1076,7 +1076,7 @@ route(/^\/study\/(\d+)$/, async (idStr, navigation) => {
       el('div', { class: 'sd-railcol' }, designCard),
       el('div', { class: 'sd-flow' }, comparisonsCard, sampleCard, el('div', { class: 'card' },
       el('h2', {}, 'Factors and source'),
-      el('p', {}, factorRow('Tissue', s.tissues), factorRow('Panel', s.panel_type),
+      el('p', {}, factorRow('Tissue', s.tissues_original || s.tissues),factorRow('Panel', s.panel_type),
         factorRow('Genotype', s.genotypes), factorRow('Treatment', s.treatments),
         factorRow('Growth', s.growth_conditions), factorRow('Additional', s.additional_conditions)),
       s.citation && el('p', { class: 'muted', style: 'font-size:12.5px;margin-top:10px' }, cleanCitation(s.citation)),
